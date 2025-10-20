@@ -1,74 +1,37 @@
 "use client"
-import {
-  Droplets, Hammer, Wrench, Shield,
-  Building2, Paintbrush, Grid, Layers
-} from "lucide-react"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 
-const services = [
-  { icon: Droplets,  title: "Recuperação e impermeabilização de fachadas" },
-  { icon: Hammer,    title: "Recuperação estrutural" },
-  { icon: Wrench,    title: "Lavagem de fachadas" },
-  { icon: Shield,    title: "Tratamento de fissuras" },
-  { icon: Building2, title: "Recuperação de mármores" },
-  { icon: Paintbrush,title: "Pintura acrílica de grande durabilidade" },
-  { icon: Grid,      title: "Revitalização e assentamento de pastilhas" },
-  { icon: Layers,    title: "Aplicação de manta asfáltica" },
-]
-
-export default function SpecialtiesSection() {
+export default function ResultsSection() {
   const { ref, isVisible } = useScrollReveal()
 
-  return (
-    <section id="especialidades" className="bg-[var(--color-surface)] py-12 sm:py-14">
-      <div className="container mx-auto px-4 sm:px-6 md:px-8 flex justify-center">
-        <div className="w-full max-w-6xl">
-          {/* Cabeçalho */}
-          <div
-            ref={ref}
-            className={`text-center mb-10 transition-all duration-700 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-            }`}
-          >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold uppercase text-gray-900">
-              Nossos Serviços
-            </h2>
-            <p className="mt-3 text-sm sm:text-base md:text-lg text-muted-foreground">
-              Expertise em recuperação, impermeabilização e manutenção predial
-            </p>
-          </div>
+  const stats = [
+    { value: "15+", label: "Anos de Experiência" },
+    { value: "150+", label: "Unidades Entregues" },
+    { value: "08",  label: "Prédios Concluídos" },
+    { value: "100%", label: "Satisfação dos Clientes" },
+  ]
 
-          {/* Uma única lista, em grid 2 colunas no desktop (sem duplicação) */}
-          <ul className="grid grid-cols-1 md:grid-cols-2 gap-y-6 md:gap-y-8 gap-x-16 justify-items-center md:translate-x-6">
-            {services.map((item, i) => {
-              const Icon = item.icon
-              return (
-                <li
-                  key={item.title}
-                  style={{ transitionDelay: `${i * 120}ms` }}
-                  className={`w-full max-w-[500px] flex items-center gap-4 sm:gap-5 
-                              group transition-all duration-500 ease-out
-                              ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
-                              hover:translate-x-2`}
-                >
-                  <span
-                    className="inline-flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center
-                               rounded-lg bg-[var(--color-primary)] text-white shadow-md
-                               ring-1 ring-[var(--color-primary)]/40 flex-shrink-0
-                               group-hover:scale-110 group-hover:brightness-110 transition-transform duration-300"
-                  >
-                    <Icon className="h-5 w-5" />
-                  </span>
-                  <span
-                    className="text-[15px] sm:text-base font-extrabold uppercase tracking-wide text-gray-800
-                               leading-tight group-hover:text-[var(--color-primary)] transition-colors duration-300"
-                  >
-                    {item.title}
-                  </span>
-                </li>
-              )
-            })}
-          </ul>
+  return (
+    <section className="bg-[#4a5568] text-white py-10 sm:py-12 md:py-14">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 max-w-7xl">
+        <div
+          ref={ref}
+          className={`grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 md:gap-10 transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+          }`}
+        >
+          {stats.map((stat, i) => (
+            <div
+              key={i}
+              className="text-center"
+              style={{ transitionDelay: `${i * 100}ms` }}
+            >
+              <div className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-none mb-1.5">
+                {stat.value}
+              </div>
+              <div className="text-xs sm:text-sm opacity-90">{stat.label}</div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

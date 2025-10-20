@@ -19,10 +19,6 @@ const services = [
 export default function SpecialtiesSection() {
   const { ref, isVisible } = useScrollReveal()
 
-  const mid = Math.ceil(services.length / 2)
-  const left = services.slice(0, mid)
-  const right = services.slice(mid)
-
   return (
     <section id="especialidades" className="bg-[var(--color-surface)] py-12 sm:py-14">
       <div className="container mx-auto px-4 sm:px-6 md:px-8 flex justify-center">
@@ -42,37 +38,37 @@ export default function SpecialtiesSection() {
             </p>
           </div>
 
-          {/* Grid centralizado com leve ajuste à direita */}
-          <div className="grid md:grid-cols-2 gap-y-6 md:gap-y-8 gap-x-16 justify-center md:translate-x-6">
-            {[left, right].map((col, idx) => (
-              <ul key={idx} className="mx-auto w-full max-w-[500px] space-y-4 sm:space-y-5">
-                {col.map((item, i) => {
-                  const Icon = item.icon
-                  return (
-                    <li
-                      key={i}
-                      className="flex items-center gap-4 sm:gap-5 group transition-all duration-300 ease-in-out hover:translate-x-2"
-                    >
-                      <span
-                        className="inline-flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center
-                                   rounded-lg bg-[#4a5568] text-white shadow-md
-                                   ring-1 ring-[var(--color-primary)]/40 flex-shrink-0
-                                   group-hover:scale-110 group-hover:brightness-110 transition-transform duration-300"
-                      >
-                        <Icon className="h-5 w-5" />
-                      </span>
-                      <span
-                        className="text-[15px] sm:text-base font-extrabold uppercase tracking-wide text-gray-800
-                                   leading-tight group-hover:text-[var(--color-primary)] transition-colors duration-300"
-                      >
-                        {item.title}
-                      </span>
-                    </li>
-                  )
-                })}
-              </ul>
-            ))}
-          </div>
+          {/* Lista centralizada */}
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-y-6 md:gap-y-8 gap-x-16 justify-items-center md:translate-x-6">
+            {services.map((item, i) => {
+              const Icon = item.icon
+              return (
+                <li
+                  key={item.title}
+                  style={{ transitionDelay: `${i * 100}ms` }}
+                  className={`w-full max-w-[500px] flex items-center gap-4 sm:gap-5 
+                              group transition-all duration-500 ease-out
+                              ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
+                              hover:translate-x-2`}
+                >
+                  <span
+                    className="inline-flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center
+                               rounded-lg bg-[#4a5568] text-white shadow-md
+                               ring-1 ring-[#4a5568]/40 flex-shrink-0
+                               group-hover:scale-110 group-hover:brightness-110 transition-transform duration-300"
+                  >
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <span
+                    className="text-[15px] sm:text-base font-extrabold uppercase tracking-wide text-gray-800
+                               leading-tight group-hover:text-[#4a5568] transition-colors duration-300"
+                  >
+                    {item.title}
+                  </span>
+                </li>
+              )
+            })}
+          </ul>
         </div>
       </div>
     </section>
