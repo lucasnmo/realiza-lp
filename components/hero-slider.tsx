@@ -9,25 +9,25 @@ const slides = [
     id: 1,
     title: "Excelência em Construção Civil",
     subtitle: "Mais de 15 anos transformando sonhos em realidade",
-    image: "/modern-residential-building-facade.jpg",
+    image: "/hortovlias.jpg",
   },
   {
     id: 2,
     title: "Obras Residenciais de Alto Padrão",
     subtitle: "Qualidade, transparência e compromisso",
-    image: "/luxury-apartment-building-construction.jpg",
+    image: "/aranyammi3.JPG",
   },
   {
     id: 3,
     title: "Reformas e Manutenções Prediais",
     subtitle: "Seu patrimônio sempre valorizado",
-    image: "/building-renovation-and-maintenance.jpg",
+    image: "/canelaresidence3.jpg",
   },
   {
     id: 4,
     title: "Regime de Condomínio",
     subtitle: "Transparência total do início ao fim",
-    image: "/condominium-construction-project.jpg",
+    image: "/estreladomar2.jpg",
   },
 ]
 

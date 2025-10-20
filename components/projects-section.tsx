@@ -7,11 +7,11 @@ import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import useEmblaCarousel from "embla-carousel-react";
 
 const projects = [
-  { id: 1, name: "Giardino Loreto", location: "Graça, Salvador", image: "/modern-residential-building.png" },
-  { id: 2, name: "Edifício Palmeiras", location: "Caminho das Árvores", image: "/luxury-apartment-building.png" },
-  { id: 3, name: "Solar das Amendoeiras", location: "Pituba, Salvador", image: "/modern-residential-complex.png" },
-  { id: 4, name: "Edifício Lagoas", location: "Canela, Salvador", image: "/modern-studio-building.jpg" },
-  { id: 5, name: "Bosque de Guarajuba", location: "Litoral Norte", image: "/beach-resort-building.jpg" },
+  { id: 1, name: "Horto Vilas", location: "Vilas do Atlântico, Lauro de Freitas", image: "/hortovlias4.jpg" },
+  { id: 2, name: "Hotel Aram Yamí", location: "Santo Antônio Além do Carmo , Salvador", image: "/aranyammi.jpg" },
+  { id: 3, name: "Solar das Amendoeiras", location: "Pituba, Salvador", image: "/solardasamendoeiras.jpg" },
+  { id: 4, name: "Alphaville Estrela do Mar", location: "Alphaville, Salvador", image: "/estreladomar2.jpg" },
+  { id: 5, name: "Bosque de Guarajuba", location: "Litoral Norte", image: "/bosquedeguarajuba3.jpg" },
 ];
 
 export default function ProjectsSection() {
@@ -114,7 +114,7 @@ export default function ProjectsSection() {
               size="lg"
               className="font-bold border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white hover:scale-105 uppercase tracking-wide px-8 py-4 sm:py-5 rounded-full bg-transparent transition-all duration-300"
             >
-              Veja Todos os Empreendimentos
+              Veja Mais Empreendimentos
             </Button>
           </Link>
         </div>

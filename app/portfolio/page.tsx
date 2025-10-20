@@ -16,6 +16,10 @@ import {
   Building2,
 } from "lucide-react"
 
+/* =========================================================
+   DADOS
+   ========================================================= */
+
 const projects = [
   {
     id: "solar-amendoeiras",
@@ -54,7 +58,7 @@ const projects = [
   {
     id: "hotel-aram-yami",
     name: "Hotel Aram Yamí",
-    images: ["/aranyammi.jpg",  "/aranyammi3.JPG", "/aranyammi4.jpg"],
+    images: ["/aranyammi.jpg", "/aranyammi3.JPG", "/aranyammi4.jpg"],
     technicalSheet: {
       year: "2009",
       regime: "Empreendimento hoteleiro",
@@ -71,8 +75,8 @@ const projects = [
 
   {
     id: "residencial-sombreiros",
-    name: "Residencial dos Sombreiros",
-    images: ["/residencialdossombreiros2.jpg","/residencialdossombreiros.jpg",   "/residencialdossombreiros3.jpg"],
+    name: "ResidencialS dos Sombreiros",
+    images: ["/residencialdossombreiros2.jpg", "/residencialdossombreiros.jpg", "/residencialdossombreiros3.jpg"],
     technicalSheet: {
       year: "2013",
       regime: "Obra em regime de condomínio",
@@ -87,11 +91,11 @@ const projects = [
     },
   },
 
-  // ——— Residenciais Exclusivos (do PDF) ———
+  // ——— Residenciais Exclusivos ———
   {
     id: "horto-vilas",
     name: "Condomínio Horto Vilas",
-    images: ["/hortovilas.jpg", "/hortovilas2.jpg", "/hortovilas3.jpg", "/hortovilas4.jpg"],
+    images: ["/hortovlias.jpg", "/hortovlias2.jpg", "/hortovlias3.jpg", "/hortovlias4.jpg"],
     technicalSheet: {
       year: "",
       regime: "Residencial exclusivo",
@@ -107,8 +111,8 @@ const projects = [
   {
     id: "alphaville-estrela-do-mar",
     name: "Alphaville Estrela do Mar",
-    // ATENÇÃO: converta os .tif para .jpg/.png e ajuste abaixo:
-    images: ["/estreladomar1.jpg", "/estreladomar2.jpg", "/estreladomar3.jpg", "/estreladomar4.jpg"],
+    // Se tiver .tif, o SmartImage tenta automaticamente .jpg/.jpeg/.png como fallback
+    images: ["/estreladomar.jpg", "/estreladomar2.jpg", "/estreladomar3.jpg", "/estreladomar4.jpg"],
     technicalSheet: {
       year: "",
       regime: "Residencial exclusivo",
@@ -120,8 +124,12 @@ const projects = [
       unitArea: "",
       infrastructure: "6 vagas de garagem e piscina aquecida.",
     },
-  }
+  },
 ]
+
+/* =========================================================
+   PÁGINA
+   ========================================================= */
 
 export default function PortfolioPage() {
   const { ref: headerRef, isVisible: headerVisible } = useScrollReveal<HTMLDivElement>()
@@ -158,7 +166,9 @@ export default function PortfolioPage() {
   )
 }
 
-/* ---------- Components ---------- */
+/* =========================================================
+   COMPONENTES
+   ========================================================= */
 
 function Chip({
   icon,
@@ -175,11 +185,95 @@ function Chip({
   )
 }
 
-function ProjectCard({ project }: { project: (typeof projects)[0]; index: number }) {
+/* ---------- Utils: construir variações de caminho/extension ---------- */
+function buildCandidateSources(src: string): string[] {
+  const lower = src.replace(/\.(jpg|jpeg|png|tif|tiff)$/i, (m) => m.toLowerCase())
+  const extMatch = lower.match(/\.(jpg|jpeg|png|tif|tiff)$/i)
+  const ext = extMatch ? extMatch[0].toLowerCase() : ""
+  const base = ext ? lower.slice(0, -ext.length) : lower
+
+  const candidates = new Set<string>()
+
+  // Se vier .tif/.tiff, tente .jpg/.jpeg/.png
+  if (ext === ".tif" || ext === ".tiff") {
+    candidates.add(base + ".jpg")
+    candidates.add(base + ".jpeg")
+    candidates.add(base + ".png")
+  } else if (ext) {
+    candidates.add(base + ext) // original em minúsculo
+  } else {
+    candidates.add(lower)
+  }
+
+  // Variações comuns + caixa alta
+  const common = [".jpg", ".jpeg", ".png"]
+  for (const e of common) {
+    candidates.add(base + e)
+    candidates.add(base + e.toUpperCase())
+  }
+
+  return Array.from(candidates)
+}
+
+/* ---------- SmartImage: fallbacks + orientação ---------- */
+function SmartImage({
+  src,
+  alt,
+  fill,
+  className,
+  sizes,
+  priority,
+  onOrientationChange,
+}: {
+  src: string
+  alt: string
+  fill?: boolean
+  className?: string
+  sizes?: string
+  priority?: boolean
+  onOrientationChange?: (isPortrait: boolean) => void
+}) {
+  const candidates = React.useMemo(() => buildCandidateSources(src), [src])
+  const [idx, setIdx] = React.useState(0)
+
+  return (
+    <Image
+      src={candidates[idx]}
+      alt={alt}
+      fill={fill}
+      className={className}
+      sizes={sizes}
+      priority={priority}
+      onError={() => {
+        setIdx((prev) => (prev + 1 < candidates.length ? prev + 1 : prev))
+      }}
+      onLoadingComplete={(img) => {
+        const isPortrait = img.naturalHeight > img.naturalWidth
+        onOrientationChange?.(isPortrait)
+      }}
+    />
+  )
+}
+
+/* ---------- Card ---------- */
+
+function ProjectCard({
+  project,
+  index: _index, // mantido apenas para compatibilidade com a chamada
+}: {
+  project: (typeof projects)[0]
+  index: number
+}) {
   const { ref: cardRef, isVisible: cardVisible } = useScrollReveal<HTMLDivElement>()
   const [activeIdx, setActiveIdx] = React.useState(0)
+  const [isPortrait, setIsPortrait] = React.useState(false)
+
   const mainImage = project.images[activeIdx] ?? project.images[0]
   const T = project.technicalSheet
+
+  // Estilos conforme orientação detectada
+  const aspectClass = isPortrait ? "aspect-[3/4]" : "aspect-[16/10]"
+  const fitClass = isPortrait ? "object-contain" : "object-cover"
 
   return (
     <div
@@ -192,14 +286,15 @@ function ProjectCard({ project }: { project: (typeof projects)[0]; index: number
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 p-5 sm:p-6">
           {/* Imagem + thumbs */}
           <div className="md:col-span-5">
-            <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-gray-100">
-              <Image
+            <div className={`relative ${aspectClass} w-full overflow-hidden rounded-xl bg-gray-100`}>
+              <SmartImage
                 src={mainImage || "/placeholder.svg"}
                 alt={project.name}
                 fill
-                className="object-cover"
+                className={fitClass}
                 sizes="(min-width:1024px) 480px, (min-width:768px) 60vw, 100vw"
                 priority
+                onOrientationChange={setIsPortrait}
               />
             </div>
 
@@ -214,18 +309,20 @@ function ProjectCard({ project }: { project: (typeof projects)[0]; index: number
                     }`}
                     aria-label={`Trocar para imagem ${i + 1}`}
                   >
-                    <Image src={src} alt={`${project.name} ${i + 1}`} fill className="object-cover" />
+                    <div className="relative h-full w-full">
+                      <SmartImage src={src} alt={`${project.name} ${i + 1}`} fill className="object-cover" />
+                    </div>
                   </button>
                 ))}
               </div>
             )}
           </div>
 
-          {/* Conteúdo enxuto */}
+          {/* Conteúdo */}
           <div className="md:col-span-7 flex flex-col">
             <h2 className="font-serif text-2xl sm:text-3xl font-bold text-gray-900 mb-3">{project.name}</h2>
 
-            {/* Chips: fatos rápidos */}
+            {/* Chips */}
             <div className="flex flex-wrap gap-2 mb-4">
               {T.year && <Chip icon={<Calendar className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.year}</Chip>}
               {T.totalArea && <Chip icon={<Ruler className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.totalArea}</Chip>}
@@ -234,7 +331,7 @@ function ProjectCard({ project }: { project: (typeof projects)[0]; index: number
               {T.unitArea && <Chip icon={<Ruler className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.unitArea}</Chip>}
             </div>
 
-            {/* Resumo objetivo */}
+            {/* Resumo */}
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700">
               {T.address && (
                 <li className="flex items-start gap-2">
@@ -256,7 +353,7 @@ function ProjectCard({ project }: { project: (typeof projects)[0]; index: number
               )}
             </ul>
 
-            {/* Ficha técnica em acordeão */}
+            {/* Ficha técnica */}
             <Accordion.Root type="single" collapsible className="mt-4">
               <Accordion.Item value="ficha">
                 <Accordion.Trigger
