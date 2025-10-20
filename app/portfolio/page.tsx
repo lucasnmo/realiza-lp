@@ -1,9 +1,20 @@
 "use client"
 
+import React from "react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import Image from "next/image"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
+import * as Accordion from "@radix-ui/react-accordion"
+import {
+  Calendar,
+  Ruler,
+  Layers,
+  Bed,
+  MapPin,
+  User2,
+  Building2,
+} from "lucide-react"
 
 const projects = [
   {
@@ -111,30 +122,29 @@ const projects = [
 ]
 
 export default function PortfolioPage() {
-  // ✅ use o ref correto: desestruture { ref, isVisible }
   const { ref: headerRef, isVisible: headerVisible } = useScrollReveal<HTMLDivElement>()
 
   return (
     <div className="min-h-screen bg-white">
       <Header />
 
-      <main className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16 py-16 sm:py-20 md:py-24">
+      <main className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-12 py-14 sm:py-16">
         <div
           ref={headerRef}
-          className={`mb-16 sm:mb-20 transition-all duration-700 ${
+          className={`mb-10 sm:mb-12 transition-all duration-700 ${
             headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}
         >
-          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-4 sm:mb-6 uppercase tracking-wide text-gray-800">
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-3 uppercase tracking-wide text-gray-800">
             Nossos Empreendimentos
           </h1>
-          <p className="font-sans text-center text-gray-600 text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-4xl mx-auto leading-relaxed px-4">
+          <p className="font-sans text-center text-gray-600 text-base sm:text-lg md:text-xl mb-6 max-w-4xl mx-auto leading-relaxed px-4">
             Conheça os projetos que construímos com excelência, qualidade e compromisso ao longo de nossa trajetória.
           </p>
-          <div className="w-20 sm:w-24 h-1 bg-[#0891b2] mx-auto"></div>
+          <div className="w-20 h-1 bg-[#0891b2] mx-auto rounded-full" />
         </div>
 
-        <div className="space-y-24 sm:space-y-32">
+        <div className="space-y-10 sm:space-y-12">
           {projects.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} />
           ))}
@@ -146,118 +156,185 @@ export default function PortfolioPage() {
   )
 }
 
-function ProjectCard({ project, index }: { project: (typeof projects)[0]; index: number }) {
-  // ✅ um hook por bloco, sempre desestruturando { ref, isVisible }
-  const { ref: titleRef, isVisible: titleVisible } = useScrollReveal<HTMLDivElement>()
-  const { ref: imagesRef, isVisible: imagesVisible } = useScrollReveal<HTMLDivElement>()
-  const { ref: techSheetRef, isVisible: techSheetVisible } = useScrollReveal<HTMLDivElement>()
+/* ---------- Components ---------- */
+
+function Chip({
+  icon,
+  children,
+}: {
+  icon: React.ReactNode
+  children: React.ReactNode
+}) {
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-2.5 py-1 text-xs text-gray-700">
+      {icon}
+      {children}
+    </span>
+  )
+}
+
+function ProjectCard({ project }: { project: (typeof projects)[0]; index: number }) {
+  const { ref: cardRef, isVisible: cardVisible } = useScrollReveal<HTMLDivElement>()
+  const [activeIdx, setActiveIdx] = React.useState(0)
+  const mainImage = project.images[activeIdx] ?? project.images[0]
+  const T = project.technicalSheet
 
   return (
-    <div className="border-b border-gray-200 pb-24 sm:pb-32 last:border-b-0">
-      <div
-        ref={titleRef}
-        className={`transition-all duration-700 ${
-          titleVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-        }`}
-      >
-        <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-12 sm:mb-16 uppercase tracking-wide text-gray-800">
-          {project.name}
-        </h2>
-      </div>
-
-      <div
-        ref={imagesRef}
-        className={`mb-12 sm:mb-16 transition-all duration-700 ${
-          imagesVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-        }`}
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-          {project.images.map((image, imgIndex) => (
-            <div
-              key={imgIndex}
-              className="relative aspect-[4/3] overflow-hidden rounded-lg bg-gray-100 shadow-lg hover:shadow-xl transition-shadow duration-300"
-            >
+    <div
+      ref={cardRef}
+      className={`transition-all duration-700 ${
+        cardVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+      }`}
+    >
+      <article className="rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 p-5 sm:p-6">
+          {/* Imagem + thumbs */}
+          <div className="md:col-span-5">
+            <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-gray-100">
               <Image
-                src={image || "/placeholder.svg"}
-                alt={`${project.name} - Foto ${imgIndex + 1}`}
+                src={mainImage || "/placeholder.svg"}
+                alt={project.name}
                 fill
-                className="object-cover hover:scale-105 transition-transform duration-500"
-                sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
-                priority={imgIndex === 0}
+                className="object-cover"
+                sizes="(min-width:1024px) 480px, (min-width:768px) 60vw, 100vw"
+                priority
               />
             </div>
-          ))}
-        </div>
-      </div>
 
-      <div
-        ref={techSheetRef}
-        className={`transition-all duration-700 ${
-          techSheetVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-        }`}
-      >
-        <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 sm:p-8 md:p-10 lg:p-12 shadow-md">
-          <h3 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold mb-8 sm:mb-10 text-center uppercase tracking-wide text-[#0891b2]">
-            Ficha Técnica
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 md:gap-x-12 gap-y-4 sm:gap-y-6 font-sans text-sm sm:text-base">
-            {project.technicalSheet.year && (
-              <div className="flex flex-col md:flex-row md:items-start">
-                <span className="font-bold text-gray-800 mb-1 md:mb-0 md:min-w-[180px]">Ano de Realização:</span>
-                <span className="text-gray-600">{project.technicalSheet.year}</span>
-              </div>
-            )}
-            {project.technicalSheet.regime && (
-              <div className="flex flex-col md:flex-row md:items-start">
-                <span className="font-bold text-gray-800 mb-1 md:mb-0 md:min-w-[180px]">Regime:</span>
-                <span className="text-gray-600">{project.technicalSheet.regime}</span>
-              </div>
-            )}
-            {project.technicalSheet.address && (
-              <div className="md:col-span-2 flex flex-col md:flex-row md:items-start">
-                <span className="font-bold text-gray-800 mb-1 md:mb-0 md:min-w-[180px]">Endereço:</span>
-                <span className="text-gray-600">{project.technicalSheet.address}</span>
-              </div>
-            )}
-            {project.technicalSheet.architect && (
-              <div className="flex flex-col md:flex-row md:items-start">
-                <span className="font-bold text-gray-800 mb-1 md:mb-0 md:min-w-[180px]">Projeto Arquitetônico:</span>
-                <span className="text-gray-600">{project.technicalSheet.architect}</span>
-              </div>
-            )}
-            {project.technicalSheet.totalArea && (
-              <div className="flex flex-col md:flex-row md:items-start">
-                <span className="font-bold text-gray-800 mb-1 md:mb-0 md:min-w-[180px]">Área Total Construída:</span>
-                <span className="text-gray-600">{project.technicalSheet.totalArea}</span>
-              </div>
-            )}
-            {project.technicalSheet.floors && (
-              <div className="flex flex-col md:flex-row md:items-start">
-                <span className="font-bold text-gray-800 mb-1 md:mb-0 md:min-w-[180px]">Número de Pavimentos:</span>
-                <span className="text-gray-600">{project.technicalSheet.floors}</span>
-              </div>
-            )}
-            {project.technicalSheet.bedrooms && (
-              <div className="flex flex-col md:flex-row md:items-start">
-                <span className="font-bold text-gray-800 mb-1 md:mb-0 md:min-w-[180px]">Número de Dormitórios:</span>
-                <span className="text-gray-600">{project.technicalSheet.bedrooms}</span>
-              </div>
-            )}
-            {project.technicalSheet.unitArea && (
-              <div className="flex flex-col md:flex-row md:items-start">
-                <span className="font-bold text-gray-800 mb-1 md:mb-0 md:min-w-[180px]">Área das Unidades:</span>
-                <span className="text-gray-600">{project.technicalSheet.unitArea}</span>
-              </div>
-            )}
-            {project.technicalSheet.infrastructure && (
-              <div className="md:col-span-2 flex flex-col md:flex-row md:items-start">
-                <span className="font-bold text-gray-800 mb-1 md:mb-0 md:min-w-[180px]">Infraestrutura:</span>
-                <span className="text-gray-600 leading-relaxed">{project.technicalSheet.infrastructure}</span>
+            {project.images.length > 1 && (
+              <div className="mt-3 flex gap-2">
+                {project.images.map((src, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActiveIdx(i)}
+                    className={`relative h-14 w-20 overflow-hidden rounded-md ring-1 transition-all ${
+                      activeIdx === i ? "ring-[#0891b2]" : "ring-gray-200 hover:ring-gray-300"
+                    }`}
+                    aria-label={`Trocar para imagem ${i + 1}`}
+                  >
+                    <Image src={src} alt={`${project.name} ${i + 1}`} fill className="object-cover" />
+                  </button>
+                ))}
               </div>
             )}
           </div>
+
+          {/* Conteúdo enxuto */}
+          <div className="md:col-span-7 flex flex-col">
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-gray-900 mb-3">{project.name}</h2>
+
+            {/* Chips: fatos rápidos */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {T.year && <Chip icon={<Calendar className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.year}</Chip>}
+              {T.totalArea && <Chip icon={<Ruler className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.totalArea}</Chip>}
+              {T.floors && <Chip icon={<Layers className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.floors} pav.</Chip>}
+              {T.bedrooms && <Chip icon={<Bed className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.bedrooms}</Chip>}
+              {T.unitArea && <Chip icon={<Ruler className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.unitArea}</Chip>}
+            </div>
+
+            {/* Resumo objetivo */}
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700">
+              {T.address && (
+                <li className="flex items-start gap-2">
+                  <MapPin className="mt-0.5 h-4 w-4 text-[#4a5568]" />
+                  <span>{T.address}</span>
+                </li>
+              )}
+              {T.regime && (
+                <li className="flex items-start gap-2">
+                  <Building2 className="mt-0.5 h-4 w-4 text-[#4a5568]" />
+                  <span>{T.regime}</span>
+                </li>
+              )}
+              {T.architect && (
+                <li className="flex items-start gap-2">
+                  <User2 className="mt-0.5 h-4 w-4 text-[#4a5568]" />
+                  <span>Projeto: {T.architect}</span>
+                </li>
+              )}
+            </ul>
+
+            {/* Ficha técnica em acordeão */}
+            <Accordion.Root type="single" collapsible className="mt-4">
+              <Accordion.Item value="ficha">
+                <Accordion.Trigger
+                  className="group inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-semibold uppercase tracking-wide
+                             hover:bg-gray-50 transition-colors"
+                >
+                  Ficha técnica
+                  <svg
+                    className="h-3.5 w-3.5 transition-transform group-data-[state=open]:rotate-180"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path d="M5.23 7.21a.75.75 0 011.06.02L10 11.188l3.71-3.958a.75.75 0 111.08 1.04l-4.24 4.52a.75.75 0 01-1.08 0l-4.24-4.52a.75.75 0 01.02-1.06z" />
+                  </svg>
+                </Accordion.Trigger>
+                <Accordion.Content className="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
+                  <div className="mt-4 rounded-xl border bg-white p-4 sm:p-5">
+                    <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
+                      {T.year && (
+                        <div className="flex gap-2">
+                          <dt className="font-semibold text-gray-800 min-w-[140px]">Ano</dt>
+                          <dd className="text-gray-700">{T.year}</dd>
+                        </div>
+                      )}
+                      {T.regime && (
+                        <div className="flex gap-2">
+                          <dt className="font-semibold text-gray-800 min-w-[140px]">Regime</dt>
+                          <dd className="text-gray-700">{T.regime}</dd>
+                        </div>
+                      )}
+                      {T.address && (
+                        <div className="flex gap-2 sm:col-span-2">
+                          <dt className="font-semibold text-gray-800 min-w-[140px]">Endereço</dt>
+                          <dd className="text-gray-700">{T.address}</dd>
+                        </div>
+                      )}
+                      {T.architect && (
+                        <div className="flex gap-2">
+                          <dt className="font-semibold text-gray-800 min-w-[140px]">Arquiteto</dt>
+                          <dd className="text-gray-700">{T.architect}</dd>
+                        </div>
+                      )}
+                      {T.totalArea && (
+                        <div className="flex gap-2">
+                          <dt className="font-semibold text-gray-800 min-w-[140px]">Área total</dt>
+                          <dd className="text-gray-700">{T.totalArea}</dd>
+                        </div>
+                      )}
+                      {T.floors && (
+                        <div className="flex gap-2">
+                          <dt className="font-semibold text-gray-800 min-w-[140px]">Pavimentos</dt>
+                          <dd className="text-gray-700">{T.floors}</dd>
+                        </div>
+                      )}
+                      {T.bedrooms && (
+                        <div className="flex gap-2">
+                          <dt className="font-semibold text-gray-800 min-w-[140px]">Dormitórios</dt>
+                          <dd className="text-gray-700">{T.bedrooms}</dd>
+                        </div>
+                      )}
+                      {T.unitArea && (
+                        <div className="flex gap-2">
+                          <dt className="font-semibold text-gray-800 min-w-[140px]">Área das unidades</dt>
+                          <dd className="text-gray-700">{T.unitArea}</dd>
+                        </div>
+                      )}
+                      {T.infrastructure && (
+                        <div className="flex gap-2 sm:col-span-2">
+                          <dt className="font-semibold text-gray-800 min-w-[140px]">Infraestrutura</dt>
+                          <dd className="text-gray-700">{T.infrastructure}</dd>
+                        </div>
+                      )}
+                    </dl>
+                  </div>
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion.Root>
+          </div>
         </div>
-      </div>
+      </article>
     </div>
   )
 }
