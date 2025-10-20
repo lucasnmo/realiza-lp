@@ -9,7 +9,7 @@ const projects = [
   {
     id: "solar-amendoeiras",
     name: "Solar das Amendoeiras",
-    images: ["/modern-residential-exterior.png", "/swimming-pool-area.jpg", "/building-entrance.jpg"],
+    images: ["/solardasamendoeiras3.png", "/solardasamendoeiras.jpg", "/solardasamendoeiras2.jpg"],
     technicalSheet: {
       year: "2010",
       regime: "Obra em regime de condomínio",
