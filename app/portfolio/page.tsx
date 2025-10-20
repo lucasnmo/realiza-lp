@@ -37,7 +37,7 @@ const projects = [
   {
     id: "bosque-guarajuba",
     name: "Condomínio Bosque de Guarajuba",
-    images: ["/beach-resort-building.jpg", "/resort-pool-area.jpg", "/sports-court.jpg"],
+    images: ["/bosquedeguarajuba.jpg", "/bosquedeguarajuba2.jpg", "/bosquedeguarajuba3.jpg"],
     technicalSheet: {
       year: "2012",
       regime: "Obra em regime de administração",
@@ -52,9 +52,27 @@ const projects = [
     },
   },
   {
-    id: "edificio-palmeiras",
-    name: "Edifício Palmeiras",
-    images: ["/modern-apartment-building.png", "/building-pool-deck.jpg", "/apartment-facade.jpg"],
+    id: "hotel-aram-yami",
+    name: "Hotel Aram Yamí",
+    images: ["/aranyammi.jpg",  "/aranyammi3.JPG", "/aranyammi4.jpg"],
+    technicalSheet: {
+      year: "2009",
+      regime: "Empreendimento hoteleiro",
+      address: "Rua Direita de Santo Antônio – Santo Antônio Além do Carmo",
+      architect: "",
+      totalArea: "1.600 m²",
+      floors: "",
+      bedrooms: "",
+      unitArea: "",
+      infrastructure:
+        "Arquitetura colonial no Centro Histórico de Salvador; piscinas individuais, cafeteria e suítes com vista panorâmica da Baía de Todos os Santos.",
+    },
+  },
+
+  {
+    id: "residencial-sombreiros",
+    name: "Residencial dos Sombreiros",
+    images: ["/residencialdossombreiros2.jpg","/residencialdossombreiros.jpg",   "/residencialdossombreiros3.jpg"],
     technicalSheet: {
       year: "2013",
       regime: "Obra em regime de condomínio",
@@ -65,60 +83,44 @@ const projects = [
       bedrooms: "3/4 (2 suítes)",
       unitArea: "93 m²",
       infrastructure:
-        "Fachadas principais pastilhadas; Piscina, pq. infantil, deck, varanda gourmet, sauna, salão de festas, salão de jogos, guarita de segurança, academia e churrasqueira.",
+        "Fachadas principais pastilhadas; Piscina, pq. infantil, deck, varanda gourmet, sauna, salão de festas, salão de jogos, guarita de segurança, academia e churrasqueira",
     },
   },
+
+  // ——— Residenciais Exclusivos (do PDF) ———
   {
-    id: "edificio-lagoas",
-    name: "Edifício Lagoas",
-    images: ["/modern-studio-building.jpg", "/modern-coworking-space.png", "/rooftop-pool.jpg"],
+    id: "horto-vilas",
+    name: "Condomínio Horto Vilas",
+    images: ["/hortovilas.jpg", "/hortovilas2.jpg", "/hortovilas3.jpg", "/hortovilas4.jpg"],
     technicalSheet: {
-      year: "2022",
-      regime: "Obra em regime de condomínio",
-      address: "R. Marechal Floriano, 570 Canela",
-      architect: "Mário Figueiredo",
-      totalArea: "5.934,75 m²",
-      floors: "16",
-      bedrooms: "1 e 2/4",
-      unitArea: "42 e 56 m²",
-      infrastructure:
-        "Fachadas em pastilha. Play coberto e descoberto, Salão de festas, espaço gourmet, academia, piscina, deck e bar da piscina.",
-    },
-  },
-  {
-    id: "giardino-loreto",
-    name: "Giardino Loreto",
-    images: ["/luxury-residential-building.png", "/modern-lobby.png", "/amenities-area.jpg"],
-    technicalSheet: {
-      year: "2023",
-      regime: "Obra em regime de condomínio",
-      address: "Alameda das Mongubas, 136 Caminho das Árvores",
-      architect: "Alessandro Grimaldi",
-      totalArea: "4.252,19 m²",
-      floors: "17",
-      bedrooms: "96 studios",
-      unitArea: "22,40 m²",
-      infrastructure:
-        "Fachadas em pastilha. Salão de festas, espaço gourmet, coworking, lavanderia, deck e bar da piscina.",
-    },
-  },
-  {
-    id: "hotel-aram-yami",
-    name: "Hotel Aram Yamí",
-    images: ["/colonial-hotel-architecture.jpg", "/hotel-pool-bay-view.jpg", "/luxury-hotel-suite.png"],
-    technicalSheet: {
-      year: "2009",
-      regime: "Empreendimento hoteleiro",
-      address: "Rua Direita de Santo Antônio - Santo Antônio Além do Carmo",
+      year: "",
+      regime: "Residencial exclusivo",
+      address: "",
       architect: "",
-      totalArea: "1.600 m²",
+      totalArea: "620 m² (residência)",
       floors: "",
-      bedrooms: "",
+      bedrooms: "5 suítes",
       unitArea: "",
-      infrastructure:
-        "Empreendimento hoteleiro com arquitetura colonial, localizado no Centro Histórico de Salvador. Possui infraestrutura com piscinas individuais, cafeteria e suítes exclusivas com vista panorâmica da Baía de Todos os Santos.",
+      infrastructure: "4 vagas de garagem e elevador social.",
     },
   },
+  {
+    id: "alphaville-estrela-do-mar",
+    name: "Alphaville Estrela do Mar",
+    // ATENÇÃO: converta os .tif para .jpg/.png e ajuste abaixo:
+    images: ["/estreladomar1.jpg", "/estreladomar2.jpg", "/estreladomar3.jpg", "/estreladomar4.jpg"],
+    technicalSheet: {
+      year: "",
+      regime: "Residencial exclusivo",
+      address: "",
+      architect: "",
+      totalArea: "830 m² (residência)",
+      floors: "",
+      bedrooms: "5 suítes",
+      unitArea: "",
+      infrastructure: "6 vagas de garagem e piscina aquecida.",
+    },
+  }
 ]
 
 export default function PortfolioPage() {
