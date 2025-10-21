@@ -5,7 +5,7 @@ import AboutSection from "@/components/about-section"
 import SpecialtiesSection from "@/components/specialties-section"
 import ResultsSection from "@/components/results-section"
 import Footer from "@/components/footer"
-import TestimonialsSection from "@/components/TestimonialsSection"
+import TestimonialsSection from "@/components/testimonialsSection"
 
 export default function Home() {
   return (

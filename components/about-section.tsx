@@ -10,9 +10,9 @@ export default function AboutSection() {
   return (
     <section
       id="quem-somos"
-      className="relative py-16 sm:py-20 md:py-24 bg-[#4a5568] overflow-hidden"
+      className="relative bg-[#4a5568] overflow-hidden py-10 sm:py-12 md:py-14"
     >
-      {/* Imagem decorativa de fundo (opcional, sutil) */}
+      {/* Fundo sutil */}
       <div className="absolute inset-0 opacity-10">
         <Image
           src="/construction-bg.jpg"
@@ -23,65 +23,70 @@ export default function AboutSection() {
         />
       </div>
 
-      <div className="relative container mx-auto px-4 sm:px-6 md:px-8 max-w-7xl">
+      <div className="relative container mx-auto px-4 sm:px-6 md:px-8 max-w-6xl">
         <h2
           ref={ref}
-          className={`text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-10 sm:mb-14 uppercase tracking-wide text-white transition-all duration-1000 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+          className={`text-2xl sm:text-3xl md:text-[32px] font-bold text-center uppercase tracking-wide text-white transition-all duration-700
+            ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"} mb-4 sm:mb-5`}
         >
           Quem Somos Nós
         </h2>
 
-        {/* Layout dividido: imagem + texto */}
+        {/* Grid compacto: 12 colunas */}
         <div
-          className={`flex flex-col md:flex-row items-center gap-10 md:gap-14 transition-all duration-1000 delay-200 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+          className={`grid md:grid-cols-12 items-center gap-6 md:gap-8 transition-all duration-700
+            ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
         >
-          {/* Imagem lateral */}
-          <div className="relative w-full md:w-1/2 h-72 sm:h-80 md:h-[420px] rounded-2xl overflow-hidden shadow-lg">
-            <Image
-              src="/quemsomosfoto.png"
-              alt="Equipe da Realiza Engenharia em obra"
-              fill
-              className="object-cover object-center"
-            />
+          {/* Imagem (5 colunas) */}
+          <div className="md:col-span-5">
+            <div className="relative h-56 sm:h-64 md:h-[320px] rounded-xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.25)] ring-1 ring-white/5">
+              <Image
+                src="/quemsomosfoto.png"
+                alt="Equipe da Realiza Engenharia em obra"
+                fill
+                className="object-cover object-center"
+                priority
+              />
+            </div>
           </div>
 
-          {/* Texto institucional */}
-          <div className="w-full md:w-1/2 text-white/90 text-center md:text-left">
-            <p className="text-base sm:text-lg leading-relaxed mb-4">
-              Fundada em <strong>2009</strong> por <strong>Sérgio Farias</strong>,
-              Engenheiro Civil graduado pela UFBA e especialista em Qualidade das
-              Construções, a <strong>Realiza Engenharia</strong> nasceu com o
-              propósito de unir técnica, transparência e compromisso para transformar
-              projetos em realidade.
-            </p>
-            <p className="text-base sm:text-lg leading-relaxed mb-4">
-              Ao longo de sua trajetória, a empresa consolidou-se como referência em
-              <strong> construção civil e reformas prediais</strong>, com mais de{" "}
-              <strong>150 unidades entregues</strong> entre empreendimentos
-              residenciais e comerciais em Salvador e região metropolitana.
-            </p>
-            <p className="text-base sm:text-lg leading-relaxed mb-6">
-              Cada obra é conduzida com foco em qualidade, segurança e prazos rigorosos,
-              refletindo os valores que sustentam nossa história:{" "}
-              <strong>seriedade, competência técnica e credibilidade</strong>.
-            </p>
+          {/* Texto (7 colunas) */}
+          <div className="md:col-span-7">
+            <div className="text-white/90 text-base sm:text-[15px] md:text-[16px] leading-relaxed">
+              <p className="mb-3">
+                Fundada em <strong>2009</strong> por <strong>Sérgio Farias</strong>, Engenheiro Civil (UFBA) e
+                especialista em Qualidade das Construções, a <strong>Realiza Engenharia</strong> une técnica,
+                transparência e compromisso para transformar projetos em realidade.
+              </p>
+              <p className="mb-3">
+                Ao longo da trajetória, consolidou-se como referência em
+                <strong> construção civil e reformas prediais</strong>, com mais de <strong>150 unidades entregues</strong> entre
+                empreendimentos residenciais e comerciais na RMS.
+              </p>
+              <p className="mb-4">
+                Cada obra é conduzida com foco em qualidade, segurança e prazos, refletindo nossos valores:
+                <strong> seriedade, competência técnica e credibilidade</strong>.
+              </p>
 
-            <Link href="/sobre">
-              <Button
-                variant="outline"
-                size="lg"
-                className="mt-2 border-2 border-white text-white font-semibold hover:bg-white hover:text-[#4a5568] hover:scale-105 uppercase tracking-wide px-6 sm:px-8 py-4 sm:py-5 rounded-full bg-transparent transition-all duration-300 ease-in-out"
-              >
-                Saiba Mais Sobre Nós
-              </Button>
-            </Link>
+              
+
+              <Link href="/sobre">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-2 border-white text-white font-semibold hover:bg-white hover:text-[#4a5568] hover:scale-[1.03]
+                             uppercase tracking-wide px-5 py-2 rounded-full bg-transparent transition-all duration-200"
+                >
+                  Saiba Mais Sobre Nós
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Reduz a “altura visual” do bloco abaixo sem tirar o respiro mínimo */}
+      <div className="h-2" />
     </section>
   );
 }
