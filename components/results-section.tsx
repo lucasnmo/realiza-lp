@@ -12,7 +12,7 @@ export default function ResultsSection() {
   ]
 
   return (
-    <section className="bg-[#4a5568] text-white py-10 sm:py-12 md:py-14">
+    <section className="bg-[#1E2A32] text-white py-10 sm:py-12 md:py-14">
       <div className="container mx-auto px-4 sm:px-6 md:px-8 max-w-7xl">
         <div
           ref={ref}

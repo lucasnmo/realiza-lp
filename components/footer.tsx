@@ -19,7 +19,7 @@ export default function Footer() {
   ]
 
   return (
-    <footer id="contato" className="bg-[var(--color-foreground)] text-white">
+    <footer id="contato" className="bg-[#1E2A32] text-white">
       <div className="container mx-auto px-4 sm:px-6 md:px-8 py-14 sm:py-16 max-w-7xl">
         {/* +1 coluna para “Conecte-se” */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 sm:gap-12 md:gap-14">

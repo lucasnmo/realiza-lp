@@ -33,24 +33,37 @@ const slides = [
 
 export default function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [fadeIn, setFadeIn] = useState(true)
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length)
+      setFadeIn(false)
+      setTimeout(() => {
+        setCurrentSlide((prev) => (prev + 1) % slides.length)
+        setFadeIn(true)
+      }, 300)
     }, 5000)
     return () => clearInterval(timer)
   }, [])
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length)
+    setFadeIn(false)
+    setTimeout(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length)
+      setFadeIn(true)
+    }, 300)
   }
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
+    setFadeIn(false)
+    setTimeout(() => {
+      setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
+      setFadeIn(true)
+    }, 300)
   }
 
   return (
-    <section id="home" className="relative h-[400px] sm:h-[500px] md:h-[600px] overflow-hidden bg-[#4a5568]">
+    <section id="home" className="relative h-[400px] sm:h-[500px] md:h-[600px] overflow-hidden bg-[#1E2A32]">
       {slides.map((slide, index) => (
         <div
           key={slide.id}
@@ -58,20 +71,26 @@ export default function HeroSlider() {
             index === currentSlide ? "opacity-100" : "opacity-0"
           }`}
         >
-          <img src={slide.image || "/placeholder.svg"} alt={slide.title} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-[#4a5568]/80" />
+          <img src={slide.image} alt={slide.title} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-[#1E2A32]/50" />
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="container mx-auto px-4 sm:px-6 md:px-8 text-center text-white">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 text-balance uppercase tracking-wide">
+            <div
+              className={`container mx-auto px-4 sm:px-6 md:px-8 text-center text-white transition-all duration-700 ${
+                fadeIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
+              }`}
+            >
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 uppercase tracking-wide">
                 {slide.title}
               </h1>
-              <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-balance font-light">{slide.subtitle}</p>
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-light">
+                {slide.subtitle}
+              </p>
             </div>
           </div>
         </div>
       ))}
 
-      {/* Navigation Buttons */}
+      {/* Navigation */}
       <Button
         variant="ghost"
         size="icon"
@@ -91,13 +110,15 @@ export default function HeroSlider() {
         <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6 md:h-8 md:w-8" />
       </Button>
 
-      {/* Dots Indicator */}
+      {/* Indicators */}
       <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 flex space-x-2 sm:space-x-3">
         {slides.map((_, index) => (
           <button
             key={index}
             className={`h-2 sm:h-3 rounded-full transition-all ${
-              index === currentSlide ? "bg-white w-8 sm:w-10" : "bg-white/50 hover:bg-white/75 w-2 sm:w-3"
+              index === currentSlide
+                ? "bg-white w-8 sm:w-10"
+                : "bg-white/50 hover:bg-white/75 w-2 sm:w-3"
             }`}
             onClick={() => setCurrentSlide(index)}
             aria-label={`Ir para slide ${index + 1}`}

@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* === Google Fonts (títulos elegantes + texto fluido) === */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Nunito+Sans:wght@300;400;500;600;700&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap');
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -75,9 +78,10 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-open-sans), system-ui, sans-serif;
-  --font-serif: var(--font-montserrat), system-ui, sans-serif;
-  --font-mono: var(--font-lato), system-ui, sans-serif;
+  /* === Fontes do projeto === */
+  --font-sans: 'Nunito Sans', system-ui, sans-serif;
+  --font-serif: 'Montserrat', system-ui, sans-serif;            /* títulos */
+  --font-mono: 'Barlow Semi Condensed', system-ui, sans-serif;  /* destaques/legendas técnicas */
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -126,7 +130,7 @@
   }
 }
 
-/* ✅ Reset mais seguro — não anula espaçamentos utilitários do Tailwind */
+/* ✅ Reset seguro */
 *,
 *::before,
 *::after {
@@ -146,11 +150,11 @@ html, body {
   margin-right: auto;
 }
 
-/* Títulos */
+/* Títulos mais elegantes (peso 600) */
 h1,
 h2 {
   font-family: var(--font-serif);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.2;
 }
 
@@ -158,7 +162,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-mono);
+  font-family: var(--font-serif);
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.25;
 }

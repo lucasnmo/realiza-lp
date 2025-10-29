@@ -18,7 +18,7 @@ export default function Header() {
   ]
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#4a5568]">
+    <header className="sticky top-0 z-50 w-full bg-[#1E2A32]">
       <div className="container mx-auto px-4 sm:px-6 md:px-8 max-w-7xl">
         <div className="flex h-16 sm:h-20 items-center justify-between">
           <Link href="/" className="flex items-center">

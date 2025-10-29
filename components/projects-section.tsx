@@ -51,9 +51,10 @@ export default function ProjectsSection() {
 
   return (
     <section
-      id="portfolio"
-      className="bg-white mt-8 sm:mt-10 lg:mt-12 pt-8 sm:pt-10 lg:pt-12 pb-12 sm:pb-14 lg:pb-16"
-    >
+  id="portfolio"
+  // troquei mt-8 → mt-4 (reduz distância entre hero e a seção)
+  className=" mt-2 sm:mt-4 lg:mt-8 pt-8 sm:pt-10 lg:pt-12 pb-12 sm:pb-14 lg:pb-16"
+>
       <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16 max-w-7xl">
         <h2
           ref={ref}
@@ -94,7 +95,7 @@ export default function ProjectsSection() {
                       <h3 className="text-lg sm:text-xl font-semibold text-gray-800 leading-snug">
                         {project.name}
                       </h3>
-                      <p className="mt-1 text-sm sm:text-base text-gray-600">{project.location}</p>
+                      <p className="mt-1 text-sm sm:text-base text-gray-800">{project.location}</p>
                     </div>
                   </article>
                 </div>
