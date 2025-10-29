@@ -61,7 +61,7 @@ export default function ProjectsSection() {
           className={`text-2xl sm:text-3xl md:text-4xl font-bold text-center uppercase tracking-wide text-gray-800 transition-all duration-700
             ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"} mb-6 sm:mb-8 lg:mb-10`}
         >
-          Exemplos de Obras
+          Nossas Obras
         </h2>
 
         {/* wrapper compensa o padding do viewport */}
