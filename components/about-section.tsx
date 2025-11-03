@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
+import { CheckCircle2 } from "lucide-react";
 
 export default function AboutSection() {
   const { ref, isVisible } = useScrollReveal();
@@ -41,7 +42,7 @@ export default function AboutSection() {
           }`}
         />
 
-        {/* Grid compacto: 12 colunas */}
+        {/* Grid 12 colunas */}
         <div
           className={`grid items-center gap-6 md:grid-cols-12 md:gap-8 transition-all duration-700 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
@@ -49,14 +50,16 @@ export default function AboutSection() {
         >
           {/* Imagem (5 colunas) */}
           <div className="md:col-span-5">
-            <div className="relative h-56 sm:h-64 md:h-[320px] overflow-hidden rounded-xl ring-1 ring-white/10 shadow-[0_8px_24px_rgba(0,0,0,0.25)]">
+            <div className="group relative h-56 sm:h-64 md:h-[320px] overflow-hidden rounded-xl ring-1 ring-white/10 shadow-[0_8px_24px_rgba(0,0,0,0.25)]">
               <Image
-                src="/quemsomosfoto.png"
+                src="/realizaquemsomos.jpeg"
                 alt="Equipe da Realiza Engenharia em obra"
                 fill
-                className="object-cover object-center"
+                className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
                 priority
               />
+              {/* gradiente sutil para legibilidade na base da foto */}
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#1E2A32]/60 to-transparent" />
             </div>
           </div>
 
@@ -64,38 +67,67 @@ export default function AboutSection() {
           <div className="md:col-span-7">
             <div className="text-white/90 text-base sm:text-[15px] md:text-[16px] leading-relaxed">
               <p className="mb-3">
-                Fundada em <strong>2009</strong> por <strong>Sérgio Farias</strong>,
-                Engenheiro Civil (UFBA) e especialista em Qualidade das Construções,
-                a <strong>Realiza Engenharia</strong> une técnica, transparência e
-                compromisso para transformar projetos em realidade.
-              </p>
-              <p className="mb-3">
-                Ao longo da trajetória, consolidou-se como referência em
-                <strong> construção civil e reformas prediais</strong>, com mais de{" "}
-                <strong>150 unidades entregues</strong> entre empreendimentos
-                residenciais e comerciais na RMS.
-              </p>
-              <p className="mb-4">
-                Cada obra é conduzida com foco em qualidade, segurança e prazos,
-                refletindo nossos valores:
-                <strong> seriedade, competência técnica e credibilidade</strong>.
+                A <strong>Realiza Engenharia Ltda.</strong>, com sede em Salvador (BA),
+                reúne <strong>15 anos</strong> de atuação na construção civil, marcada por
+                solidez, transparência e gestão próxima dos clientes.
               </p>
 
-              <Link href="/sobre">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="rounded-full border-2 border-white bg-transparent px-5 py-2 font-semibold uppercase tracking-wide text-white transition-all duration-200 hover:scale-[1.03] hover:bg-white hover:text-[#4a5568]"
-                >
-                  Saiba Mais Sobre Nós
-                </Button>
-              </Link>
+              <p className="mb-3">
+                Especialistas no <strong>regime de condomínio a preço de custo</strong>,
+                modelo em que os próprios condôminos financiam a obra — sem necessidade de
+                financiamento bancário —, tornando o investimento mais acessível e
+                participativo, com <strong>prestação de contas rigorosa</strong>.
+              </p>
+
+              <p className="mb-5">
+                Desde a fundação, entregamos <strong>10 edifícios</strong> residenciais,
+                somando <strong>quase 500 unidades</strong>, sempre com{" "}
+                <strong>transparência, segurança e cumprimento de prazos</strong>.
+              </p>
+
+              {/* Mini “modelo de atuação” — linha, elegante (sem balões) */}
+              <ul className="flex flex-col sm:flex-row sm:items-center sm:divide-x sm:divide-white/15 gap-3 sm:gap-0 mb-6">
+                <li className="flex items-center gap-2 pr-0 sm:pr-4">
+                  <CheckCircle2 className="h-5 w-5 text-[#2A98AA]" />
+                  <span className="text-white/90">Gestão compartilhada</span>
+                </li>
+                <li className="flex items-center gap-2 sm:px-4">
+                  <CheckCircle2 className="h-5 w-5 text-[#2A98AA]" />
+                  <span className="text-white/90">Sem juros bancários</span>
+                </li>
+                <li className="flex items-center gap-2 sm:pl-4">
+                  <CheckCircle2 className="h-5 w-5 text-[#2A98AA]" />
+                  <span className="text-white/90">Transparência e controle</span>
+                </li>
+              </ul>
+
+              {/* CTAs */}
+              <div className="flex flex-wrap items-center gap-3">
+                <Link href="/sobre">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-full border-2 border-white bg-transparent px-5 py-2 font-semibold uppercase tracking-wide text-white transition-all duration-200 hover:scale-[1.03] hover:bg-white hover:text-[#1E2A32]"
+                  >
+                    Saiba Mais Sobre Nós
+                  </Button>
+                </Link>
+
+                <Link href="#contato">
+                  <Button
+                    size="sm"
+                    className="rounded-full bg-[#2A98AA] px-5 py-2 font-semibold uppercase tracking-wide text-white shadow-md transition-all duration-200 hover:scale-[1.03] hover:shadow-lg"
+                  >
+                    Fale com um Engenheiro
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* espaçador mínimo para não “colar” na seção seguinte */}
+      {/* espaçador mínimo */}
       <div className="h-2" />
     </section>
   );

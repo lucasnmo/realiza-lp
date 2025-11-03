@@ -4,26 +4,28 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const SLIDE_DURATION = 4200; // ms — velocidade mais lenta entre trocas
-const TEXT_DELAY = 220;      // ms — pequeno atraso antes do texto aparecer
+// ⏱ controle de ritmo
+const SLIDE_DURATION = 5500; // ms — tempo de cada slide na tela
+const TEXT_DELAY = 280;      // ms — pequeno atraso antes do texto surgir
 
+// ✍️ textos atualizados conforme orientação do contratante
 const slides = [
   {
     id: 1,
-    title: "Excelência em Construção Civil",
-    subtitle: "Mais de 15 anos transformando sonhos em realidade",
+    title: "Engenharia com Credibilidade",
+    subtitle: "Mais de 15 anos transformando projetos em realidade",
     image: "/hortovlias.jpg",
   },
   {
     id: 2,
-    title: "Obras Residenciais de Alto Padrão",
-    subtitle: "Qualidade, transparência e compromisso",
+    title: "Empreendimentos Residenciais e Comerciais",
+    subtitle: "Transparência, controle e compromisso",
     image: "/aranyammi3.JPG",
   },
   {
-    id: 4,
-    title: "Regime de Condomínio",
-    subtitle: "Transparência total do início ao fim",
+    id: 3,
+    title: "Regime de Condomínio a Preço de Custo",
+    subtitle: "Gestão compartilhada, sem financiamento bancário",
     image: "/estreladomar2.jpg",
   },
 ];
@@ -41,6 +43,7 @@ export default function HeroSlider() {
     }, SLIDE_DURATION);
   };
 
+  // quando o slide troca, faz o texto "entrar" com atraso sutil
   useEffect(() => {
     setTextVisible(false);
     if (textTimerRef.current) clearTimeout(textTimerRef.current);
@@ -53,6 +56,7 @@ export default function HeroSlider() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current]);
 
+  // limpeza geral
   useEffect(() => {
     return () => {
       if (slideTimerRef.current) clearTimeout(slideTimerRef.current);
@@ -60,17 +64,14 @@ export default function HeroSlider() {
     };
   }, []);
 
-  const next = () => {
+  const goTo = (index: number) => {
     if (slideTimerRef.current) clearTimeout(slideTimerRef.current);
     if (textTimerRef.current) clearTimeout(textTimerRef.current);
-    setCurrent((i) => (i + 1) % slides.length);
+    setCurrent(index);
   };
 
-  const prev = () => {
-    if (slideTimerRef.current) clearTimeout(slideTimerRef.current);
-    if (textTimerRef.current) clearTimeout(textTimerRef.current);
-    setCurrent((i) => (i - 1 + slides.length) % slides.length);
-  };
+  const next = () => goTo((current + 1) % slides.length);
+  const prev = () => goTo((current - 1 + slides.length) % slides.length);
 
   return (
     <section
@@ -80,18 +81,19 @@ export default function HeroSlider() {
       {slides.map((s, i) => (
         <div
           key={s.id}
-          className={`absolute inset-0 transition-opacity duration-900 ease-in-out ${
-            i === current ? "opacity-100" : "opacity-0"
-          }`}
+          className={`absolute inset-0 transition-opacity duration-[1400ms] ease-out
+            ${i === current ? "opacity-100" : "opacity-0"}`}
           aria-hidden={i !== current}
         >
           <img src={s.image} alt={s.title} className="h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-[#1E2A32]/50" />
+          {/* véu para legibilidade */}
+          <div className="absolute inset-0 bg-[#1E2A32]/55" />
 
+          {/* texto central com fade-up */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div
               className={`container mx-auto px-4 sm:px-6 md:px-8 text-center text-white
-                          ${textVisible ? "animate-[fadeUp_700ms_ease-out] opacity-100" : "opacity-0"}`}
+                          ${textVisible ? "animate-[fadeUp_750ms_ease-out] opacity-100" : "opacity-0"}`}
             >
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 uppercase tracking-wide">
                 {s.title}
@@ -129,15 +131,10 @@ export default function HeroSlider() {
         {slides.map((_, i) => (
           <button
             key={i}
-            onClick={() => {
-              if (slideTimerRef.current) clearTimeout(slideTimerRef.current);
-              if (textTimerRef.current) clearTimeout(textTimerRef.current);
-              setCurrent(i);
-            }}
+            onClick={() => goTo(i)}
             aria-label={`Ir para slide ${i + 1}`}
-            className={`h-2 sm:h-3 rounded-full transition-all ${
-              i === current ? "bg-white w-8 sm:w-10" : "bg-white/50 hover:bg-white/75 w-2 sm:w-3"
-            }`}
+            className={`h-2 sm:h-3 rounded-full transition-all
+              ${i === current ? "bg-white w-8 sm:w-10" : "bg-white/50 hover:bg-white/75 w-2 sm:w-3"}`}
           />
         ))}
       </div>

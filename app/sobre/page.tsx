@@ -4,10 +4,20 @@ import Footer from "@/components/footer";
 import Image from "next/image";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
+/**
+ * SOBRE NÓS — versão revisada
+ * - Nome jurídico: Realiza Engenharia Ltda.
+ * - Métricas: 2009 | 10 prédios | ~500 unidades | 35+ anos de experiência
+ * - Removido: Reforma Predial
+ * - Adicionado: Casas de Alto Padrão
+ * - Modelo de Atuação: Condomínio a preço de custo (Lei 4.591/1964)
+ */
+
 export default function SobrePage() {
   const { ref: refHero, isVisible: visHero } = useScrollReveal();
   const { ref: refHistoria, isVisible: visHistoria } = useScrollReveal();
   const { ref: refAtuacao, isVisible: visAtuacao } = useScrollReveal();
+  const { ref: refModelo, isVisible: visModelo } = useScrollReveal();
   const { ref: refValores, isVisible: visValores } = useScrollReveal();
 
   return (
@@ -35,18 +45,19 @@ export default function SobrePage() {
               }`}
             >
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-[#4a5568] font-serif">
-                Realiza Engenharia
+                Realiza Engenharia Ltda.
               </h1>
               <p className="mt-4 text-base sm:text-lg md:text-xl text-gray-600 text-center max-w-3xl mx-auto">
-                Engenharia com transparência, controle e compromisso — há mais de uma década transformando projetos em realidade.
+                Engenharia com <strong>transparência, controle e compromisso</strong> — há mais de 15 anos
+                transformando projetos em realidade.
               </p>
 
-              {/* métricas */}
+              {/* Métricas */}
               <div className="mt-8 flex flex-wrap justify-center gap-4">
                 <Metric label="Fundação" value="2009" />
-                <Metric label="Prédios entregues" value="8" />
-                <Metric label="Unidades habitacionais" value="150+" />
-                <Metric label="Anos de experiência" value="20+" />
+                <Metric label="Prédios entregues" value="10" />
+                <Metric label="Unidades habitacionais" value="~500" />
+                <Metric label="Anos de experiência" value="35+" />
               </div>
             </div>
           </div>
@@ -67,10 +78,13 @@ export default function SobrePage() {
                     Nossa História
                   </h2>
                   <p className="text-gray-700 text-base leading-relaxed">
-                    Fundada em <strong>2009</strong> por <strong>Sérgio Farias</strong>, engenheiro civil formado pela UFBA e especialista em Qualidade das Construções pela UNIFACS, a Realiza Engenharia nasceu após mais de <strong>20 anos de experiência</strong> em grandes obras na Bahia.
+                    Fundada em <strong>2009</strong> por <strong>Sérgio Farias</strong>, engenheiro civil (UFBA) e
+                    especialista em Qualidade das Construções (UNIFACS), a Realiza Engenharia nasceu com a proposta de
+                    unir técnica e gestão próxima aos clientes, conduzindo cada obra com seriedade e clareza.
                   </p>
                   <p className="mt-3 text-gray-700 text-base leading-relaxed">
-                    Desde então, a empresa consolidou-se como referência em <strong>construções residenciais e comerciais</strong>, atuando sob os regimes de administração e condomínio. Já são <strong>8 prédios e mais de 150 unidades</strong> entregues, além de casas de alto padrão e diversas reformas prediais.
+                    Ao longo da trajetória, entregamos <strong>10 edifícios</strong> e <strong>quase 500 unidades</strong>, com
+                    foco em qualidade, segurança e cumprimento rigoroso de prazos.
                   </p>
                 </div>
 
@@ -84,7 +98,7 @@ export default function SobrePage() {
                     />
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#0d7a8f]/90 via-[#0d7a8f]/60 to-transparent p-4">
                       <p className="text-white text-sm sm:text-base font-semibold">
-                        Liderança técnica e experiência de mais de duas décadas
+                        Liderança técnica e experiência de 35+ anos
                       </p>
                     </div>
                   </div>
@@ -110,25 +124,62 @@ export default function SobrePage() {
               <div className="grid md:grid-cols-2 gap-8">
                 <HoverCard
                   title="Construção Civil"
-                  description="Atuamos no planejamento, gerenciamento e execução de obras residenciais e comerciais, com destaque para o sistema de construção em regime de condomínio — modelo que garante participação ativa e decisões transparentes."
+                  description="Planejamento, gerenciamento e execução de empreendimentos residenciais e comerciais, com forte especialização no regime de condomínio a preço de custo — participação ativa, prestação de contas e decisões transparentes."
                   items={[
-                    "Gestão de obras e orçamentos",
+                    "Gestão de obras, orçamentos e cronograma",
                     "Transparência e controle de custos",
-                    "Cronogramas cumpridos com precisão",
+                    "Qualidade técnica do projeto à entrega",
                   ]}
                   icon="/construction-icon.svg"
                 />
                 <HoverCard
-                  title="Reforma Predial"
-                  description="Também realizamos reformas e manutenções prediais, comerciais e residenciais, com foco em segurança, agilidade e custos controlados."
+                  title="Casas de Alto Padrão"
+                  description="Projetos sob medida, alto nível de acabamento e condução técnica minuciosa, do executivo à entrega final — sempre com prazos e especificações respeitados."
                   items={[
-                    "Recuperação e impermeabilização de fachadas",
-                    "Revitalização e assentamento de pastilhas",
-                    "Recuperação estrutural e tratamento de fissuras",
-                    "Pintura acrílica e aplicação de manta asfáltica",
+                    "Arquitetura autoral e compatibilização",
+                    "Execução cuidadosa de acabamentos",
+                    "Acompanhamento próximo e criterioso",
                   ]}
-                  icon="/maintenance-icon.svg"
+                  icon="/home-premium.svg"
                 />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* MODELO DE ATUAÇÃO — Cond. a preço de custo */}
+        <section className="py-10 sm:py-12 md:py-14 bg-white">
+          <div className="container mx-auto max-w-6xl px-4 sm:px-6 md:px-8">
+            <div
+              ref={refModelo}
+              className={`transition-all duration-700 ${
+                visModelo ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              }`}
+            >
+              <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-md transition-all">
+                <h3 className="text-xl sm:text-2xl font-semibold text-[#4a5568] mb-2">
+                  Modelo de Atuação
+                </h3>
+                <p className="text-gray-700">
+                  Especialistas em <strong>condomínio a preço de custo</strong> (Lei Federal n.º 4.591/1964), conduzimos a
+                  obra com gestão técnica e administrativa, prestação de contas rigorosa e taxa de administração
+                  previamente aprovada em assembleia.
+                </p>
+
+                <ul className="mt-4 grid sm:grid-cols-3 gap-3 text-gray-700 text-sm sm:text-base">
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#0d7a8f] mt-1">•</span>
+                    <span><strong>Sem financiamento bancário:</strong> aportes mensais do grupo, sem juros.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#0d7a8f] mt-1">•</span>
+                    <span><strong>Baixo custo de comercialização:</strong> estrutura enxuta que otimiza o valor final.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#0d7a8f] mt-1">•</span>
+                    <span><strong>Sem margem de incorporadora:</strong> custos rateados com total transparência.</span>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
@@ -149,16 +200,30 @@ export default function SobrePage() {
                     Nossos Valores
                   </h2>
                   <p className="text-gray-700 text-base leading-relaxed">
-                    Nosso compromisso é com a <strong>qualidade técnica</strong> e a
-                    <strong> transparência</strong> em cada etapa da obra.  
-                    Valorizamos o <strong>relacionamento próximo</strong> com clientes, fornecedores e parceiros, garantindo confiança mútua e resultados consistentes.
+                    Nosso compromisso é com a <strong>qualidade técnica</strong>, a{" "}
+                    <strong>transparência</strong> e o <strong>cumprimento de prazos</strong>. Mantemos uma relação
+                    próxima com clientes e parceiros, sustentada por controle, organização e ética.
                   </p>
 
-                  <div className="mt-6 grid sm:grid-cols-2 gap-3">
-                    <ValuePill text="Organização e planejamento" />
-                    <ValuePill text="Transparência e ética" />
-                    <ValuePill text="Cumprimento de prazos" />
-                    <ValuePill text="Controle e eficiência" />
+                  {/* Lista elegante (sem “chips”) */}
+                  <div className="mt-6 text-gray-800/90">
+                    <ul className="space-y-2">
+                      {[
+                        "Organização e planejamento",
+                        "Transparência e ética",
+                        "Controle e eficiência",
+                        "Compromisso com prazos",
+                      ].map((v, i) => (
+                        <li
+                          key={v}
+                          className="group flex items-center gap-3 text-sm sm:text-base"
+                          style={{ transitionDelay: `${i * 60}ms` }}
+                        >
+                          <span className="h-[2px] w-6 bg-[#0d7a8f]/60 group-hover:w-8 group-hover:bg-[#0d7a8f] transition-all duration-300" />
+                          <span className="group-hover:text-[#0d7a8f] transition-colors duration-300">{v}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
 
@@ -172,7 +237,7 @@ export default function SobrePage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0d7a8f]/80 via-[#0d7a8f]/40 to-transparent" />
                   <div className="absolute bottom-3 left-4 text-white">
                     <p className="font-semibold text-sm sm:text-base">
-                      Excelência técnica e resultados que geram confiança
+                      Credibilidade que constrói resultados
                     </p>
                   </div>
                 </div>
@@ -187,7 +252,7 @@ export default function SobrePage() {
   );
 }
 
-/* ==== Componentes auxiliares modernos ==== */
+/* ==== Componentes auxiliares ==== */
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
@@ -226,14 +291,6 @@ function HoverCard({
           </li>
         ))}
       </ul>
-    </div>
-  );
-}
-
-function ValuePill({ text }: { text: string }) {
-  return (
-    <div className="bg-gray-100 hover:bg-[#0d7a8f]/10 border border-gray-200 rounded-full px-4 py-2 text-sm sm:text-base text-gray-700 font-medium transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-      {text}
     </div>
   );
 }

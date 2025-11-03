@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { MapPin, Phone, Mail, Facebook, Instagram, Linkedin } from "lucide-react"
+import { MapPin, Phone, Mail, Instagram, MessageCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export default function Footer() {
@@ -12,20 +12,24 @@ export default function Footer() {
     { name: "Contato", href: "#contato" },
   ]
 
+  // Somente Instagram (mantendo o padrão)
   const socialLinks = [
-    { icon: Facebook,  href: "#", label: "Facebook" },
-    { icon: Instagram, href: "#", label: "Instagram" },
-    { icon: Linkedin,  href: "#", label: "LinkedIn" },
+    { icon: Instagram, href: "https://www.instagram.com/realiza.eng/", label: "Instagram" },
   ]
 
   return (
     <footer id="contato" className="bg-[#1E2A32] text-white">
       <div className="container mx-auto px-4 sm:px-6 md:px-8 py-14 sm:py-16 max-w-7xl">
-        {/* +1 coluna para “Conecte-se” */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 sm:gap-12 md:gap-14">
           {/* Logo + texto */}
           <div className="flex flex-col items-center md:items-start text-center md:text-left">
-            <Image src="/realiza-logo-white.png" alt="REALIZA Engenharia" width={140} height={45} className="mb-6" />
+            <Image
+              src="/realiza-logo-white.png"
+              alt="REALIZA Engenharia"
+              width={140}
+              height={45}
+              className="mb-6"
+            />
             <p className="text-sm text-gray-300 leading-relaxed">
               Engenharia de qualidade, com transparência e compromisso.
               Construindo sonhos desde 2009.
@@ -53,18 +57,33 @@ export default function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin className="h-5 w-5 flex-shrink-0 mt-0.5" />
                 <span>
-                  Rua Professor Rômulo Almeida, 217<br />
-                  Sala 02 - Acupe de Brotas<br />
-                  Salvador, BA
+                  Marginal da Avenida Vasco da Gama, 3691<br />
+                  Sala 1404 — Acupe<br />
+                  Salvador — BA, 40290-350
                 </span>
               </li>
+
+              {/* Telefone fixo (padrão de texto) */}
               <li className="flex items-start gap-3">
                 <Phone className="h-5 w-5 flex-shrink-0 mt-0.5" />
-                <div>
-                  <a href="tel:+557132769191" className="hover:text-white">(71) 3276.9191</a><br />
-                  <a href="tel:+5571992470390" className="hover:text-white">(71) 99247.0390</a>
-                </div>
+                <a href="tel:+557132769191" className="hover:text-white">
+                  (71) 3276.9191
+                </a>
               </li>
+
+              {/* WhatsApp no MESMO padrão do número acima (linha de texto, sem botão verde) */}
+              <li className="flex items-start gap-3">
+                <MessageCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                <a
+                  href="https://wa.me/5571992220164"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white"
+                >
+                  (71) 99222-0164
+                </a>
+              </li>
+
               <li className="flex items-center gap-3">
                 <Mail className="h-5 w-5 flex-shrink-0" />
                 <a href="mailto:contato@realizaeng.com.br" className="hover:text-white">
@@ -74,7 +93,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Conecte-se Conosco (migrado para o rodapé) */}
+          {/* Conecte-se Conosco — apenas Instagram, mantendo padrões */}
           <div className="text-center md:text-left">
             <h3 className="text-base sm:text-lg font-bold mb-4 sm:mb-5">Conecte-se Conosco</h3>
             <div className="flex justify-center md:justify-start gap-3 sm:gap-4 mb-5">
@@ -86,15 +105,13 @@ export default function Footer() {
                   className="bg-white/10 border-white/20 text-white hover:bg-white/20 hover:scale-110 transition-all duration-300"
                   asChild
                 >
-                  <a href={href} aria-label={label}>
+                  <a href={href} aria-label={label} target="_blank" rel="noopener noreferrer">
                     <Icon className="h-5 w-5" />
                   </a>
                 </Button>
               ))}
             </div>
-            <p className="text-xs text-gray-300/90">
-              Acompanhe novidades, obras e bastidores nas nossas redes.
-            </p>
+            <p className="text-xs text-gray-300/90">Acompanhe obras, novidades e bastidores.</p>
           </div>
         </div>
 

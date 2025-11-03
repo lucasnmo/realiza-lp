@@ -51,7 +51,7 @@ export default function TestimonialsSection() {
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           } mb-6 sm:mb-8 lg:mb-10`}
         >
-          Depoimentos
+          Quem Viveu a Experiência Realiza
         </h2>
 
         <div className="-mx-6 sm:-mx-8">

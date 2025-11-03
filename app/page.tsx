@@ -6,6 +6,7 @@ import SpecialtiesSection from "@/components/specialties-section"
 import ResultsSection from "@/components/results-section"
 import Footer from "@/components/footer"
 import TestimonialsSection from "@/components/testimonialsSection"
+import MethodologySection from "@/components/nossametodologia"
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
       <ProjectsSection />
       <AboutSection />
       <ResultsSection />
+      <MethodologySection/>
       <TestimonialsSection/>
       <Footer />
     </main>
