@@ -29,7 +29,7 @@ const projects = [
     id: "solar-amendoeiras",
     category: "residenciais" as Category,
     name: "Solar das Amendoeiras",
-    images: ["/solardasamendoeiras3.png", "/solardasamendoeiras.jpg", "/solardasamendoeiras2.jpg"],
+    images: ["/solardasamendoeiras3.png", "/solardasamendoeiras.jpg", "/solardasamendoeiras2.jpg", "solarmendoeiras1.jpg", "solarmendoeiras2.jpg", "solarmendoeiras3.jpg"],
     technicalSheet: {
       year: "2010",
       regime: "Obra em regime de condomínio",
@@ -47,7 +47,7 @@ const projects = [
     id: "bosque-guarajuba",
     category: "residenciais" as Category,
     name: "Condomínio Bosque de Guarajuba",
-    images: ["/bosquedeguarajuba.jpg", "/bosquedeguarajuba2.jpg", "/bosquedeguarajuba3.jpg"],
+    images: ["/bosquedeguarajuba.jpg", "/bosquedeguarajuba2.jpg", "/bosquedeguarajuba3.jpg", "bosque1.JPG", "bosque2.JPG", "bosque3.JPG", "bosque4.JPG", "bosque5.JPG", "bosque6.JPG", "bosque7.JPG", "bosque8.JPG"],
     technicalSheet: {
       year: "2012",
       regime: "Obra em regime de administração",

@@ -87,7 +87,7 @@ export default function Footer() {
               <li className="flex items-center gap-3">
                 <Mail className="h-5 w-5 flex-shrink-0" />
                 <a href="mailto:contato@realizaeng.com.br" className="hover:text-white">
-                  contato@realizaeng.com.br
+                  -
                 </a>
               </li>
             </ul>
