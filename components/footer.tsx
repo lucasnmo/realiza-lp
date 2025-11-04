@@ -32,7 +32,7 @@ export default function Footer() {
             />
             <p className="text-sm text-gray-300 leading-relaxed">
               Engenharia de qualidade, com transparência e compromisso.
-              Construindo sonhos desde 2009.
+              Construção com método, clareza e resultado
             </p>
           </div>
 

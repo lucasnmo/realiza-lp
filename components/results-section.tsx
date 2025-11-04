@@ -6,8 +6,8 @@ export default function ResultsSection() {
 
   const stats = [
     { value: "15+", label: "Anos de Experiência" },
-    { value: "150+", label: "Unidades Entregues" },
-    { value: "08",  label: "Prédios Concluídos" },
+    { value: "500+", label: "Unidades Habitacionais" },
+    { value: "10",  label: "Prédios Concluídos" },
     { value: "100%", label: "Satisfação dos Clientes" },
   ]
 

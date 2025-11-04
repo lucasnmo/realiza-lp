@@ -5,7 +5,6 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import Image from "next/image"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
-import * as Accordion from "@radix-ui/react-accordion"
 import {
   Calendar,
   Ruler,
@@ -14,15 +13,21 @@ import {
   MapPin,
   User2,
   Building2,
+  ChevronLeft,
+  ChevronRight,
+  X
 } from "lucide-react"
 
 /* =========================================================
    DADOS
    ========================================================= */
 
+type Category = "residenciais" | "casas" | "comerciais"
+
 const projects = [
   {
     id: "solar-amendoeiras",
+    category: "residenciais" as Category,
     name: "Solar das Amendoeiras",
     images: ["/solardasamendoeiras3.png", "/solardasamendoeiras.jpg", "/solardasamendoeiras2.jpg"],
     technicalSheet: {
@@ -40,6 +45,7 @@ const projects = [
   },
   {
     id: "bosque-guarajuba",
+    category: "residenciais" as Category,
     name: "Condomínio Bosque de Guarajuba",
     images: ["/bosquedeguarajuba.jpg", "/bosquedeguarajuba2.jpg", "/bosquedeguarajuba3.jpg"],
     technicalSheet: {
@@ -57,6 +63,7 @@ const projects = [
   },
   {
     id: "hotel-aram-yami",
+    category: "comerciais" as Category,
     name: "Hotel Aram Yamí",
     images: ["/aranyammi.jpg", "/aranyammi3.JPG", "/aranyammi4.jpg"],
     technicalSheet: {
@@ -72,34 +79,34 @@ const projects = [
         "Arquitetura colonial no Centro Histórico de Salvador; piscinas individuais, cafeteria e suítes com vista panorâmica da Baía de Todos os Santos.",
     },
   },
-
   {
     id: "residencial-sombreiros",
-    name: "ResidencialS dos Sombreiros",
+    category: "residenciais" as Category,
+    name: "Residencial dos Sombreiros",
     images: ["/residencialdossombreiros2.jpg", "/residencialdossombreiros.jpg", "/residencialdossombreiros3.jpg"],
     technicalSheet: {
       year: "2013",
       regime: "Obra em regime de condomínio",
       address: "Alameda dos Sombreiros, Caminho das Árvores",
       architect: "Mário Figueiredo",
-      totalArea: "4.050,00 m²",
+      totalArea: "4.050 m²",
       floors: "16",
       bedrooms: "3/4 (2 suítes)",
       unitArea: "93 m²",
       infrastructure:
-        "Fachadas principais pastilhadas; Piscina, pq. infantil, deck, varanda gourmet, sauna, salão de festas, salão de jogos, guarita de segurança, academia e churrasqueira",
+        "Fachadas principais pastilhadas; piscina, parque infantil, deck, varanda gourmet, sauna, salão de festas, salão de jogos, guarita de segurança, academia e churrasqueira.",
     },
   },
-
-  // ——— Residenciais Exclusivos ———
+  // ——— Casas de alto padrão ———
   {
     id: "horto-vilas",
+    category: "casas" as Category,
     name: "Condomínio Horto Vilas",
     images: ["/hortovlias.jpg", "/hortovlias2.jpg", "/hortovlias3.jpg", "/hortovlias4.jpg"],
     technicalSheet: {
       year: "",
       regime: "Residencial exclusivo",
-      address: "",
+      address: "Vilas do Atlântico, Lauro de Freitas",
       architect: "",
       totalArea: "620 m² (residência)",
       floors: "",
@@ -110,13 +117,13 @@ const projects = [
   },
   {
     id: "alphaville-estrela-do-mar",
+    category: "casas" as Category,
     name: "Alphaville Estrela do Mar",
-    // Se tiver .tif, o SmartImage tenta automaticamente .jpg/.jpeg/.png como fallback
     images: ["/estreladomar.jpg", "/estreladomar2.jpg", "/estreladomar3.jpg", "/estreladomar4.jpg"],
     technicalSheet: {
       year: "",
       regime: "Residencial exclusivo",
-      address: "",
+      address: "Alphaville, Salvador",
       architect: "",
       totalArea: "830 m² (residência)",
       floors: "",
@@ -133,15 +140,41 @@ const projects = [
 
 export default function PortfolioPage() {
   const { ref: headerRef, isVisible: headerVisible } = useScrollReveal<HTMLDivElement>()
+  const [tab, setTab] = React.useState<Category>("residenciais")
+
+  const [lightbox, setLightbox] = React.useState<{
+    open: boolean
+    images: string[]
+    index: number
+    title?: string
+  }>({ open: false, images: [], index: 0 })
+
+  const filtered = React.useMemo(
+    () => projects.filter((p) => p.category === tab),
+    [tab]
+  )
+
+  // fecha lightbox com ESC
+  React.useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!lightbox.open) return
+      if (e.key === "Escape") setLightbox((s) => ({ ...s, open: false }))
+      if (e.key === "ArrowRight") setLightbox((s) => ({ ...s, index: (s.index + 1) % s.images.length }))
+      if (e.key === "ArrowLeft") setLightbox((s) => ({ ...s, index: (s.index - 1 + s.images.length) % s.images.length }))
+    }
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [lightbox.open, lightbox.images.length])
 
   return (
     <div className="min-h-screen bg-white">
       <Header />
 
       <main className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-12 py-14 sm:py-16">
+        {/* Cabeçalho */}
         <div
           ref={headerRef}
-          className={`mb-10 sm:mb-12 transition-all duration-700 ${
+          className={`mb-8 sm:mb-10 transition-all duration-700 ${
             headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}
         >
@@ -149,17 +182,44 @@ export default function PortfolioPage() {
             Nossos Empreendimentos
           </h1>
           <p className="font-sans text-center text-gray-600 text-base sm:text-lg md:text-xl mb-6 max-w-4xl mx-auto leading-relaxed px-4">
-            Conheça os projetos que construímos com excelência, qualidade e compromisso ao longo de nossa trajetória.
+            Conheça os projetos que construímos com qualidade, transparência e compromisso.
           </p>
           <div className="w-20 h-1 bg-[#0891b2] mx-auto rounded-full" />
         </div>
 
-        <div className="space-y-10 sm:space-y-12">
-          {projects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
+        {/* Abas */}
+        <Tabs tab={tab} onChange={setTab} />
+
+        {/* Lista (1 coluna, ficha aberta) */}
+        <div className="mt-8 space-y-10 sm:space-y-12">
+          {filtered.map((project, index) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              onOpenLightbox={(startIndex: number) =>
+                setLightbox({ open: true, images: project.images, index: startIndex, title: project.name })
+              }
+            />
           ))}
         </div>
       </main>
+
+      {/* Lightbox simples, sem dependências */}
+      {lightbox.open && (
+        <LightboxOverlay
+          title={lightbox.title}
+          images={lightbox.images}
+          index={lightbox.index}
+          onClose={() => setLightbox((s) => ({ ...s, open: false }))}
+          onPrev={() =>
+            setLightbox((s) => ({ ...s, index: (s.index - 1 + s.images.length) % s.images.length }))
+          }
+          onNext={() =>
+            setLightbox((s) => ({ ...s, index: (s.index + 1) % s.images.length }))
+          }
+          onThumbClick={(i) => setLightbox((s) => ({ ...s, index: i }))}
+        />
+      )}
 
       <Footer />
     </div>
@@ -169,6 +229,44 @@ export default function PortfolioPage() {
 /* =========================================================
    COMPONENTES
    ========================================================= */
+
+function Tabs({
+  tab,
+  onChange,
+}: {
+  tab: Category
+  onChange: (t: Category) => void
+}) {
+  const btn =
+    "px-4 py-2 rounded-full text-sm sm:text-base font-semibold transition-all border"
+  const active =
+    "bg-[#0d7a8f] text-white border-[#0d7a8f] shadow-sm"
+  const idle =
+    "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+      <button
+        className={`${btn} ${tab === "residenciais" ? active : idle}`}
+        onClick={() => onChange("residenciais")}
+      >
+        Prédios Residenciais
+      </button>
+      <button
+        className={`${btn} ${tab === "casas" ? active : idle}`}
+        onClick={() => onChange("casas")}
+      >
+        Casas
+      </button>
+      <button
+        className={`${btn} ${tab === "comerciais" ? active : idle}`}
+        onClick={() => onChange("comerciais")}
+      >
+        Comerciais
+      </button>
+    </div>
+  )
+}
 
 function Chip({
   icon,
@@ -194,18 +292,16 @@ function buildCandidateSources(src: string): string[] {
 
   const candidates = new Set<string>()
 
-  // Se vier .tif/.tiff, tente .jpg/.jpeg/.png
   if (ext === ".tif" || ext === ".tiff") {
     candidates.add(base + ".jpg")
     candidates.add(base + ".jpeg")
     candidates.add(base + ".png")
   } else if (ext) {
-    candidates.add(base + ext) // original em minúsculo
+    candidates.add(base + ext)
   } else {
     candidates.add(lower)
   }
 
-  // Variações comuns + caixa alta
   const common = [".jpg", ".jpeg", ".png"]
   for (const e of common) {
     candidates.add(base + e)
@@ -248,21 +344,23 @@ function SmartImage({
         setIdx((prev) => (prev + 1 < candidates.length ? prev + 1 : prev))
       }}
       onLoadingComplete={(img) => {
-        const isPortrait = img.naturalHeight > img.naturalWidth
-        onOrientationChange?.(isPortrait)
+        if (onOrientationChange) {
+          const isPortrait = img.naturalHeight > img.naturalWidth
+          onOrientationChange(isPortrait)
+        }
       }}
     />
   )
 }
 
-/* ---------- Card ---------- */
+/* ---------- Card (1 coluna, ficha aberta) ---------- */
 
 function ProjectCard({
   project,
-  index: _index, // mantido apenas para compatibilidade com a chamada
+  onOpenLightbox,
 }: {
   project: (typeof projects)[0]
-  index: number
+  onOpenLightbox: (startIndex: number) => void
 }) {
   const { ref: cardRef, isVisible: cardVisible } = useScrollReveal<HTMLDivElement>()
   const [activeIdx, setActiveIdx] = React.useState(0)
@@ -271,9 +369,9 @@ function ProjectCard({
   const mainImage = project.images[activeIdx] ?? project.images[0]
   const T = project.technicalSheet
 
-  // Estilos conforme orientação detectada
-  const aspectClass = isPortrait ? "aspect-[3/4]" : "aspect-[16/10]"
+  // Ajuste inteligente do enquadramento
   const fitClass = isPortrait ? "object-contain" : "object-cover"
+  const bgClass = isPortrait ? "bg-white" : "bg-gray-100"
 
   return (
     <div
@@ -283,157 +381,254 @@ function ProjectCard({
       }`}
     >
       <article className="rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 p-5 sm:p-6">
-          {/* Imagem + thumbs */}
-          <div className="md:col-span-5">
-            <div className={`relative ${aspectClass} w-full overflow-hidden rounded-xl bg-gray-100`}>
+        {/* Imagem — alturas responsivas, um pouco menores no desktop */}
+        <div className="p-5 sm:p-6">
+          <button
+            type="button"
+            onClick={() => onOpenLightbox(activeIdx)}
+            className="group block w-full"
+            aria-label={`Ampliar imagens de ${project.name}`}
+          >
+            <div
+              className={`
+                relative w-full overflow-hidden rounded-xl ${bgClass}
+                h-[220px] sm:h-[260px] md:h-[300px] lg:h-[340px] xl:h-[360px]
+              `}
+            >
               <SmartImage
                 src={mainImage || "/placeholder.svg"}
                 alt={project.name}
                 fill
-                className={fitClass}
-                sizes="(min-width:1024px) 480px, (min-width:768px) 60vw, 100vw"
+                className={`${fitClass} object-center transition-transform duration-500 group-hover:scale-[1.02]`}
+                sizes="(min-width:1280px) 1100px, (min-width:1024px) 960px, 100vw"
                 priority
                 onOrientationChange={setIsPortrait}
               />
             </div>
+          </button>
 
-            {project.images.length > 1 && (
-              <div className="mt-3 flex gap-2">
-                {project.images.map((src, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setActiveIdx(i)}
-                    className={`relative h-14 w-20 overflow-hidden rounded-md ring-1 transition-all ${
-                      activeIdx === i ? "ring-[#0891b2]" : "ring-gray-200 hover:ring-gray-300"
-                    }`}
-                    aria-label={`Trocar para imagem ${i + 1}`}
-                  >
-                    <div className="relative h-full w-full">
-                      <SmartImage src={src} alt={`${project.name} ${i + 1}`} fill className="object-cover" />
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
+          {/* Thumbs */}
+          {project.images.length > 1 && (
+            <div className="mt-3 flex gap-2 overflow-x-auto">
+              {project.images.map((src: string, i: number) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveIdx(i)}
+                  className={`relative h-14 w-20 flex-shrink-0 overflow-hidden rounded-md ring-1 transition-all ${
+                    activeIdx === i ? "ring-[#0891b2]" : "ring-gray-200 hover:ring-gray-300"
+                  }`}
+                  aria-label={`Trocar para imagem ${i + 1}`}
+                >
+                  <div className="relative h-full w-full bg-gray-100">
+                    <SmartImage src={src} alt={`${project.name} ${i + 1}`} fill className="object-cover" />
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Conteúdo */}
+        <div className="px-5 sm:px-6 pb-6">
+          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+            {project.name}
+          </h2>
+
+          {/* Chips */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {T.year && <Chip icon={<Calendar className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.year}</Chip>}
+            {T.totalArea && <Chip icon={<Ruler className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.totalArea}</Chip>}
+            {T.floors && <Chip icon={<Layers className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.floors} pav.</Chip>}
+            {T.bedrooms && <Chip icon={<Bed className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.bedrooms}</Chip>}
+            {T.unitArea && <Chip icon={<Ruler className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.unitArea}</Chip>}
           </div>
 
-          {/* Conteúdo */}
-          <div className="md:col-span-7 flex flex-col">
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-gray-900 mb-3">{project.name}</h2>
+          {/* Resumo */}
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700">
+            {T.address && (
+              <li className="flex items-start gap-2">
+                <MapPin className="mt-0.5 h-4 w-4 text-[#4a5568]" />
+                <span>{T.address}</span>
+              </li>
+            )}
+            {T.regime && (
+              <li className="flex items-start gap-2">
+                <Building2 className="mt-0.5 h-4 w-4 text-[#4a5568]" />
+                <span>{T.regime}</span>
+              </li>
+            )}
+            {T.architect && (
+              <li className="flex items-start gap-2">
+                <User2 className="mt-0.5 h-4 w-4 text-[#4a5568]" />
+                <span>Projeto: {T.architect}</span>
+              </li>
+            )}
+          </ul>
 
-            {/* Chips */}
-            <div className="flex flex-wrap gap-2 mb-4">
-              {T.year && <Chip icon={<Calendar className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.year}</Chip>}
-              {T.totalArea && <Chip icon={<Ruler className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.totalArea}</Chip>}
-              {T.floors && <Chip icon={<Layers className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.floors} pav.</Chip>}
-              {T.bedrooms && <Chip icon={<Bed className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.bedrooms}</Chip>}
-              {T.unitArea && <Chip icon={<Ruler className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.unitArea}</Chip>}
-            </div>
-
-            {/* Resumo */}
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700">
-              {T.address && (
-                <li className="flex items-start gap-2">
-                  <MapPin className="mt-0.5 h-4 w-4 text-[#4a5568]" />
-                  <span>{T.address}</span>
-                </li>
+          {/* Ficha técnica — ABERTA por padrão */}
+          <div className="mt-5 rounded-xl border bg-white p-4 sm:p-5">
+            <h3 className="text-sm font-bold uppercase tracking-wide text-[#4a5568] mb-3">
+              Ficha técnica
+            </h3>
+            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
+              {T.year && (
+                <div className="flex gap-2">
+                  <dt className="font-semibold text-gray-800 min-w-[140px]">Ano</dt>
+                  <dd className="text-gray-700">{T.year}</dd>
+                </div>
               )}
               {T.regime && (
-                <li className="flex items-start gap-2">
-                  <Building2 className="mt-0.5 h-4 w-4 text-[#4a5568]" />
-                  <span>{T.regime}</span>
-                </li>
+                <div className="flex gap-2">
+                  <dt className="font-semibold text-gray-800 min-w-[140px]">Regime</dt>
+                  <dd className="text-gray-700">{T.regime}</dd>
+                </div>
+              )}
+              {T.address && (
+                <div className="flex gap-2 sm:col-span-2">
+                  <dt className="font-semibold text-gray-800 min-w-[140px]">Endereço</dt>
+                  <dd className="text-gray-700">{T.address}</dd>
+                </div>
               )}
               {T.architect && (
-                <li className="flex items-start gap-2">
-                  <User2 className="mt-0.5 h-4 w-4 text-[#4a5568]" />
-                  <span>Projeto: {T.architect}</span>
-                </li>
+                <div className="flex gap-2">
+                  <dt className="font-semibold text-gray-800 min-w-[140px]">Arquiteto</dt>
+                  <dd className="text-gray-700">{T.architect}</dd>
+                </div>
               )}
-            </ul>
-
-            {/* Ficha técnica */}
-            <Accordion.Root type="single" collapsible className="mt-4">
-              <Accordion.Item value="ficha">
-                <Accordion.Trigger
-                  className="group inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-semibold uppercase tracking-wide
-                             hover:bg-gray-50 transition-colors"
-                >
-                  Ficha técnica
-                  <svg
-                    className="h-3.5 w-3.5 transition-transform group-data-[state=open]:rotate-180"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path d="M5.23 7.21a.75.75 0 011.06.02L10 11.188l3.71-3.958a.75.75 0 111.08 1.04l-4.24 4.52a.75.75 0 01-1.08 0l-4.24-4.52a.75.75 0 01.02-1.06z" />
-                  </svg>
-                </Accordion.Trigger>
-                <Accordion.Content className="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
-                  <div className="mt-4 rounded-xl border bg-white p-4 sm:p-5">
-                    <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
-                      {T.year && (
-                        <div className="flex gap-2">
-                          <dt className="font-semibold text-gray-800 min-w-[140px]">Ano</dt>
-                          <dd className="text-gray-700">{T.year}</dd>
-                        </div>
-                      )}
-                      {T.regime && (
-                        <div className="flex gap-2">
-                          <dt className="font-semibold text-gray-800 min-w-[140px]">Regime</dt>
-                          <dd className="text-gray-700">{T.regime}</dd>
-                        </div>
-                      )}
-                      {T.address && (
-                        <div className="flex gap-2 sm:col-span-2">
-                          <dt className="font-semibold text-gray-800 min-w-[140px]">Endereço</dt>
-                          <dd className="text-gray-700">{T.address}</dd>
-                        </div>
-                      )}
-                      {T.architect && (
-                        <div className="flex gap-2">
-                          <dt className="font-semibold text-gray-800 min-w-[140px]">Arquiteto</dt>
-                          <dd className="text-gray-700">{T.architect}</dd>
-                        </div>
-                      )}
-                      {T.totalArea && (
-                        <div className="flex gap-2">
-                          <dt className="font-semibold text-gray-800 min-w-[140px]">Área total</dt>
-                          <dd className="text-gray-700">{T.totalArea}</dd>
-                        </div>
-                      )}
-                      {T.floors && (
-                        <div className="flex gap-2">
-                          <dt className="font-semibold text-gray-800 min-w-[140px]">Pavimentos</dt>
-                          <dd className="text-gray-700">{T.floors}</dd>
-                        </div>
-                      )}
-                      {T.bedrooms && (
-                        <div className="flex gap-2">
-                          <dt className="font-semibold text-gray-800 min-w-[140px]">Dormitórios</dt>
-                          <dd className="text-gray-700">{T.bedrooms}</dd>
-                        </div>
-                      )}
-                      {T.unitArea && (
-                        <div className="flex gap-2">
-                          <dt className="font-semibold text-gray-800 min-w-[140px]">Área das unidades</dt>
-                          <dd className="text-gray-700">{T.unitArea}</dd>
-                        </div>
-                      )}
-                      {T.infrastructure && (
-                        <div className="flex gap-2 sm:col-span-2">
-                          <dt className="font-semibold text-gray-800 min-w-[140px]">Infraestrutura</dt>
-                          <dd className="text-gray-700">{T.infrastructure}</dd>
-                        </div>
-                      )}
-                    </dl>
-                  </div>
-                </Accordion.Content>
-              </Accordion.Item>
-            </Accordion.Root>
+              {T.totalArea && (
+                <div className="flex gap-2">
+                  <dt className="font-semibold text-gray-800 min-w-[140px]">Área total</dt>
+                  <dd className="text-gray-700">{T.totalArea}</dd>
+                </div>
+              )}
+              {T.floors && (
+                <div className="flex gap-2">
+                  <dt className="font-semibold text-gray-800 min-w-[140px]">Pavimentos</dt>
+                  <dd className="text-gray-700">{T.floors}</dd>
+                </div>
+              )}
+              {T.bedrooms && (
+                <div className="flex gap-2">
+                  <dt className="font-semibold text-gray-800 min-w-[140px]">Dormitórios</dt>
+                  <dd className="text-gray-700">{T.bedrooms}</dd>
+                </div>
+              )}
+              {T.unitArea && (
+                <div className="flex gap-2">
+                  <dt className="font-semibold text-gray-800 min-w-[140px]">Área das unidades</dt>
+                  <dd className="text-gray-700">{T.unitArea}</dd>
+                </div>
+              )}
+              {T.infrastructure && (
+                <div className="flex gap-2 sm:col-span-2">
+                  <dt className="font-semibold text-gray-800 min-w-[140px]">Infraestrutura</dt>
+                  <dd className="text-gray-700">{T.infrastructure}</dd>
+                </div>
+              )}
+            </dl>
           </div>
         </div>
       </article>
+    </div>
+  )
+}
+
+/* ---------- Lightbox Overlay (sem libs) ---------- */
+function LightboxOverlay({
+  title,
+  images,
+  index,
+  onClose,
+  onPrev,
+  onNext,
+  onThumbClick,
+}: {
+  title?: string
+  images: string[]
+  index: number
+  onClose: () => void
+  onPrev: () => void
+  onNext: () => void
+  onThumbClick: (i: number) => void
+}) {
+  return (
+    <div
+      className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm"
+      onClick={onClose}
+      aria-modal="true"
+      role="dialog"
+    >
+      <div className="relative h-full w-full" onClick={(e) => e.stopPropagation()}>
+        {/* Fechar */}
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
+          aria-label="Fechar"
+        >
+          <X className="h-6 w-6" />
+        </button>
+
+        {/* Título (opcional) */}
+        {title && (
+          <div className="absolute left-4 top-4 text-white/90 text-sm sm:text-base">
+            {title}
+          </div>
+        )}
+
+        {/* Navegação */}
+        <button
+          onClick={onPrev}
+          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
+          aria-label="Anterior"
+        >
+          <ChevronLeft className="h-7 w-7" />
+        </button>
+        <button
+          onClick={onNext}
+          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
+          aria-label="Próxima"
+        >
+          <ChevronRight className="h-7 w-7" />
+        </button>
+
+        {/* Imagem central com contain para evitar cortes */}
+        <div className="flex h-full items-center justify-center px-3 sm:px-8">
+          <div className="relative w-full max-w-6xl">
+            <div className="relative h-[58vh] sm:h-[68vh] md:h-[72vh]">
+              <Image
+                src={images[index] || "/placeholder.svg"}
+                alt={`Imagem ${index + 1}`}
+                fill
+                className="object-contain"
+                sizes="100vw"
+                priority
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Thumbs */}
+        {images.length > 1 && (
+          <div className="absolute bottom-3 left-0 right-0 mx-auto w-full max-w-6xl px-3 sm:px-8">
+            <div className="flex gap-2 overflow-x-auto">
+              {images.map((src: string, i: number) => (
+                <button
+                  key={i}
+                  onClick={() => onThumbClick(i)}
+                  className={`relative h-14 w-20 flex-shrink-0 overflow-hidden rounded-md ring-2 transition-all ${
+                    index === i ? "ring-white" : "ring-white/30 hover:ring-white/50"
+                  }`}
+                  aria-label={`Abrir imagem ${i + 1}`}
+                >
+                  <div className="relative h-full w-full bg-black/40">
+                    <Image src={src} alt={`thumb ${i + 1}`} fill className="object-cover" />
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
