@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import Image from "next/image"
@@ -15,156 +15,66 @@ import {
   Building2,
   ChevronLeft,
   ChevronRight,
-  X
+  X,
 } from "lucide-react"
+import {
+  PROJECTS,
+  Category,
+  Project,
+  TechnicalSheet,
+} from "@/lib/projects"
+import { Button } from "@/components/ui/button"
 
-/* =========================================================
-   DADOS
-   ========================================================= */
-
-type Category = "residenciais" | "casas" | "comerciais"
-
-const projects = [
-  {
-    id: "solar-amendoeiras",
-    category: "residenciais" as Category,
-    name: "Solar das Amendoeiras",
-    images: ["/solardasamendoeiras3.png", "/solardasamendoeiras.jpg", "/solardasamendoeiras2.jpg", "solarmendoeiras1.jpg", "solarmendoeiras2.jpg", "solarmendoeiras3.jpg"],
-    technicalSheet: {
-      year: "2010",
-      regime: "Obra em regime de condomínio",
-      address: "R. Carmen Miranda, 372, Pituba",
-      architect: "Mário Figueiredo",
-      totalArea: "3.070 m²",
-      floors: "14",
-      bedrooms: "2/4 (1 suíte)",
-      unitArea: "73 m²",
-      infrastructure:
-        "Piscina com deck, academia, sauna, salão de festas, salão de jogos, parque infantil e guarita de segurança.",
-    },
-  },
-  {
-    id: "bosque-guarajuba",
-    category: "residenciais" as Category,
-    name: "Condomínio Bosque de Guarajuba",
-    images: ["/bosquedeguarajuba.jpg", "/bosquedeguarajuba2.jpg", "/bosquedeguarajuba3.jpg", "bosque1.JPG", "bosque2.JPG", "bosque3.JPG", "bosque4.JPG", "bosque5.JPG", "bosque6.JPG", "bosque7.JPG", "bosque8.JPG"],
-    technicalSheet: {
-      year: "2012",
-      regime: "Obra em regime de administração",
-      address: "Litoral Norte, Guarajuba",
-      architect: "",
-      totalArea: "4.750 m²",
-      floors: "01 torre de 4 pavimentos e outra de 10 pavimentos",
-      bedrooms: "",
-      unitArea: "",
-      infrastructure:
-        "Guarita de acesso, espaço gourmet, salão de jogos, quadra poliesportiva, 2 piscinas (adulto e infantil), área de convivência, academia.",
-    },
-  },
-  {
-    id: "hotel-aram-yami",
-    category: "comerciais" as Category,
-    name: "Hotel Aram Yamí",
-    images: ["/aranyammi.jpg", "/aranyammi3.JPG", "/aranyammi4.jpg"],
-    technicalSheet: {
-      year: "2009",
-      regime: "Empreendimento hoteleiro",
-      address: "Rua Direita de Santo Antônio – Santo Antônio Além do Carmo",
-      architect: "",
-      totalArea: "1.600 m²",
-      floors: "",
-      bedrooms: "",
-      unitArea: "",
-      infrastructure:
-        "Arquitetura colonial no Centro Histórico de Salvador; piscinas individuais, cafeteria e suítes com vista panorâmica da Baía de Todos os Santos.",
-    },
-  },
-  {
-    id: "residencial-sombreiros",
-    category: "residenciais" as Category,
-    name: "Residencial dos Sombreiros",
-    images: ["/residencialdossombreiros2.jpg", "/residencialdossombreiros.jpg", "/residencialdossombreiros3.jpg"],
-    technicalSheet: {
-      year: "2013",
-      regime: "Obra em regime de condomínio",
-      address: "Alameda dos Sombreiros, Caminho das Árvores",
-      architect: "Mário Figueiredo",
-      totalArea: "4.050 m²",
-      floors: "16",
-      bedrooms: "3/4 (2 suítes)",
-      unitArea: "93 m²",
-      infrastructure:
-        "Fachadas principais pastilhadas; piscina, parque infantil, deck, varanda gourmet, sauna, salão de festas, salão de jogos, guarita de segurança, academia e churrasqueira.",
-    },
-  },
-  // ——— Casas de alto padrão ———
-  {
-    id: "horto-vilas",
-    category: "casas" as Category,
-    name: "Condomínio Horto Vilas",
-    images: ["/hortovlias.jpg", "/hortovlias2.jpg", "/hortovlias3.jpg", "/hortovlias4.jpg"],
-    technicalSheet: {
-      year: "",
-      regime: "Residencial exclusivo",
-      address: "Vilas do Atlântico, Lauro de Freitas",
-      architect: "",
-      totalArea: "620 m² (residência)",
-      floors: "",
-      bedrooms: "5 suítes",
-      unitArea: "",
-      infrastructure: "4 vagas de garagem e elevador social.",
-    },
-  },
-  {
-    id: "alphaville-estrela-do-mar",
-    category: "casas" as Category,
-    name: "Alphaville Estrela do Mar",
-    images: ["/estreladomar.jpg", "/estreladomar2.jpg", "/estreladomar3.jpg", "/estreladomar4.jpg"],
-    technicalSheet: {
-      year: "",
-      regime: "Residencial exclusivo",
-      address: "Alphaville, Salvador",
-      architect: "",
-      totalArea: "830 m² (residência)",
-      floors: "",
-      bedrooms: "5 suítes",
-      unitArea: "",
-      infrastructure: "6 vagas de garagem e piscina aquecida.",
-    },
-  },
-]
-
-/* =========================================================
-   PÁGINA
-   ========================================================= */
+/* ==================== PÁGINA ==================== */
 
 export default function PortfolioPage() {
-  const { ref: headerRef, isVisible: headerVisible } = useScrollReveal<HTMLDivElement>()
-  const [tab, setTab] = React.useState<Category>("residenciais")
+  const { ref: headerRef, isVisible: headerVisible } =
+    useScrollReveal<HTMLDivElement>()
 
-  const [lightbox, setLightbox] = React.useState<{
-    open: boolean
+  // Aba inicial: Breve Lançamento
+  const [tab, setTab] = useState<Category>("breve")
+
+  const [lightbox, setLightbox] = useState<{
     images: string[]
     index: number
     title?: string
-  }>({ open: false, images: [], index: 0 })
+  } | null>(null)
 
-  const filtered = React.useMemo(
-    () => projects.filter((p) => p.category === tab),
+  const filtered = useMemo(
+    () => PROJECTS.filter((p) => p.category === tab),
     [tab]
   )
 
-  // fecha lightbox com ESC
-  React.useEffect(() => {
+  useEffect(() => {
+    if (!lightbox) return
+
     const onKey = (e: KeyboardEvent) => {
-      if (!lightbox.open) return
-      if (e.key === "Escape") setLightbox((s) => ({ ...s, open: false }))
-      if (e.key === "ArrowRight") setLightbox((s) => ({ ...s, index: (s.index + 1) % s.images.length }))
-      if (e.key === "ArrowLeft") setLightbox((s) => ({ ...s, index: (s.index - 1 + s.images.length) % s.images.length }))
+      if (!lightbox) return
+      if (e.key === "Escape") setLightbox(null)
+      if (e.key === "ArrowRight") {
+        setLightbox((prev) =>
+          prev
+            ? { ...prev, index: (prev.index + 1) % prev.images.length }
+            : prev
+        )
+      }
+      if (e.key === "ArrowLeft") {
+        setLightbox((prev) =>
+          prev
+            ? {
+                ...prev,
+                index:
+                  (prev.index - 1 + prev.images.length) %
+                  prev.images.length,
+              }
+            : prev
+        )
+      }
     }
+
     window.addEventListener("keydown", onKey)
     return () => window.removeEventListener("keydown", onKey)
-  }, [lightbox.open, lightbox.images.length])
+  }, [lightbox])
 
   return (
     <div className="min-h-screen bg-white">
@@ -175,7 +85,9 @@ export default function PortfolioPage() {
         <div
           ref={headerRef}
           className={`mb-8 sm:mb-10 transition-all duration-700 ${
-            headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+            headerVisible
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-6"
           }`}
         >
           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-3 uppercase tracking-wide text-gray-800">
@@ -184,40 +96,70 @@ export default function PortfolioPage() {
           <p className="font-sans text-center text-gray-600 text-base sm:text-lg md:text-xl mb-6 max-w-4xl mx-auto leading-relaxed px-4">
             Conheça os projetos que construímos com qualidade, transparência e compromisso.
           </p>
-          <div className="w-20 h-1 bg-[#0891b2] mx-auto rounded-full" />
+          <div className="mx-auto h-1 w-20 rounded-full bg-[#0891b2]" />
         </div>
 
         {/* Abas */}
         <Tabs tab={tab} onChange={setTab} />
 
-        {/* Lista (1 coluna, ficha aberta) */}
+        {/* Lista */}
         <div className="mt-8 space-y-10 sm:space-y-12">
+          {filtered.length === 0 && (
+            <p className="text-center text-sm sm:text-base text-gray-500">
+              Em breve novos empreendimentos nesta categoria.
+            </p>
+          )}
+
           {filtered.map((project, index) => (
             <ProjectCard
               key={project.id}
               project={project}
-              onOpenLightbox={(startIndex: number) =>
-                setLightbox({ open: true, images: project.images, index: startIndex, title: project.name })
+              index={index}
+              onOpenLightbox={(startIndex) =>
+                setLightbox({
+                  images: project.images,
+                  index: startIndex,
+                  title: project.name,
+                })
               }
             />
           ))}
         </div>
       </main>
 
-      {/* Lightbox simples, sem dependências */}
-      {lightbox.open && (
+      {lightbox && (
         <LightboxOverlay
           title={lightbox.title}
           images={lightbox.images}
           index={lightbox.index}
-          onClose={() => setLightbox((s) => ({ ...s, open: false }))}
+          onClose={() => setLightbox(null)}
           onPrev={() =>
-            setLightbox((s) => ({ ...s, index: (s.index - 1 + s.images.length) % s.images.length }))
+            setLightbox((prev) =>
+              prev
+                ? {
+                    ...prev,
+                    index:
+                      (prev.index - 1 + prev.images.length) %
+                      prev.images.length,
+                  }
+                : prev
+            )
           }
           onNext={() =>
-            setLightbox((s) => ({ ...s, index: (s.index + 1) % s.images.length }))
+            setLightbox((prev) =>
+              prev
+                ? {
+                    ...prev,
+                    index: (prev.index + 1) % prev.images.length,
+                  }
+                : prev
+            )
           }
-          onThumbClick={(i) => setLightbox((s) => ({ ...s, index: i }))}
+          onThumbClick={(i) =>
+            setLightbox((prev) =>
+              prev ? { ...prev, index: i } : prev
+            )
+          }
         />
       )}
 
@@ -226,9 +168,7 @@ export default function PortfolioPage() {
   )
 }
 
-/* =========================================================
-   COMPONENTES
-   ========================================================= */
+/* ==================== COMPONENTES ==================== */
 
 function Tabs({
   tab,
@@ -237,7 +177,7 @@ function Tabs({
   tab: Category
   onChange: (t: Category) => void
 }) {
-  const btn =
+  const base =
     "px-4 py-2 rounded-full text-sm sm:text-base font-semibold transition-all border"
   const active =
     "bg-[#0d7a8f] text-white border-[#0d7a8f] shadow-sm"
@@ -247,19 +187,25 @@ function Tabs({
   return (
     <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
       <button
-        className={`${btn} ${tab === "residenciais" ? active : idle}`}
+        className={`${base} ${tab === "breve" ? active : idle}`}
+        onClick={() => onChange("breve")}
+      >
+        Breve Lançamento
+      </button>
+      <button
+        className={`${base} ${tab === "residenciais" ? active : idle}`}
         onClick={() => onChange("residenciais")}
       >
         Prédios Residenciais
       </button>
       <button
-        className={`${btn} ${tab === "casas" ? active : idle}`}
+        className={`${base} ${tab === "casas" ? active : idle}`}
         onClick={() => onChange("casas")}
       >
         Casas
       </button>
       <button
-        className={`${btn} ${tab === "comerciais" ? active : idle}`}
+        className={`${base} ${tab === "comerciais" ? active : idle}`}
         onClick={() => onChange("comerciais")}
       >
         Comerciais
@@ -283,9 +229,14 @@ function Chip({
   )
 }
 
-/* ---------- Utils: construir variações de caminho/extension ---------- */
+/* ---- utils imagem ---- */
+
 function buildCandidateSources(src: string): string[] {
-  const lower = src.replace(/\.(jpg|jpeg|png|tif|tiff)$/i, (m) => m.toLowerCase())
+  const normalized = src.trim()
+  const withSlash = normalized.startsWith("/") ? normalized : `/${normalized}`
+  const lower = withSlash.replace(/\.(jpg|jpeg|png|tif|tiff)$/i, (m) =>
+    m.toLowerCase()
+  )
   const extMatch = lower.match(/\.(jpg|jpeg|png|tif|tiff)$/i)
   const ext = extMatch ? extMatch[0].toLowerCase() : ""
   const base = ext ? lower.slice(0, -ext.length) : lower
@@ -293,17 +244,19 @@ function buildCandidateSources(src: string): string[] {
   const candidates = new Set<string>()
 
   if (ext === ".tif" || ext === ".tiff") {
+    // tenta versões otimizadas caso existam
     candidates.add(base + ".jpg")
     candidates.add(base + ".jpeg")
     candidates.add(base + ".png")
-  } else if (ext) {
+  }
+
+  if (ext) {
     candidates.add(base + ext)
   } else {
     candidates.add(lower)
   }
 
-  const common = [".jpg", ".jpeg", ".png"]
-  for (const e of common) {
+  for (const e of [".jpg", ".jpeg", ".png"]) {
     candidates.add(base + e)
     candidates.add(base + e.toUpperCase())
   }
@@ -311,7 +264,6 @@ function buildCandidateSources(src: string): string[] {
   return Array.from(candidates)
 }
 
-/* ---------- SmartImage: fallbacks + orientação ---------- */
 function SmartImage({
   src,
   alt,
@@ -319,7 +271,8 @@ function SmartImage({
   className,
   sizes,
   priority,
-  onOrientationChange,
+  loading,
+  onLoad,
 }: {
   src: string
   alt: string
@@ -327,10 +280,11 @@ function SmartImage({
   className?: string
   sizes?: string
   priority?: boolean
-  onOrientationChange?: (isPortrait: boolean) => void
+  loading?: "lazy" | "eager"
+  onLoad?: (img: HTMLImageElement) => void
 }) {
-  const candidates = React.useMemo(() => buildCandidateSources(src), [src])
-  const [idx, setIdx] = React.useState(0)
+  const candidates = useMemo(() => buildCandidateSources(src), [src])
+  const [idx, setIdx] = useState(0)
 
   return (
     <Image
@@ -340,48 +294,71 @@ function SmartImage({
       className={className}
       sizes={sizes}
       priority={priority}
-      onError={() => {
-        setIdx((prev) => (prev + 1 < candidates.length ? prev + 1 : prev))
-      }}
-      onLoadingComplete={(img) => {
-        if (onOrientationChange) {
-          const isPortrait = img.naturalHeight > img.naturalWidth
-          onOrientationChange(isPortrait)
-        }
-      }}
+      loading={loading ?? (priority ? "eager" : "lazy")}
+      onError={() =>
+        setIdx((prev) =>
+          prev + 1 < candidates.length ? prev + 1 : prev
+        )
+      }
+      onLoadingComplete={(img) => onLoad?.(img as HTMLImageElement)}
     />
   )
 }
 
-/* ---------- Card (1 coluna, ficha aberta) ---------- */
+/* ---- Card ---- */
 
 function ProjectCard({
   project,
   onOpenLightbox,
+  index,
 }: {
-  project: (typeof projects)[0]
+  project: Project
   onOpenLightbox: (startIndex: number) => void
+  index: number
 }) {
-  const { ref: cardRef, isVisible: cardVisible } = useScrollReveal<HTMLDivElement>()
-  const [activeIdx, setActiveIdx] = React.useState(0)
-  const [isPortrait, setIsPortrait] = React.useState(false)
+  const { ref: cardRef, isVisible: cardVisible } =
+    useScrollReveal<HTMLDivElement>()
+  const [activeIdx, setActiveIdx] = useState(0)
+  const [isPortrait, setIsPortrait] = useState(false)
 
   const mainImage = project.images[activeIdx] ?? project.images[0]
   const T = project.technicalSheet
 
-  // Ajuste inteligente do enquadramento
-  const fitClass = isPortrait ? "object-contain" : "object-cover"
-  const bgClass = isPortrait ? "bg-white" : "bg-gray-100"
+  const isHouse = project.category === "casas"
+
+  // Casas: mostrar a casa inteira (contain)
+  // Retrato: contain
+  // Outros paisagem: cover central
+  const useContain = isHouse || isPortrait
+
+  const fitClass = useContain
+    ? "object-contain"
+    : "object-cover object-center"
+
+  const bgClass = useContain ? "bg-white" : "bg-gray-100"
+
+  // Só o primeiro card de "breve" ganha prioridade (hero)
+  const shouldPriority =
+    project.category === "breve" && index === 0
+
+  const whatsappUrl =
+    project.category === "breve"
+      ? `https://wa.me/5571992220164?text=${encodeURIComponent(
+          `Olá, tenho interesse em investir no empreendimento ${project.name}. Poderia me enviar mais informações?`
+        )}`
+      : ""
 
   return (
     <div
       ref={cardRef}
       className={`transition-all duration-700 ${
-        cardVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+        cardVisible
+          ? "opacity-100 translate-y-0"
+          : "opacity-0 translate-y-6"
       }`}
     >
-      <article className="rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow">
-        {/* Imagem — alturas responsivas, um pouco menores no desktop */}
+      <article className="rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md">
+        {/* Imagem */}
         <div className="p-5 sm:p-6">
           <button
             type="button"
@@ -390,37 +367,46 @@ function ProjectCard({
             aria-label={`Ampliar imagens de ${project.name}`}
           >
             <div
-              className={`
-                relative w-full overflow-hidden rounded-xl ${bgClass}
-                h-[220px] sm:h-[260px] md:h-[300px] lg:h-[340px] xl:h-[360px]
-              `}
+              className={`relative w-full overflow-hidden rounded-xl ${bgClass}
+                h-[300px] sm:h-[360px] md:h-[420px] lg:h-[480px] xl:h-[520px]`}
             >
               <SmartImage
                 src={mainImage || "/placeholder.svg"}
                 alt={project.name}
                 fill
-                className={`${fitClass} object-center transition-transform duration-500 group-hover:scale-[1.02]`}
+                className={`${fitClass} transition-transform duration-500 group-hover:scale-[1.02]`}
                 sizes="(min-width:1280px) 1100px, (min-width:1024px) 960px, 100vw"
-                priority
-                onOrientationChange={setIsPortrait}
+                priority={shouldPriority}
+                loading={shouldPriority ? "eager" : "lazy"}
+                onLoad={(img) =>
+                  setIsPortrait(img.naturalHeight > img.naturalWidth)
+                }
               />
             </div>
           </button>
 
-          {/* Thumbs */}
           {project.images.length > 1 && (
             <div className="mt-3 flex gap-2 overflow-x-auto">
-              {project.images.map((src: string, i: number) => (
+              {project.images.map((src, i) => (
                 <button
                   key={i}
                   onClick={() => setActiveIdx(i)}
                   className={`relative h-14 w-20 flex-shrink-0 overflow-hidden rounded-md ring-1 transition-all ${
-                    activeIdx === i ? "ring-[#0891b2]" : "ring-gray-200 hover:ring-gray-300"
+                    activeIdx === i
+                      ? "ring-[#0891b2]"
+                      : "ring-gray-200 hover:ring-gray-300"
                   }`}
                   aria-label={`Trocar para imagem ${i + 1}`}
                 >
                   <div className="relative h-full w-full bg-gray-100">
-                    <SmartImage src={src} alt={`${project.name} ${i + 1}`} fill className="object-cover" />
+                    <SmartImage
+                      src={src}
+                      alt={`${project.name} ${i + 1}`}
+                      fill
+                      className="object-cover"
+                      loading="lazy"
+                      priority={false}
+                    />
                   </div>
                 </button>
               ))}
@@ -430,21 +416,39 @@ function ProjectCard({
 
         {/* Conteúdo */}
         <div className="px-5 sm:px-6 pb-6">
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+          <h2 className="mb-3 font-serif text-2xl sm:text-3xl font-bold text-gray-900">
             {project.name}
           </h2>
 
-          {/* Chips */}
-          <div className="flex flex-wrap gap-2 mb-4">
-            {T.year && <Chip icon={<Calendar className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.year}</Chip>}
-            {T.totalArea && <Chip icon={<Ruler className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.totalArea}</Chip>}
-            {T.floors && <Chip icon={<Layers className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.floors} pav.</Chip>}
-            {T.bedrooms && <Chip icon={<Bed className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.bedrooms}</Chip>}
-            {T.unitArea && <Chip icon={<Ruler className="h-3.5 w-3.5 text-[#4a5568]" />}>{T.unitArea}</Chip>}
+          <div className="mb-4 flex flex-wrap gap-2">
+            {T.year && (
+              <Chip icon={<Calendar className="h-3.5 w-3.5 text-[#4a5568]" />}>
+                {T.year}
+              </Chip>
+            )}
+            {T.totalArea && (
+              <Chip icon={<Ruler className="h-3.5 w-3.5 text-[#4a5568]" />}>
+                {T.totalArea}
+              </Chip>
+            )}
+            {T.floors && (
+              <Chip icon={<Layers className="h-3.5 w-3.5 text-[#4a5568]" />}>
+                {T.floors} pav.
+              </Chip>
+            )}
+            {T.bedrooms && (
+              <Chip icon={<Bed className="h-3.5 w-3.5 text-[#4a5568]" />}>
+                {T.bedrooms}
+              </Chip>
+            )}
+            {T.unitArea && (
+              <Chip icon={<Ruler className="h-3.5 w-3.5 text-[#4a5568]" />}>
+                {T.unitArea}
+              </Chip>
+            )}
           </div>
 
-          {/* Resumo */}
-          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700">
+          <ul className="grid grid-cols-1 gap-2 text-sm text-gray-700 sm:grid-cols-2">
             {T.address && (
               <li className="flex items-start gap-2">
                 <MapPin className="mt-0.5 h-4 w-4 text-[#4a5568]" />
@@ -465,75 +469,78 @@ function ProjectCard({
             )}
           </ul>
 
-          {/* Ficha técnica — ABERTA por padrão */}
+          {/* Ficha técnica */}
           <div className="mt-5 rounded-xl border bg-white p-4 sm:p-5">
-            <h3 className="text-sm font-bold uppercase tracking-wide text-[#4a5568] mb-3">
+            <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-[#4a5568]">
               Ficha técnica
             </h3>
-            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
-              {T.year && (
-                <div className="flex gap-2">
-                  <dt className="font-semibold text-gray-800 min-w-[140px]">Ano</dt>
-                  <dd className="text-gray-700">{T.year}</dd>
-                </div>
-              )}
-              {T.regime && (
-                <div className="flex gap-2">
-                  <dt className="font-semibold text-gray-800 min-w-[140px]">Regime</dt>
-                  <dd className="text-gray-700">{T.regime}</dd>
-                </div>
-              )}
-              {T.address && (
-                <div className="flex gap-2 sm:col-span-2">
-                  <dt className="font-semibold text-gray-800 min-w-[140px]">Endereço</dt>
-                  <dd className="text-gray-700">{T.address}</dd>
-                </div>
-              )}
-              {T.architect && (
-                <div className="flex gap-2">
-                  <dt className="font-semibold text-gray-800 min-w-[140px]">Arquiteto</dt>
-                  <dd className="text-gray-700">{T.architect}</dd>
-                </div>
-              )}
-              {T.totalArea && (
-                <div className="flex gap-2">
-                  <dt className="font-semibold text-gray-800 min-w-[140px]">Área total</dt>
-                  <dd className="text-gray-700">{T.totalArea}</dd>
-                </div>
-              )}
-              {T.floors && (
-                <div className="flex gap-2">
-                  <dt className="font-semibold text-gray-800 min-w-[140px]">Pavimentos</dt>
-                  <dd className="text-gray-700">{T.floors}</dd>
-                </div>
-              )}
-              {T.bedrooms && (
-                <div className="flex gap-2">
-                  <dt className="font-semibold text-gray-800 min-w-[140px]">Dormitórios</dt>
-                  <dd className="text-gray-700">{T.bedrooms}</dd>
-                </div>
-              )}
-              {T.unitArea && (
-                <div className="flex gap-2">
-                  <dt className="font-semibold text-gray-800 min-w-[140px]">Área das unidades</dt>
-                  <dd className="text-gray-700">{T.unitArea}</dd>
-                </div>
-              )}
-              {T.infrastructure && (
-                <div className="flex gap-2 sm:col-span-2">
-                  <dt className="font-semibold text-gray-800 min-w-[140px]">Infraestrutura</dt>
-                  <dd className="text-gray-700">{T.infrastructure}</dd>
-                </div>
-              )}
+            <dl className="grid grid-cols-1 gap-y-2 gap-x-6 text-sm sm:grid-cols-2">
+              <InfoRows sheet={T} />
             </dl>
           </div>
+
+          {/* Botão WhatsApp só para Breve Lançamento */}
+          {project.category === "breve" && (
+            <div className="mt-5">
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button
+                  size="lg"
+                  className="rounded-full border-2 border-gray-800 bg-transparent px-8 py-4 sm:py-5 font-bold uppercase tracking-wide text-gray-800 transition-all duration-300 hover:scale-105 hover:bg-gray-800 hover:text-white w-full sm:w-auto"
+                >
+                  Quero Investir
+                </Button>
+              </a>
+            </div>
+          )}
         </div>
       </article>
     </div>
   )
 }
 
-/* ---------- Lightbox Overlay (sem libs) ---------- */
+function InfoRows({ sheet: T }: { sheet: TechnicalSheet }) {
+  return (
+    <>
+      {T.year && <Row label="Ano" value={T.year} />}
+      {T.regime && <Row label="Regime" value={T.regime} />}
+      {T.address && <Row label="Endereço" value={T.address} full />}
+      {T.architect && <Row label="Arquiteto" value={T.architect} />}
+      {T.totalArea && <Row label="Área total" value={T.totalArea} />}
+      {T.floors && <Row label="Pavimentos" value={T.floors} />}
+      {T.bedrooms && <Row label="Dormitórios" value={T.bedrooms} />}
+      {T.unitArea && <Row label="Área das unidades" value={T.unitArea} />}
+      {T.infrastructure && (
+        <Row label="Infraestrutura" value={T.infrastructure} full />
+      )}
+    </>
+  )
+}
+
+function Row({
+  label,
+  value,
+  full,
+}: {
+  label: string
+  value: string
+  full?: boolean
+}) {
+  return (
+    <div className={`flex gap-2 ${full ? "sm:col-span-2" : ""}`}>
+      <dt className="min-w-[140px] font-semibold text-gray-800">
+        {label}
+      </dt>
+      <dd className="text-gray-700">{value}</dd>
+    </div>
+  )
+}
+
+/* ---- Lightbox ---- */
+
 function LightboxOverlay({
   title,
   images,
@@ -558,8 +565,10 @@ function LightboxOverlay({
       aria-modal="true"
       role="dialog"
     >
-      <div className="relative h-full w-full" onClick={(e) => e.stopPropagation()}>
-        {/* Fechar */}
+      <div
+        className="relative h-full w-full"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           onClick={onClose}
           className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
@@ -568,30 +577,27 @@ function LightboxOverlay({
           <X className="h-6 w-6" />
         </button>
 
-        {/* Título (opcional) */}
         {title && (
-          <div className="absolute left-4 top-4 text-white/90 text-sm sm:text-base">
+          <div className="absolute left-4 top-4 text-sm text-white/90 sm:text-base">
             {title}
           </div>
         )}
 
-        {/* Navegação */}
         <button
           onClick={onPrev}
-          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
+          className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg_WHITE/10 p-2 text-white hover:bg-white/20 sm:left-4"
           aria-label="Anterior"
         >
           <ChevronLeft className="h-7 w-7" />
         </button>
         <button
           onClick={onNext}
-          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
+          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 sm:right-4"
           aria-label="Próxima"
         >
           <ChevronRight className="h-7 w-7" />
         </button>
 
-        {/* Imagem central com contain para evitar cortes */}
         <div className="flex h-full items-center justify-center px-3 sm:px-8">
           <div className="relative w-full max-w-6xl">
             <div className="relative h-[58vh] sm:h-[68vh] md:h-[72vh]">
@@ -607,21 +613,28 @@ function LightboxOverlay({
           </div>
         </div>
 
-        {/* Thumbs */}
         {images.length > 1 && (
           <div className="absolute bottom-3 left-0 right-0 mx-auto w-full max-w-6xl px-3 sm:px-8">
             <div className="flex gap-2 overflow-x-auto">
-              {images.map((src: string, i: number) => (
+              {images.map((src, i) => (
                 <button
                   key={i}
                   onClick={() => onThumbClick(i)}
                   className={`relative h-14 w-20 flex-shrink-0 overflow-hidden rounded-md ring-2 transition-all ${
-                    index === i ? "ring-white" : "ring-white/30 hover:ring-white/50"
+                    index === i
+                      ? "ring-white"
+                      : "ring-white/30 hover:ring-white/50"
                   }`}
                   aria-label={`Abrir imagem ${i + 1}`}
                 >
                   <div className="relative h-full w-full bg-black/40">
-                    <Image src={src} alt={`thumb ${i + 1}`} fill className="object-cover" />
+                    <Image
+                      src={src}
+                      alt={`thumb ${i + 1}`}
+                      fill
+                      className="object-cover"
+                      loading="lazy"
+                    />
                   </div>
                 </button>
               ))}

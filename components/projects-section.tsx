@@ -7,11 +7,43 @@ import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import useEmblaCarousel from "embla-carousel-react";
 
 const projects = [
-  { id: 1, name: "Horto Vilas", location: "Vilas do Atlântico, Lauro de Freitas", image: "/hortovlias4.jpg" },
-  { id: 2, name: "Hotel Aram Yamí", location: "Santo Antônio Além do Carmo , Salvador", image: "/aranyammi.jpg" },
-  { id: 3, name: "Solar das Amendoeiras", location: "Pituba, Salvador", image: "/solardasamendoeiras.jpg" },
-  { id: 4, name: "Alphaville Estrela do Mar", location: "Alphaville, Salvador", image: "/estreladomar2.jpg" },
-  { id: 5, name: "Bosque de Guarajuba", location: "Litoral Norte", image: "/bosquedeguarajuba3.jpg" },
+  {
+    id: 1,
+    name: "Azure Beach Living",
+    location: "Rua Sereno da Madrugada, 47, Itapuã",
+    image: "/azure2.jpg",
+    status: "Breve",
+    objectPosition: "center center", // ajuste se quiser mais céu ou mais prédio
+  },
+  {
+    id: 2,
+    name: "EGEU Pedra do Sal - Pré-lançamento",
+    location: "Rua Sereno da Madrugada 17,18,19 - Itapuã, Salvador",
+    image: "/EGEU2.jpeg",
+    status: "Breve",
+    objectPosition: "center center", // ex: "center top" se o prédio for alto e cortar embaixo
+  },
+  {
+    id: 3,
+    name: "Horto Vilas",
+    location: "Vilas do Atlântico, Lauro de Freitas",
+    image: "/hortovlias4.jpg",
+    objectPosition: "center center",
+  },
+  {
+    id: 4,
+    name: "Hotel Aram Yamí",
+    location: "Santo Antônio Além do Carmo, Salvador",
+    image: "/aranyammi.jpg",
+    objectPosition: "center center",
+  },
+  {
+    id: 5,
+    name: "Alphaville Estrela do Mar",
+    location: "Alphaville, Salvador",
+    image: "/estreladomar2.jpg",
+    objectPosition: "center center",
+  },
 ];
 
 export default function ProjectsSection() {
@@ -21,26 +53,30 @@ export default function ProjectsSection() {
     loop: true,
     align: "start",
     slidesToScroll: 1,
-    containScroll: false, // loop contínuo sem “reset” visível
+    containScroll: false,
   });
 
   // autoplay suave
   const timer = React.useRef<ReturnType<typeof setInterval> | null>(null);
+
   const start = React.useCallback(() => {
     if (timer.current) return;
     timer.current = setInterval(() => emblaApi?.scrollNext(), 3500);
   }, [emblaApi]);
+
   const stop = React.useCallback(() => {
     if (!timer.current) return;
     clearInterval(timer.current);
     timer.current = null;
   }, []);
+
   React.useEffect(() => {
     if (!emblaApi) return;
     start();
     emblaApi.on("pointerDown", stop);
     emblaApi.on("select", start);
     emblaApi.on("reInit", start);
+
     return () => {
       emblaApi.off("pointerDown", stop);
       emblaApi.off("select", start);
@@ -51,26 +87,25 @@ export default function ProjectsSection() {
 
   return (
     <section
-  id="portfolio"
-  // troquei mt-8 → mt-4 (reduz distância entre hero e a seção)
-  className=" mt-2 sm:mt-4 lg:mt-8 pt-8 sm:pt-10 lg:pt-12 pb-12 sm:pb-14 lg:pb-16"
->
-      <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16 max-w-7xl">
+      id="portfolio"
+      className="mt-2 sm:mt-4 lg:mt-8 pt-8 sm:pt-10 lg:pt-12 pb-12 sm:pb-14 lg:pb-16"
+    >
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 md:px-12 lg:px-16">
         <h2
           ref={ref}
+          style={{ textShadow: "0 3px 10px rgba(0,0,0,0.18)" }}
           className={`text-2xl sm:text-3xl md:text-4xl font-bold text-center uppercase tracking-wide text-gray-800 transition-all duration-700
             ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"} mb-6 sm:mb-8 lg:mb-10`}
         >
-          Nossas Obras
+          NOSSOS EMPREENDIMENTOS
         </h2>
 
         {/* wrapper compensa o padding do viewport */}
         <div className="-mx-6 sm:-mx-8">
-          {/* viewport com padding MAIOR que o dos slides -> nada “vaza” nas pontas */}
+          {/* viewport com padding MAIOR que o dos slides */}
           <div ref={emblaRef} className="overflow-hidden px-6 sm:px-2">
             <div className="flex">
               {projects.map((project, index) => (
-                // 1 por vez no mobile; 3 por vez no md+
                 <div
                   key={project.id}
                   className="flex-[0_0_100%] md:flex-[0_0_33.333%] px-4 sm:px-5 pb-4"
@@ -83,19 +118,32 @@ export default function ProjectsSection() {
                     style={{ transitionDelay: `${index * 90}ms` }}
                   >
                     <div className="relative overflow-hidden rounded-t-2xl aspect-[4/3] bg-gray-100">
+                      {/* Selo para lançamentos */}
+                      {project.status === "Breve" && (
+                        <div className="absolute top-3 left-3 z-10 px-3 py-1 rounded-full bg-emerald-600/95 text-[0.65rem] sm:text-xs font-bold uppercase tracking-[0.12em] text-white shadow-md">
+                          Lançamento em Breve
+                        </div>
+                      )}
+
                       <Image
                         src={project.image || "/placeholder.svg"}
                         alt={project.name}
                         fill
                         className="object-cover transition-transform duration-300 hover:scale-105"
                         sizes="(min-width:1024px) 33vw, (min-width:768px) 50vw, 100vw"
+                        style={{
+                          objectPosition:
+                            project.objectPosition || "center center",
+                        }}
                       />
                     </div>
                     <div className="p-5 sm:p-6">
                       <h3 className="text-lg sm:text-xl font-semibold text-gray-800 leading-snug">
                         {project.name}
                       </h3>
-                      <p className="mt-1 text-sm sm:text-base text-gray-800">{project.location}</p>
+                      <p className="mt-1 text-sm sm:text-base text-gray-800">
+                        {project.location}
+                      </p>
                     </div>
                   </article>
                 </div>
@@ -104,20 +152,34 @@ export default function ProjectsSection() {
           </div>
         </div>
 
+        {/* CTAs */}
         <div
-          className={`flex justify-center transition-all duration-700 ${
+          className={`mt-8 sm:mt-10 lg:mt-12 flex flex-wrap justify-center gap-3 transition-all duration-700 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-          } mt-8 sm:mt-10 lg:mt-12`}
+          }`}
         >
           <Link href="/portfolio">
             <Button
               variant="outline"
               size="lg"
-              className="font-bold border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white hover:scale-105 uppercase tracking-wide px-8 py-4 sm:py-5 rounded-full bg-transparent transition-all duration-300"
+              className="rounded-full border-2 border-gray-800 bg-transparent px-8 py-4 sm:py-5 font-bold uppercase tracking-wide text-gray-800 transition-all duration-300 hover:scale-105 hover:bg-gray-800 hover:text-white"
             >
-              Veja Mais Empreendimentos
+              Conheça Nossos Projetos
             </Button>
           </Link>
+
+          <a
+            href="https://wa.me/5571992220164?text=Ol%C3%A1,%20gostaria%20de%20avaliar%20as%20oportunidades%20de%20investimento%20com%20a%20Realiza%20Engenharia."
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button
+              size="lg"
+              className="rounded-full border-2 border-gray-800 bg-transparent px-8 py-4 sm:py-5 font-bold uppercase tracking-wide text-gray-800 transition-all duration-300 hover:scale-105 hover:bg-gray-800 hover:text-white"
+            >
+              Quero Investir
+            </Button>
+          </a>
         </div>
       </div>
     </section>
