@@ -32,7 +32,7 @@ const PROJECTS_UNSORTED: Project[] = [
     category: "residenciais",
     name: "Facility View",
     images: [
-      "/facilityview1.jpg",
+      "/facilityview1.png",
       "/facilityview2.jpg",
       "/facilityview3.jpg",
       "/facilityview4.jpg",
@@ -56,7 +56,7 @@ const PROJECTS_UNSORTED: Project[] = [
     category: "residenciais",
     name: "Facility Tower",
     images: [
-      "/facilitytower1.jpg",
+      "/facilitytower1.png",
       "/facilitytower2.jpeg",
       "/facilitytower3.jpeg",
       "/facilitytower4.jpeg",
