@@ -22,60 +22,134 @@ export type Project = {
   technicalSheet: TechnicalSheet;
 };
 
-export const PROJECTS: Project[] = [
+// ================== PROJETOS ==================
+
+const PROJECTS_UNSORTED: Project[] = [
   // ================== Residenciais ==================
 
   {
-    id: "solar-amendoeiras",
+    id: "facility-view",
     category: "residenciais",
-    name: "Solar das Amendoeiras",
+    name: "Facility View",
     images: [
-      "/solardasamendoeiras3.png",
-      "/solardasamendoeiras.jpg",
-      "/solardasamendoeiras2.jpg",
-      "/solarmendoeiras1.jpg",
-      "/solarmendoeiras2.jpg",
-      "/solarmendoeiras3.jpg",
+      "/facilityview1.jpg",
+      "/facilityview2.jpg",
+      "/facilityview3.jpg",
+      "/facilityview4.jpg",
     ],
     technicalSheet: {
-      year: "2010",
+      year: "2024",
       regime: "Obra em regime de condomínio",
-      address: "R. Carmen Miranda, 372, Pituba",
+      address: "Alameda das Mongubas, nº 58 - Caminho das Árvores",
       architect: "Mário Figueiredo",
-      totalArea: "3.070 m²",
-      floors: "14",
-      bedrooms: "2/4 (1 suíte)",
-      unitArea: "73 m²",
+      totalArea: "4.606,91 m²",
+      floors: "18",
+      bedrooms: "102 studios",
+      unitArea: "24,55 m²",
       infrastructure:
-        "Piscina com deck, academia, sauna, salão de festas, salão de jogos, parque infantil e guarita de segurança.",
+        "Fachadas em pastilha; salão de festas, espaço gourmet, coworking, lavanderia, deck e bar da piscina.",
     },
   },
 
   {
-    id: "bosque-guarajuba",
+    id: "facility-tower",
     category: "residenciais",
-    name: "Condomínio Bosque de Guarajuba",
+    name: "Facility Tower",
     images: [
-      "/bosquedeguarajuba.jpg",
-      "/bosquedeguarajuba2.jpg",
-      "/bosquedeguarajuba3.jpg",
-      "/bosque1.JPG",
-      "/bosque2.JPG",
-      "/bosque3.JPG",
-      "/bosque4.JPG",
-      "/bosque5.JPG",
-      "/bosque6.JPG",
-      "/bosque7.JPG",
-      "/bosque8.JPG",
+      "/facilitytower1.jpg",
+      "/facilitytower2.jpeg",
+      "/facilitytower3.jpeg",
+      "/facilitytower4.jpeg",
     ],
     technicalSheet: {
-      year: "2012",
-      regime: "Obra em regime de administração",
-      address: "Litoral Norte, Guarajuba",
-      totalArea: "4.750 m²",
-      floors: "01 torre de 4 pavimentos e outra de 10 pavimentos",
+      year: "2023",
+      regime: "Obra em regime de condomínio",
+      address: "Alameda das Mongubas, 136 - Caminho das Árvores",
+      architect: "Alessandro Grimaldi",
+      totalArea: "4.252,19 m²",
+      floors: "17",
+      bedrooms: "96 studios",
+      unitArea: "22,40 m²",
       infrastructure:
-        "Guarita de acesso, espaço gourmet, salão de jogos, quadra poliesportiva, 2 piscinas (adulto e infantil), área de convivência e academia.",
+        "Fachadas em pastilha; salão de festas, espaço gourmet, coworking, lavanderia, deck e bar da piscina.",
+    },
+  },
+
+  {
+    id: "giardino-loreto",
+    category: "residenciais",
+    name: "Giardino Loreto",
+    images: [
+      "/giardino1.jpg",
+      "/giardino2.jpg",
+      "/giardino3.jpg",
+      "/giardino4.jpg",
+      "/giardino5.jpg",
+      "/giardino6.jpg",
+      "/giardino7.PJG",
+      "/giardino8.PJG",
+    ],
+    technicalSheet: {
+      year: "2017",
+      regime: "Obra em regime de condomínio",
+      address: "R. Barão de Loreto, Graça",
+      architect: "Mário Figueiredo",
+      totalArea: "4.700 m²",
+      floors: "16",
+      bedrooms: "3/4 (2 suítes)",
+      unitArea: "103 m²",
+      infrastructure:
+        "Fachadas principais pastilhadas; porcelanato nos quartos, sala e varanda; piscina com prainha e raia de natação, sauna, espaço fitness, salão de jogos, parque infantil e salão de festas.",
+    },
+  },
+
+  {
+    id: "pituba-paradiso",
+    category: "residenciais",
+    name: "Pituba Paradiso",
+    images: [
+      "/pitubaparadiso1.jpg",
+      "/pitubaparadiso2.jpg",
+      "/pitubaparadiso3.jpg",
+      "/pitubaparadiso4.jpg",
+      "/pitubaparadiso5.jpg",
+    ],
+    technicalSheet: {
+      year: "2016",
+      regime: "Obra em regime de condomínio",
+      address: "Alameda Catânia, Pituba",
+      architect: "Mário Figueiredo",
+      totalArea: "4.237,82 m²",
+      floors: "17",
+      bedrooms: "2/4 (2 suítes)",
+      unitArea: "84 m²",
+      infrastructure:
+        "Fachadas principais pastilhadas; piscina com prainha, bar afogado e deck; guarita de segurança, academia, parque infantil, salão de festas e jogos.",
+    },
+  },
+
+  {
+    id: "residencial-canela",
+    category: "residenciais",
+    name: "Canela Residence",
+    images: [
+      "/canelares1.jpg",
+      "/canelares2.jpg",
+      "/canelares3.jpg",
+      "/canelares4.jpg",
+      "/canelares5.jpg",
+    ],
+    technicalSheet: {
+      year: "2022",
+      regime: "Obra em regime de condomínio",
+      address: "R. Marechal Floriano, 570 - Canela",
+      architect: "Mário Figueiredo",
+      totalArea: "5.934,75 m²",
+      floors: "16",
+      bedrooms: "1 e 2 quartos",
+      unitArea: "42 m² e 56 m²",
+      infrastructure:
+        "Fachadas em pastilha; play coberto e descoberto; salão de festas; espaço gourmet; academia; piscina; deck e bar da piscina.",
     },
   },
 
@@ -108,37 +182,120 @@ export const PROJECTS: Project[] = [
   },
 
   {
-    id: "residencial-canela",
+    id: "bosque-guarajuba",
     category: "residenciais",
-    name: "Residencial Canela",
+    name: "Condomínio Bosque de Guarajuba",
     images: [
-      "/canelares1.jpg",
-      "/canelares2.jpg",
-      "/canelares3.jpg",
-      "/canelares4.jpg",
-      "/canelares5.jpg",
+      "/bosquedeguarajuba.jpg",
+      "/bosquedeguarajuba2.jpg",
+      "/bosquedeguarajuba3.jpg",
+      "/bosque1.JPG",
+      "/bosque2.JPG",
+      "/bosque3.JPG",
+      "/bosque4.JPG",
+      "/bosque5.JPG",
+      "/bosque6.JPG",
+      "/bosque7.JPG",
+      "/bosque8.JPG",
     ],
     technicalSheet: {
-      year: "2022",
-      regime: "Obra em regime de condomínio",
-      address: "R. Marechal Floriano, 570 - Canela",
-      architect: "Mário Figueiredo",
-      totalArea: "5.934,75 m²",
-      floors: "16",
-      bedrooms: "1 e 2 quartos",
-      unitArea: "42 m² e 56 m²",
+      year: "2012",
+      regime: "Obra em regime de administração",
+      address: "Litoral Norte, Guarajuba",
+      totalArea: "4.750 m²",
+      floors: "01 torre de 4 pavimentos e outra de 10 pavimentos",
       infrastructure:
-        "Fachadas em pastilha; play coberto e descoberto; salão de festas; espaço gourmet; academia; piscina; deck e bar da piscina.",
+        "Guarita de acesso, espaço gourmet, salão de jogos, quadra poliesportiva, 2 piscinas (adulto e infantil), área de convivência e academia.",
+    },
+  },
+
+  {
+    id: "solar-amendoeiras",
+    category: "residenciais",
+    name: "Solar das Amendoeiras",
+    images: [
+      "/solarmendoeiras1.jpg",
+      "/solardasamendoeiras.jpg",
+      "/solardasamendoeiras2.jpg",
+      "/solarmendoeiras2.jpg",
+      "/solarmendoeiras3.jpg",
+    ],
+    technicalSheet: {
+      year: "2010",
+      regime: "Obra em regime de condomínio",
+      address: "R. Carmen Miranda, 372, Pituba",
+      architect: "Mário Figueiredo",
+      totalArea: "3.070 m²",
+      floors: "14",
+      bedrooms: "2/4 (1 suíte)",
+      unitArea: "73 m²",
+      infrastructure:
+        "Piscina com deck, academia, sauna, salão de festas, salão de jogos, parque infantil e guarita de segurança.",
     },
   },
 
   // ================== Comerciais ==================
 
   {
+    id: "inoa-parque-bela-vista",
+    category: "comerciais",
+    name: "INOA Parque Bela Vista",
+    images: [
+      "/inoa1.webp",
+      "/inoa2.webp",
+      "/inoa3.webp",
+      "/inoa4.webp",
+    ],
+    technicalSheet: {
+      year: "2023",
+      regime: "Obra por administração",
+      address: "Rua Metódio Coelho, 55 - Parque Bela Vista",
+      architect: "Graça Alcântara",
+      totalArea: "2.700,00 m²",
+      floors: "7",
+      infrastructure:
+        "19 apartamentos e 16 consultórios; revestimento em pele de vidro verde e ACM verde e silver; esquadrias em alumínio bronze.",
+    },
+  },
+
+  {
+    id: "horto-office",
+    category: "comerciais",
+    name: "Horto Office",
+    images: [
+      "/hortofice.webp",
+      "/hortofice1.jpg",
+      "/hortofice2.jpg",
+      "/hortofice3.jpg",
+      "/hortofice4.jpg",
+      "/hortofice5.jpg",
+      "/hortofice6.jpg",
+    ],
+    technicalSheet: {
+      year: "2018",
+      regime: "Obra por administração",
+      address: "R. Waldemar Falcão, 979 - Horto",
+      architect: "Mário Figueiredo",
+      totalArea: "7.453,34 m²",
+      floors: "30",
+      unitArea: "Salas comerciais: 45 m²; apartamentos: 58 m²",
+      bedrooms: "Apartamentos 1/4 (suíte) com varanda",
+      infrastructure:
+        "Fachadas principais em alumínio composto e vidro.",
+    },
+  },
+
+  {
     id: "hotel-aram-yami",
     category: "comerciais",
     name: "Hotel Aram Yamí",
-    images: ["/aranyammi.jpg", "/aranyammi3.JPG", "/aranyammi4.jpg"],
+    images: [
+      "/aranyammi.jpg",
+      "/aranyammi3.JPG",
+      "/aranyammi4.jpg",
+      "/aramyami.JPG",
+      "/aramyami6.JPG",
+    ],
     technicalSheet: {
       year: "2009",
       regime: "Empreendimento hoteleiro",
@@ -161,37 +318,10 @@ export const PROJECTS: Project[] = [
     ],
     technicalSheet: {
       regime: "Obra em regime de administração",
-      address:
-        "R. Dr. Mario Augusto Teixeira de Freitas, 11 - Massaranduba",
+      address: "R. Dr. Mario Augusto Teixeira de Freitas, 11 - Massaranduba",
       totalArea: "2.000 m²",
       infrastructure:
         "Clínica médica especializada em nefrologia, com capacidade para atendimento de 100 pessoas por dia; prédio com estacionamento privativo e guarita de segurança.",
-    },
-  },
-
-  {
-    id: "horto-office",
-    category: "comerciais",
-    name: "Horto Office",
-    images: [
-      "/hortofice1.jpg",
-      "/hortofice2.jpg",
-      "/hortofice3.jpg",
-      "/hortofice4.jpg",
-      "/hortofice5.jpg",
-      "/hortofice6.jpg",
-    ],
-    technicalSheet: {
-      year: "2018",
-      regime: "Obra por administração",
-      address: "R. Waldemar Falcão, 979 - Horto",
-      architect: "Mário Figueiredo",
-      totalArea: "7.453,34 m²",
-      floors: "30",
-      unitArea: "Salas comerciais: 45 m²; apartamentos: 58 m²",
-      bedrooms: "Apartamentos 1/4 (suíte) com varanda",
-      infrastructure:
-        "Fachadas principais em alumínio composto e vidro.",
     },
   },
 
@@ -252,8 +382,7 @@ export const PROJECTS: Project[] = [
       address: "Alphaville Itaparica",
       totalArea: "350 m²",
       bedrooms: "4 suítes",
-      infrastructure:
-        "4 vagas de garagem e brinquedoteca.",
+      infrastructure: "4 vagas de garagem e brinquedoteca.",
     },
   },
 
@@ -341,23 +470,6 @@ export const PROJECTS: Project[] = [
   // ================== Breve Lançamento ==================
 
   {
-    id: "azure-beach-living",
-    category: "breve",
-    name: "Azure Beach Living",
-    images: ["/azure2.jpg", "/azure1.jpg", "/azure3.jpg"],
-    technicalSheet: {
-      regime: "Obra em regime de condomínio",
-      address: "Rua Sereno da Madrugada, 47 - Itapuã",
-      architect: "Mario Figueiredo",
-      totalArea: "5.705,86 m²",
-      bedrooms: "1 e 2 suítes",
-      unitArea: "34,50 m² a 81,00 m²",
-      infrastructure:
-        "Fachadas em pastilha; academia; piscina com borda infinita, prainha e deck; espaço gourmet; coworking; sala de reuniões; lavanderia; bicicletário; guardaria de pranchas; lobby com pé-direito duplo; guarita.",
-    },
-  },
-
-  {
     id: "egeu-pedra-do-sal",
     category: "breve",
     name: "EGEU Pedra do Sal - Pré-lançamento",
@@ -374,4 +486,29 @@ export const PROJECTS: Project[] = [
         "Fachadas em pastilha; academia com pé-direito duplo; piscina com borda infinita, prainha e deck; espaço gourmet; sala de projeção; coworking; mini market; sala de reuniões; lavanderia; bicicletário; guardaria de pranchas; lobby com pé-direito duplo; guarita.",
     },
   },
+
+  {
+    id: "azure-beach-living",
+    category: "breve",
+    name: "Azure Beach Living",
+    images: ["/azure2.jpg", "/azure1.jpg", "/azure3.jpg"],
+    technicalSheet: {
+      regime: "Obra em regime de condomínio",
+      address: "Rua Sereno da Madrugada, 47 - Itapuã",
+      architect: "Mario Figueiredo",
+      totalArea: "5.705,86 m²",
+      bedrooms: "1 e 2 suítes",
+      unitArea: "34,50 m² a 81,00 m²",
+      infrastructure:
+        "Fachadas em pastilha; academia; piscina com borda infinita, prainha e deck; espaço gourmet; coworking; sala de reuniões; lavanderia; bicicletário; guardaria de pranchas; lobby com pé-direito duplo; guarita.",
+    },
+  },
 ];
+
+// ================== ORDENAÇÃO POR ANO (mais recentes primeiro) ==================
+
+export const PROJECTS: Project[] = PROJECTS_UNSORTED.sort((a, b) => {
+  const yearA = a.technicalSheet.year ? parseInt(a.technicalSheet.year) : 0;
+  const yearB = b.technicalSheet.year ? parseInt(b.technicalSheet.year) : 0;
+  return yearB - yearA;
+});

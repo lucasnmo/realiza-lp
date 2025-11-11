@@ -190,7 +190,7 @@ function Tabs({
         className={`${base} ${tab === "breve" ? active : idle}`}
         onClick={() => onChange("breve")}
       >
-        Breve Lançamento
+        Obras em andamento
       </button>
       <button
         className={`${base} ${tab === "residenciais" ? active : idle}`}

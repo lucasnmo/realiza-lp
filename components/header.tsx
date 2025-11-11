@@ -12,26 +12,29 @@ export default function Header() {
   const navItems = [
     { name: "HOME", href: "/" },
     { name: "PORTFÓLIO", href: "/portfolio" },
-    { name: "ESPECIALIDADES", href: "#especialidades" },
     { name: "QUEM SOMOS NÓS", href: "/sobre" },
     { name: "CONTATO", href: "#contato" },
   ]
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#1E2A32]">
-      <div className="container mx-auto px-4 sm:px-6 md:px-8 max-w-7xl">
-        <div className="flex h-16 sm:h-20 items-center justify-between">
-          <Link href="/" className="flex items-center">
+    <header className="sticky top-0 z-50 w-full bg-[#1E2A32]/95 backdrop-blur-sm shadow-md py-2 sm:py-3">
+      {/* Container com leve centralização */}
+      <div className="mx-auto max-w-[1350px] px-8 sm:px-10">
+        <div className="flex h-20 items-center justify-between gap-8">
+          {/* LOGO — ligeiramente deslocada à direita */}
+          <Link href="/" className="flex items-center pl-10 sm:pl-14 md:pl-16">
             <Image
               src="/realiza-logo-white.png"
               alt="REALIZA Engenharia"
-              width={200}
-              height={60}
-              className="h-12 sm:h-14 md:h-16 w-auto"
+              width={290}
+              height={90}
+              className="h-[78px] sm:h-[84px] md:h-[88px] w-auto"
+              priority
             />
           </Link>
 
-          <nav className="hidden md:flex items-center justify-center gap-6 lg:gap-8 flex-1">
+          {/* MENU DESKTOP */}
+          <nav className="hidden md:flex items-center justify-center gap-6 lg:gap-8 flex-1 pr-6">
             {navItems.map((item) => (
               <Link
                 key={item.name}
@@ -43,18 +46,24 @@ export default function Header() {
             ))}
           </nav>
 
+          {/* BOTÃO MENU MOBILE */}
           <Button
             variant="ghost"
             size="icon"
             className="md:hidden text-white hover:bg-white/10"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {mobileMenuOpen ? <X className="h-5 w-5 sm:h-6 sm:w-6" /> : <Menu className="h-5 w-5 sm:h-6 sm:w-6" />}
+            {mobileMenuOpen ? (
+              <X className="h-5 w-5 sm:h-6 sm:w-6" />
+            ) : (
+              <Menu className="h-5 w-5 sm:h-6 sm:w-6" />
+            )}
           </Button>
         </div>
 
+        {/* MENU MOBILE */}
         {mobileMenuOpen && (
-          <nav className="md:hidden py-4 border-t border-white/20">
+          <nav className="md:hidden py-4 border-t border-white/20 text-center">
             {navItems.map((item) => (
               <Link
                 key={item.name}

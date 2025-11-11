@@ -19,7 +19,7 @@ export default function MethodologySection() {
     },
     {
       icon: FileSearch,
-      title: "Prestação de Contas Rigorosa",
+      title: "Governança com Prestação de contas",
       text: "A Realiza apresenta relatórios mensais completos, assegurando controle total dos investimentos realizados.",
     },
     {
