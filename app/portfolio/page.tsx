@@ -31,9 +31,7 @@ export default function PortfolioPage() {
   const { ref: headerRef, isVisible: headerVisible } =
     useScrollReveal<HTMLDivElement>()
 
-  // Aba inicial: Breve Lançamento
   const [tab, setTab] = useState<Category>("breve")
-
   const [lightbox, setLightbox] = useState<{
     images: string[]
     index: number
@@ -47,18 +45,15 @@ export default function PortfolioPage() {
 
   useEffect(() => {
     if (!lightbox) return
-
     const onKey = (e: KeyboardEvent) => {
-      if (!lightbox) return
       if (e.key === "Escape") setLightbox(null)
-      if (e.key === "ArrowRight") {
+      if (e.key === "ArrowRight")
         setLightbox((prev) =>
           prev
             ? { ...prev, index: (prev.index + 1) % prev.images.length }
             : prev
         )
-      }
-      if (e.key === "ArrowLeft") {
+      if (e.key === "ArrowLeft")
         setLightbox((prev) =>
           prev
             ? {
@@ -69,9 +64,7 @@ export default function PortfolioPage() {
               }
             : prev
         )
-      }
     }
-
     window.addEventListener("keydown", onKey)
     return () => window.removeEventListener("keydown", onKey)
   }, [lightbox])
@@ -81,7 +74,6 @@ export default function PortfolioPage() {
       <Header />
 
       <main className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-12 py-14 sm:py-16">
-        {/* Cabeçalho */}
         <div
           ref={headerRef}
           className={`mb-8 sm:mb-10 transition-all duration-700 ${
@@ -93,16 +85,14 @@ export default function PortfolioPage() {
           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-3 uppercase tracking-wide text-gray-800">
             Nossos Empreendimentos
           </h1>
-          <p className="font-sans text-center text-gray-600 text-base sm:text-lg md:text-xl mb-6 max-w-4xl mx-auto leading-relaxed px-4">
+          <p className="text-center text-gray-600 text-base sm:text-lg md:text-xl mb-6 max-w-4xl mx-auto leading-relaxed">
             Conheça os projetos que construímos com qualidade, transparência e compromisso.
           </p>
           <div className="mx-auto h-1 w-20 rounded-full bg-[#0891b2]" />
         </div>
 
-        {/* Abas */}
         <Tabs tab={tab} onChange={setTab} />
 
-        {/* Lista */}
         <div className="mt-8 space-y-10 sm:space-y-12">
           {filtered.length === 0 && (
             <p className="text-center text-sm sm:text-base text-gray-500">
@@ -214,6 +204,7 @@ function Tabs({
   )
 }
 
+/* ---- CHIP ---- */
 function Chip({
   icon,
   children,
@@ -229,83 +220,7 @@ function Chip({
   )
 }
 
-/* ---- utils imagem ---- */
-
-function buildCandidateSources(src: string): string[] {
-  const normalized = src.trim()
-  const withSlash = normalized.startsWith("/") ? normalized : `/${normalized}`
-  const lower = withSlash.replace(/\.(jpg|jpeg|png|tif|tiff)$/i, (m) =>
-    m.toLowerCase()
-  )
-  const extMatch = lower.match(/\.(jpg|jpeg|png|tif|tiff)$/i)
-  const ext = extMatch ? extMatch[0].toLowerCase() : ""
-  const base = ext ? lower.slice(0, -ext.length) : lower
-
-  const candidates = new Set<string>()
-
-  if (ext === ".tif" || ext === ".tiff") {
-    // tenta versões otimizadas caso existam
-    candidates.add(base + ".jpg")
-    candidates.add(base + ".jpeg")
-    candidates.add(base + ".png")
-  }
-
-  if (ext) {
-    candidates.add(base + ext)
-  } else {
-    candidates.add(lower)
-  }
-
-  for (const e of [".jpg", ".jpeg", ".png"]) {
-    candidates.add(base + e)
-    candidates.add(base + e.toUpperCase())
-  }
-
-  return Array.from(candidates)
-}
-
-function SmartImage({
-  src,
-  alt,
-  fill,
-  className,
-  sizes,
-  priority,
-  loading,
-  onLoad,
-}: {
-  src: string
-  alt: string
-  fill?: boolean
-  className?: string
-  sizes?: string
-  priority?: boolean
-  loading?: "lazy" | "eager"
-  onLoad?: (img: HTMLImageElement) => void
-}) {
-  const candidates = useMemo(() => buildCandidateSources(src), [src])
-  const [idx, setIdx] = useState(0)
-
-  return (
-    <Image
-      src={candidates[idx]}
-      alt={alt}
-      fill={fill}
-      className={className}
-      sizes={sizes}
-      priority={priority}
-      loading={loading ?? (priority ? "eager" : "lazy")}
-      onError={() =>
-        setIdx((prev) =>
-          prev + 1 < candidates.length ? prev + 1 : prev
-        )
-      }
-      onLoadingComplete={(img) => onLoad?.(img as HTMLImageElement)}
-    />
-  )
-}
-
-/* ---- Card ---- */
+/* ---- CARD ---- */
 
 function ProjectCard({
   project,
@@ -323,30 +238,18 @@ function ProjectCard({
 
   const mainImage = project.images[activeIdx] ?? project.images[0]
   const T = project.technicalSheet
-
   const isHouse = project.category === "casas"
-
-  // Casas: mostrar a casa inteira (contain)
-  // Retrato: contain
-  // Outros paisagem: cover central
   const useContain = isHouse || isPortrait
-
   const fitClass = useContain
     ? "object-contain"
     : "object-cover object-center"
-
   const bgClass = useContain ? "bg-white" : "bg-gray-100"
-
-  // Só o primeiro card de "breve" ganha prioridade (hero)
-  const shouldPriority =
-    project.category === "breve" && index === 0
-
-  const whatsappUrl =
-    project.category === "breve"
-      ? `https://wa.me/5571992220164?text=${encodeURIComponent(
-          `Olá, tenho interesse em investir no empreendimento ${project.name}. Poderia me enviar mais informações?`
-        )}`
-      : ""
+  const shouldPriority = project.category === "breve" && index === 0
+  const whatsappUrl = project.category === "breve"
+    ? `https://wa.me/5571992220164?text=${encodeURIComponent(
+        `Olá, tenho interesse em investir no empreendimento ${project.name}. Poderia me enviar mais informações?`
+      )}`
+    : ""
 
   return (
     <div
@@ -357,28 +260,24 @@ function ProjectCard({
           : "opacity-0 translate-y-6"
       }`}
     >
-      <article className="rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md">
-        {/* Imagem */}
+      <article className="rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow">
         <div className="p-5 sm:p-6">
           <button
-            type="button"
             onClick={() => onOpenLightbox(activeIdx)}
             className="group block w-full"
-            aria-label={`Ampliar imagens de ${project.name}`}
           >
             <div
-              className={`relative w-full overflow-hidden rounded-xl ${bgClass}
-                h-[300px] sm:h-[360px] md:h-[420px] lg:h-[480px] xl:h-[520px]`}
+              className={`relative overflow-hidden rounded-xl ${bgClass}
+                h-[300px] sm:h-[360px] md:h-[420px] lg:h-[480px]`}
             >
-              <SmartImage
+              <Image
                 src={mainImage || "/placeholder.svg"}
                 alt={project.name}
                 fill
                 className={`${fitClass} transition-transform duration-500 group-hover:scale-[1.02]`}
                 sizes="(min-width:1280px) 1100px, (min-width:1024px) 960px, 100vw"
                 priority={shouldPriority}
-                loading={shouldPriority ? "eager" : "lazy"}
-                onLoad={(img) =>
+                onLoadingComplete={(img) =>
                   setIsPortrait(img.naturalHeight > img.naturalWidth)
                 }
               />
@@ -396,25 +295,19 @@ function ProjectCard({
                       ? "ring-[#0891b2]"
                       : "ring-gray-200 hover:ring-gray-300"
                   }`}
-                  aria-label={`Trocar para imagem ${i + 1}`}
                 >
-                  <div className="relative h-full w-full bg-gray-100">
-                    <SmartImage
-                      src={src}
-                      alt={`${project.name} ${i + 1}`}
-                      fill
-                      className="object-cover"
-                      loading="lazy"
-                      priority={false}
-                    />
-                  </div>
+                  <Image
+                    src={src}
+                    alt={`${project.name} ${i + 1}`}
+                    fill
+                    className="object-cover"
+                  />
                 </button>
               ))}
             </div>
           )}
         </div>
 
-        {/* Conteúdo */}
         <div className="px-5 sm:px-6 pb-6">
           <h2 className="mb-3 font-serif text-2xl sm:text-3xl font-bold text-gray-900">
             {project.name}
@@ -448,48 +341,22 @@ function ProjectCard({
             )}
           </div>
 
-          <ul className="grid grid-cols-1 gap-2 text-sm text-gray-700 sm:grid-cols-2">
-            {T.address && (
-              <li className="flex items-start gap-2">
-                <MapPin className="mt-0.5 h-4 w-4 text-[#4a5568]" />
-                <span>{T.address}</span>
-              </li>
-            )}
-            {T.regime && (
-              <li className="flex items-start gap-2">
-                <Building2 className="mt-0.5 h-4 w-4 text-[#4a5568]" />
-                <span>{T.regime}</span>
-              </li>
-            )}
-            {T.architect && (
-              <li className="flex items-start gap-2">
-                <User2 className="mt-0.5 h-4 w-4 text-[#4a5568]" />
-                <span>Projeto: {T.architect}</span>
-              </li>
-            )}
-          </ul>
-
-          {/* Ficha técnica */}
+          {/* Ficha técnica — agora em uma única coluna */}
           <div className="mt-5 rounded-xl border bg-white p-4 sm:p-5">
             <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-[#4a5568]">
               Ficha técnica
             </h3>
-            <dl className="grid grid-cols-1 gap-y-2 gap-x-6 text-sm sm:grid-cols-2">
+            <dl className="grid grid-cols-1 gap-y-2 text-sm">
               <InfoRows sheet={T} />
             </dl>
           </div>
 
-          {/* Botão WhatsApp só para Breve Lançamento */}
           {project.category === "breve" && (
             <div className="mt-5">
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
                 <Button
                   size="lg"
-                  className="rounded-full border-2 border-gray-800 bg-transparent px-8 py-4 sm:py-5 font-bold uppercase tracking-wide text-gray-800 transition-all duration-300 hover:scale-105 hover:bg-gray-800 hover:text-white w-full sm:w-auto"
+                  className="rounded-full border-2 border-gray-800 bg-transparent px-8 py-4 sm:py-5 font-bold uppercase tracking-wide text-gray-800 hover:scale-105 hover:bg-gray-800 hover:text-white w-full sm:w-auto"
                 >
                   Quero Investir
                 </Button>
@@ -502,146 +369,32 @@ function ProjectCard({
   )
 }
 
+/* ---- FICHA TÉCNICA ---- */
 function InfoRows({ sheet: T }: { sheet: TechnicalSheet }) {
   return (
     <>
       {T.year && <Row label="Ano" value={T.year} />}
       {T.regime && <Row label="Regime" value={T.regime} />}
-      {T.address && <Row label="Endereço" value={T.address} full />}
+      {T.address && <Row label="Endereço" value={T.address} />}
       {T.architect && <Row label="Arquiteto" value={T.architect} />}
       {T.totalArea && <Row label="Área total" value={T.totalArea} />}
       {T.floors && <Row label="Pavimentos" value={T.floors} />}
       {T.bedrooms && <Row label="Dormitórios" value={T.bedrooms} />}
       {T.unitArea && <Row label="Área das unidades" value={T.unitArea} />}
       {T.infrastructure && (
-        <Row label="Infraestrutura" value={T.infrastructure} full />
+        <Row label="Infraestrutura" value={T.infrastructure} />
       )}
     </>
   )
 }
 
-function Row({
-  label,
-  value,
-  full,
-}: {
-  label: string
-  value: string
-  full?: boolean
-}) {
+function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className={`flex gap-2 ${full ? "sm:col-span-2" : ""}`}>
+    <div className="flex gap-2">
       <dt className="min-w-[140px] font-semibold text-gray-800">
         {label}
       </dt>
       <dd className="text-gray-700">{value}</dd>
-    </div>
-  )
-}
-
-/* ---- Lightbox ---- */
-
-function LightboxOverlay({
-  title,
-  images,
-  index,
-  onClose,
-  onPrev,
-  onNext,
-  onThumbClick,
-}: {
-  title?: string
-  images: string[]
-  index: number
-  onClose: () => void
-  onPrev: () => void
-  onNext: () => void
-  onThumbClick: (i: number) => void
-}) {
-  return (
-    <div
-      className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm"
-      onClick={onClose}
-      aria-modal="true"
-      role="dialog"
-    >
-      <div
-        className="relative h-full w-full"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          onClick={onClose}
-          className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
-          aria-label="Fechar"
-        >
-          <X className="h-6 w-6" />
-        </button>
-
-        {title && (
-          <div className="absolute left-4 top-4 text-sm text-white/90 sm:text-base">
-            {title}
-          </div>
-        )}
-
-        <button
-          onClick={onPrev}
-          className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg_WHITE/10 p-2 text-white hover:bg-white/20 sm:left-4"
-          aria-label="Anterior"
-        >
-          <ChevronLeft className="h-7 w-7" />
-        </button>
-        <button
-          onClick={onNext}
-          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 sm:right-4"
-          aria-label="Próxima"
-        >
-          <ChevronRight className="h-7 w-7" />
-        </button>
-
-        <div className="flex h-full items-center justify-center px-3 sm:px-8">
-          <div className="relative w-full max-w-6xl">
-            <div className="relative h-[58vh] sm:h-[68vh] md:h-[72vh]">
-              <Image
-                src={images[index] || "/placeholder.svg"}
-                alt={`Imagem ${index + 1}`}
-                fill
-                className="object-contain"
-                sizes="100vw"
-                priority
-              />
-            </div>
-          </div>
-        </div>
-
-        {images.length > 1 && (
-          <div className="absolute bottom-3 left-0 right-0 mx-auto w-full max-w-6xl px-3 sm:px-8">
-            <div className="flex gap-2 overflow-x-auto">
-              {images.map((src, i) => (
-                <button
-                  key={i}
-                  onClick={() => onThumbClick(i)}
-                  className={`relative h-14 w-20 flex-shrink-0 overflow-hidden rounded-md ring-2 transition-all ${
-                    index === i
-                      ? "ring-white"
-                      : "ring-white/30 hover:ring-white/50"
-                  }`}
-                  aria-label={`Abrir imagem ${i + 1}`}
-                >
-                  <div className="relative h-full w-full bg-black/40">
-                    <Image
-                      src={src}
-                      alt={`thumb ${i + 1}`}
-                      fill
-                      className="object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
     </div>
   )
 }

@@ -1,50 +1,60 @@
 "use client";
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import useEmblaCarousel from "embla-carousel-react";
+import {
+  Calendar,
+  Ruler,
+  Layers,
+  Bed,
+} from "lucide-react";
+import {
+  PROJECTS,
+  Project,
+  TechnicalSheet,
+} from "@/lib/projects";
 
-const projects = [
+// Quais projetos entram no carrossel da home + posição da imagem
+type CarouselConfig = {
+  id: string;
+  objectPosition?: string;
+};
+
+const carouselConfig: CarouselConfig[] = [
   {
-    id: 1,
-    name: "Azure Beach Living",
-    location: "Rua Sereno da Madrugada, 47, Itapuã",
-    image: "/azure2.jpg",
-    status: "Breve",
-    objectPosition: "center center", // ajuste se quiser mais céu ou mais prédio
-  },
-  {
-    id: 2,
-    name: "EGEU Pedra do Sal - Pré-lançamento",
-    location: "Rua Sereno da Madrugada 17,18,19 - Itapuã, Salvador",
-    image: "/EGEU2.jpeg",
-    status: "Breve",
-    objectPosition: "center center", // ex: "center top" se o prédio for alto e cortar embaixo
-  },
-  {
-    id: 3,
-    name: "Horto Vilas",
-    location: "Vilas do Atlântico, Lauro de Freitas",
-    image: "/hortovlias4.jpg",
+    id: "azure-beach-living",
     objectPosition: "center center",
   },
   {
-    id: 4,
-    name: "Hotel Aram Yamí",
-    location: "Santo Antônio Além do Carmo, Salvador",
-    image: "/aranyammi.jpg",
+    id: "egeu-pedra-do-sal",
     objectPosition: "center center",
   },
   {
-    id: 5,
-    name: "Alphaville Estrela do Mar",
-    location: "Alphaville, Salvador",
-    image: "/estreladomar2.jpg",
+    id: "horto-vilas",
+    objectPosition: "center center",
+  },
+  {
+    id: "hotel-aram-yami",
+    objectPosition: "center center",
+  },
+  {
+    id: "alphaville-estrela-do-mar",
     objectPosition: "center center",
   },
 ];
+
+// Monta a lista usando os dados do lib/projects.ts
+const projects: (Project & { objectPosition?: string })[] = carouselConfig
+  .map((cfg) => {
+    const base = PROJECTS.find((p) => p.id === cfg.id);
+    if (!base) return null;
+    return { ...base, objectPosition: cfg.objectPosition };
+  })
+  .filter(Boolean) as (Project & { objectPosition?: string })[];
 
 export default function ProjectsSection() {
   const { ref, isVisible } = useScrollReveal();
@@ -95,14 +105,18 @@ export default function ProjectsSection() {
           ref={ref}
           style={{ textShadow: "0 3px 10px rgba(0,0,0,0.18)" }}
           className={`text-2xl sm:text-3xl md:text-4xl font-bold text-center uppercase tracking-wide text-gray-800 transition-all duration-700
-            ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"} mb-6 sm:mb-8 lg:mb-10`}
+            ${
+              isVisible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-6"
+            } mb-6 sm:mb-8 lg:mb-10`}
         >
-          NOSSOS EMPREENDIMENTOS
+          Nossos Empreendimentos
         </h2>
 
         {/* wrapper compensa o padding do viewport */}
         <div className="-mx-6 sm:-mx-8">
-          {/* viewport com padding MAIOR que o dos slides */}
+          {/* viewport */}
           <div ref={emblaRef} className="overflow-hidden px-6 sm:px-2">
             <div className="flex">
               {projects.map((project, index) => (
@@ -114,19 +128,23 @@ export default function ProjectsSection() {
                     className={`h-full bg-white rounded-2xl border border-zinc-100
                       shadow-[0_4px_16px_rgba(0,0,0,0.10)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)]
                       transition-all duration-300
-                      ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+                      ${
+                        isVisible
+                          ? "opacity-100 translate-y-0"
+                          : "opacity-0 translate-y-6"
+                      }`}
                     style={{ transitionDelay: `${index * 90}ms` }}
                   >
+                    {/* Imagem */}
                     <div className="relative overflow-hidden rounded-t-2xl aspect-[4/3] bg-gray-100">
-                      {/* Selo para lançamentos */}
-                      {project.status === "Breve" && (
+                      {project.category === "breve" && (
                         <div className="absolute top-3 left-3 z-10 px-3 py-1 rounded-full bg-emerald-600/95 text-[0.65rem] sm:text-xs font-bold uppercase tracking-[0.12em] text-white shadow-md">
-                          Lançamento em Breve
+                          Obra em andamento
                         </div>
                       )}
 
                       <Image
-                        src={project.image || "/placeholder.svg"}
+                        src={project.images[0] || "/placeholder.svg"}
                         alt={project.name}
                         fill
                         className="object-cover transition-transform duration-300 hover:scale-105"
@@ -137,13 +155,15 @@ export default function ProjectsSection() {
                         }}
                       />
                     </div>
+
+                    {/* Conteúdo */}
                     <div className="p-5 sm:p-6">
-                      <h3 className="text-lg sm:text-xl font-semibold text-gray-800 leading-snug">
+                      <h3 className="text-lg sm:text-xl font-semibold text-gray-800 leading-snug mb-3">
                         {project.name}
                       </h3>
-                      <p className="mt-1 text-sm sm:text-base text-gray-800">
-                        {project.location}
-                      </p>
+
+                      {/* Chips técnicos (substituem o endereço) */}
+                      <Chips technicalSheet={project.technicalSheet} />
                     </div>
                   </article>
                 </div>
@@ -155,7 +175,9 @@ export default function ProjectsSection() {
         {/* CTAs */}
         <div
           className={`mt-8 sm:mt-10 lg:mt-12 flex flex-wrap justify-center gap-3 transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+            isVisible
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-6"
           }`}
         >
           <Link href="/portfolio">
@@ -183,5 +205,54 @@ export default function ProjectsSection() {
         </div>
       </div>
     </section>
+  );
+}
+
+/* ================== Chips ================== */
+
+function Chips({ technicalSheet }: { technicalSheet: TechnicalSheet }) {
+  const t = technicalSheet;
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {t.year && (
+        <Chip>
+          <Calendar className="h-3.5 w-3.5 text-slate-700" />
+          {t.year}
+        </Chip>
+      )}
+      {t.totalArea && (
+        <Chip>
+          <Ruler className="h-3.5 w-3.5 text-slate-700" />
+          {t.totalArea}
+        </Chip>
+      )}
+      {t.floors && (
+        <Chip>
+          <Layers className="h-3.5 w-3.5 text-slate-700" />
+          {t.floors} pav.
+        </Chip>
+      )}
+      {t.bedrooms && (
+        <Chip>
+          <Bed className="h-3.5 w-3.5 text-slate-700" />
+          {t.bedrooms}
+        </Chip>
+      )}
+      {t.unitArea && (
+        <Chip>
+          <Ruler className="h-3.5 w-3.5 text-slate-700" />
+          {t.unitArea}
+        </Chip>
+      )}
+    </div>
+  );
+}
+
+function Chip({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-50 px-3 py-1 border border-gray-200 text-[10px] sm:text-xs font-medium text-slate-800">
+      {children}
+    </span>
   );
 }
