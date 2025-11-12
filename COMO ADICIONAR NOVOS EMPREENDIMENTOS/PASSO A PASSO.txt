@@ -1,0 +1,64 @@
+Como adicionar um novo empreendimento ao site
+
+O que você vai precisar?
+-As imagens do empreendimento (em .jpg/.jpeg/.png).
+-Os dados do empreendimento (nome, categoria, ficha técnica).
+
+
+Passo 1 — Acessar o repositório
+-Abra o link do GitHub do projeto.
+-Faça login na sua conta do GitHub.
+
+Passo 2 — Enviar as imagens
+-No GitHub, entre na pasta public/.
+-Clique em “Add file” → “Upload files”.
+-Arraste as imagens do seu computador para a página.
+-Clique em “Commit changes” (pode escrever “Imagens do empreendimento X”).
+use nomes simples, tudo minúsculo, sem espaços.
+
+Passo 3 — Editar o arquivo de projetos
+-Entre na pasta public/data/.
+-Clique no arquivo projects.json.
+-Clique no ícone de lápis (Edit).
+-Role até o final, e adicione o bloco do novo empreendimento antes do ] de fechamento (separado por vírgula).
+-Clique em “Commit changes”.
+
+
+OBSERVAÇÕES: 
+
+Categorias válidas (campo category):
+	-residenciais
+	-casas
+	-comerciais
+	-breve (obras em andamento)
+
+O campo id deve ser único (ex.: residencial-aurora, horto-vilas-2)
+
+
+
+
+
+
+MODELO JSON PARA COPIAR E COLAR:
+
+{
+  "id": "residencial-novo-horizonte",
+  "category": "residenciais",
+  "name": "Residencial Novo Horizonte",
+  "images": [
+    "/novo-horizonte1.jpg",
+    "/novo-horizonte2.jpg",
+    "/novo-horizonte3.jpg"
+  ],
+  "technicalSheet": {
+    "year": "2025",
+    "regime": "Obra em regime de condomínio",
+    "address": "Av. Central, 123 - Bairro Novo, Salvador",
+    "architect": "João Silva",
+    "totalArea": "3.200 m²",
+    "floors": "12",
+    "bedrooms": "2 e 3 quartos",
+    "unitArea": "65 m² a 90 m²",
+    "infrastructure": "Piscina, salão de festas, academia, playground e portaria 24h."
+  }
+}
