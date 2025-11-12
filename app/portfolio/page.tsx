@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import React, { useEffect, useMemo, useState } from "react"
-import Header from "@/components/header"
-import Footer from "@/components/footer"
-import Image from "next/image"
-import { useScrollReveal } from "@/hooks/use-scroll-reveal"
+import React, { useEffect, useMemo, useState } from "react";
+import Header from "@/components/header";
+import Footer from "@/components/footer";
+import Image from "next/image";
+import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import {
   Calendar,
   Ruler,
@@ -16,51 +16,75 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
-} from "lucide-react"
+} from "lucide-react";
 import {
   PROJECTS,
   Category,
   Project,
   TechnicalSheet,
-} from "@/lib/projects"
-import { Button } from "@/components/ui/button"
+} from "@/lib/projects";
+import { Button } from "@/components/ui/button";
+import { useSearchParams, useRouter } from "next/navigation";
 
 /* ==================== PÁGINA ==================== */
 
 export default function PortfolioPage() {
   const { ref: headerRef, isVisible: headerVisible } =
-    useScrollReveal<HTMLDivElement>()
+    useScrollReveal<HTMLDivElement>();
 
-  const [tab, setTab] = useState<Category>("breve")
+  const params = useSearchParams();
+  const router = useRouter();
+
+  const urlTab = (params.get("tab") as Category) || "breve";
+  const highlightId = params.get("highlight") || undefined;
+
+  const [tab, setTab] = useState<Category>(urlTab);
   const [lightbox, setLightbox] = useState<{
-    images: string[]
-    index: number
-    title?: string
-  } | null>(null)
+    images: string[];
+    index: number;
+    title?: string;
+  } | null>(null);
+
+  // Atualiza o query param quando o usuário troca de aba
+  useEffect(() => {
+    const sp = new URLSearchParams(params.toString());
+    sp.set("tab", tab);
+    // mantém highlight se já existir
+    router.replace(`/portfolio?${sp.toString()}`, { scroll: false });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab]);
 
   const filtered = useMemo(
     () => PROJECTS.filter((p) => p.category === tab),
     [tab]
-  )
+  );
+
+  // Rola e destaca o card de highlight (se existir)
+  useEffect(() => {
+    if (!highlightId) return;
+    const el = document.getElementById(`project-${highlightId}`);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      el.classList.add("ring-2", "ring-[#0891b2]");
+      const t = setTimeout(() => {
+        el.classList.remove("ring-2", "ring-[#0891b2]");
+      }, 2000);
+      return () => clearTimeout(t);
+    }
+  }, [highlightId, tab]);
 
   useEffect(() => {
-    if (!lightbox) return
+    if (!lightbox) return;
 
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setLightbox(null)
-
-      if (e.key === "ArrowRight") {
+      if (e.key === "Escape") setLightbox(null);
+      if (e.key === "ArrowRight")
         setLightbox((prev) =>
           prev
-            ? {
-                ...prev,
-                index: (prev.index + 1) % prev.images.length,
-              }
+            ? { ...prev, index: (prev.index + 1) % prev.images.length }
             : prev
-        )
-      }
-
-      if (e.key === "ArrowLeft") {
+        );
+      if (e.key === "ArrowLeft")
         setLightbox((prev) =>
           prev
             ? {
@@ -70,13 +94,11 @@ export default function PortfolioPage() {
                   prev.images.length,
               }
             : prev
-        )
-      }
-    }
-
-    window.addEventListener("keydown", onKey)
-    return () => window.removeEventListener("keydown", onKey)
-  }, [lightbox])
+        );
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightbox]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -96,8 +118,7 @@ export default function PortfolioPage() {
             Nossos Empreendimentos
           </h1>
           <p className="text-center text-gray-600 text-base sm:text-lg md:text-xl mb-6 max-w-4xl mx-auto leading-relaxed">
-            Conheça os projetos que construímos com qualidade,
-            transparência e compromisso.
+            Conheça os projetos que construímos com qualidade, transparência e compromisso.
           </p>
           <div className="mx-auto h-1 w-20 rounded-full bg-[#0891b2]" />
         </div>
@@ -118,6 +139,7 @@ export default function PortfolioPage() {
               key={project.id}
               project={project}
               index={index}
+              highlight={highlightId === project.id}
               onOpenLightbox={(startIndex) =>
                 setLightbox({
                   images: project.images,
@@ -170,7 +192,7 @@ export default function PortfolioPage() {
 
       <Footer />
     </div>
-  )
+  );
 }
 
 /* ==================== COMPONENTES ==================== */
@@ -179,52 +201,42 @@ function Tabs({
   tab,
   onChange,
 }: {
-  tab: Category
-  onChange: (t: Category) => void
+  tab: Category;
+  onChange: (t: Category) => void;
 }) {
   const base =
-    "px-4 py-2 rounded-full text-sm sm:text-base font-semibold transition-all border"
-  const active =
-    "bg-[#0d7a8f] text-white border-[#0d7a8f] shadow-sm"
-  const idle =
-    "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+    "px-4 py-2 rounded-full text-sm sm:text-base font-semibold transition-all border";
+  const active = "bg-[#0d7a8f] text-white border-[#0d7a8f] shadow-sm";
+  const idle = "bg-white text-gray-700 border-gray-200 hover:bg-gray-50";
 
   return (
     <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
       <button
-        className={`${base} ${
-          tab === "breve" ? active : idle
-        }`}
+        className={`${base} ${tab === "breve" ? active : idle}`}
         onClick={() => onChange("breve")}
       >
         Obras em andamento
       </button>
       <button
-        className={`${base} ${
-          tab === "residenciais" ? active : idle
-        }`}
+        className={`${base} ${tab === "residenciais" ? active : idle}`}
         onClick={() => onChange("residenciais")}
       >
         Prédios Residenciais
       </button>
       <button
-        className={`${base} ${
-          tab === "casas" ? active : idle
-        }`}
+        className={`${base} ${tab === "casas" ? active : idle}`}
         onClick={() => onChange("casas")}
       >
         Casas
       </button>
       <button
-        className={`${base} ${
-          tab === "comerciais" ? active : idle
-        }`}
+        className={`${base} ${tab === "comerciais" ? active : idle}`}
         onClick={() => onChange("comerciais")}
       >
         Comerciais
       </button>
     </div>
-  )
+  );
 }
 
 /* ---- CHIP ---- */
@@ -233,15 +245,15 @@ function Chip({
   icon,
   children,
 }: {
-  icon: React.ReactNode
-  children: React.ReactNode
+  icon: React.ReactNode;
+  children: React.ReactNode;
 }) {
   return (
     <span className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-2.5 py-1 text-xs text-gray-700">
       {icon}
       {children}
     </span>
-  )
+  );
 }
 
 /* ---- CARD ---- */
@@ -250,46 +262,53 @@ function ProjectCard({
   project,
   onOpenLightbox,
   index,
+  highlight,
 }: {
-  project: Project
-  onOpenLightbox: (startIndex: number) => void
-  index: number
+  project: Project;
+  onOpenLightbox: (startIndex: number) => void;
+  index: number;
+  highlight?: boolean;
 }) {
   const { ref: cardRef, isVisible: cardVisible } =
-    useScrollReveal<HTMLDivElement>()
-  const [activeIdx, setActiveIdx] = useState(0)
-  const [isPortrait, setIsPortrait] = useState(false)
+    useScrollReveal<HTMLDivElement>();
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [isPortrait, setIsPortrait] = useState(false);
 
-  const mainImage = project.images[activeIdx] ?? project.images[0]
-  const T = project.technicalSheet
-  const isHouse = project.category === "casas"
+  const mainImage = project.images[activeIdx] ?? project.images[0];
+  const T = project.technicalSheet;
+  const isHouse = project.category === "casas";
 
-  const useContain = isHouse || isPortrait
+  const useContain = isHouse || isPortrait;
   const fitClass = useContain
     ? "object-contain"
-    : "object-cover object-center"
-  const bgClass = useContain ? "bg-white" : "bg-gray-100"
+    : "object-cover object-center";
+  const bgClass = useContain ? "bg-white" : "bg-gray-100";
 
   const shouldPriority =
-    project.category === "breve" && index === 0
+    project.category === "breve" && index === 0;
 
   const whatsappUrl =
     project.category === "breve"
       ? `https://wa.me/5571992220164?text=${encodeURIComponent(
           `Olá, tenho interesse em investir no empreendimento ${project.name}. Poderia me enviar mais informações?`
         )}`
-      : ""
+      : "";
 
   return (
     <div
       ref={cardRef}
+      id={`project-${project.id}`}
       className={`transition-all duration-700 ${
         cardVisible
           ? "opacity-100 translate-y-0"
           : "opacity-0 translate-y-6"
       }`}
     >
-      <article className="rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow">
+      <article
+        className={`rounded-2xl border bg-white shadow-sm hover:shadow-md transition-shadow ${
+          highlight ? "border-[#0891b2]" : "border-gray-100"
+        }`}
+      >
         {/* Imagem principal */}
         <div className="p-5 sm:p-6">
           <button
@@ -311,7 +330,8 @@ function ProjectCard({
                 priority={shouldPriority}
                 onLoadingComplete={(img) =>
                   setIsPortrait(
-                    img.naturalHeight > img.naturalWidth
+                    (img as HTMLImageElement).naturalHeight >
+                      (img as HTMLImageElement).naturalWidth
                   )
                 }
               />
@@ -411,7 +431,7 @@ function ProjectCard({
         </div>
       </article>
     </div>
-  )
+  );
 }
 
 /* ---- FICHA TÉCNICA ---- */
@@ -423,38 +443,18 @@ function InfoRows({ sheet: T }: { sheet: TechnicalSheet }) {
       {T.regime && <Row label="Regime" value={T.regime} />}
       {T.address && <Row label="Endereço" value={T.address} />}
       {T.architect && <Row label="Arquiteto" value={T.architect} />}
-      {T.totalArea && (
-        <Row label="Área total" value={T.totalArea} />
-      )}
-      {T.floors && (
-        <Row label="Pavimentos" value={T.floors} />
-      )}
-      {T.bedrooms && (
-        <Row label="Dormitórios" value={T.bedrooms} />
-      )}
-      {T.unitArea && (
-        <Row
-          label="Área das unidades"
-          value={T.unitArea}
-        />
-      )}
+      {T.totalArea && <Row label="Área total" value={T.totalArea} />}
+      {T.floors && <Row label="Pavimentos" value={T.floors} />}
+      {T.bedrooms && <Row label="Dormitórios" value={T.bedrooms} />}
+      {T.unitArea && <Row label="Área das unidades" value={T.unitArea} />}
       {T.infrastructure && (
-        <Row
-          label="Infraestrutura"
-          value={T.infrastructure}
-        />
+        <Row label="Infraestrutura" value={T.infrastructure} />
       )}
     </>
-  )
+  );
 }
 
-function Row({
-  label,
-  value,
-}: {
-  label: string
-  value: string
-}) {
+function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex gap-2">
       <dt className="min-w-[140px] font-semibold text-gray-800">
@@ -462,7 +462,7 @@ function Row({
       </dt>
       <dd className="text-gray-700">{value}</dd>
     </div>
-  )
+  );
 }
 
 /* ---- LIGHTBOX ---- */
@@ -476,13 +476,13 @@ function LightboxOverlay({
   onNext,
   onThumbClick,
 }: {
-  title?: string
-  images: string[]
-  index: number
-  onClose: () => void
-  onPrev: () => void
-  onNext: () => void
-  onThumbClick: (i: number) => void
+  title?: string;
+  images: string[];
+  index: number;
+  onClose: () => void;
+  onPrev: () => void;
+  onNext: () => void;
+  onThumbClick: (i: number) => void;
 }) {
   return (
     <div
@@ -573,5 +573,5 @@ function LightboxOverlay({
         )}
       </div>
     </div>
-  )
+  );
 }

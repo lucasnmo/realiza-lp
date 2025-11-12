@@ -17,24 +17,32 @@ export default function Header() {
   ]
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#1E2A32]/95 backdrop-blur-sm shadow-md py-2 sm:py-3">
-      {/* Container com leve centralização */}
-      <div className="mx-auto max-w-[1350px] px-8 sm:px-10">
-        <div className="flex h-20 items-center justify-between gap-8">
-          {/* LOGO — ligeiramente deslocada à direita */}
-          <Link href="/" className="flex items-center pl-10 sm:pl-14 md:pl-16">
-            <Image
-              src="/realiza-logo-white.png"
-              alt="REALIZA Engenharia"
-              width={290}
-              height={90}
-              className="h-[78px] sm:h-[84px] md:h-[88px] w-auto"
-              priority
-            />
+    <header className="sticky top-0 z-50 w-full bg-[#1E2A32]/95 backdrop-blur-sm shadow-md">
+      <div className="mx-auto max-w-[1350px] px-6 sm:px-10">
+        <div className="flex h-24 sm:h-28 items-center justify-between relative">
+          {/* LOGO */}
+          <Link
+            href="/"
+            className="
+              flex items-center justify-center 
+              w-full md:w-auto
+              md:ml-24
+            "
+          >
+            <div className="h-16 sm:h-20 md:h-24 flex items-center">
+              <Image
+                src="/realiza-logo-white.png"
+                alt="REALIZA Engenharia"
+                width={320}
+                height={100}
+                className="site-logo"
+                priority
+              />
+            </div>
           </Link>
 
-          {/* MENU DESKTOP */}
-          <nav className="hidden md:flex items-center justify-center gap-6 lg:gap-8 flex-1 pr-6">
+          {/* MENU DESKTOP CENTRALIZADO */}
+          <nav className="hidden md:flex items-center justify-center gap-6 lg:gap-8 absolute left-1/2 -translate-x-1/2">
             {navItems.map((item) => (
               <Link
                 key={item.name}
@@ -50,8 +58,9 @@ export default function Header() {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden text-white hover:bg-white/10"
+            className="md:hidden text-white hover:bg-white/10 absolute right-6 top-7"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Abrir menu"
           >
             {mobileMenuOpen ? (
               <X className="h-5 w-5 sm:h-6 sm:w-6" />
