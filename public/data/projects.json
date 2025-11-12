@@ -69,7 +69,7 @@
     "id": "horto-office",
     "category": "comerciais",
     "name": "Horto Office",
-    "images": ["/hortofice.webp", "/hortofice1.jpg", "/hortofice2.jpg", "/hortofice3.jpg", "/hortofice4.jpg", "/hortofice5.jpg", "/hortofice6.jpg"],
+    "images": ["/hortofice.webp", "/hortofice1.jpeg", "/hortofice2.jpeg", "/hortofice3.jpeg", "/hortofice4.jpg", "/hortofice5.jpg", "/hortofice6.jpg"],
     "technicalSheet": {
       "year": "2018",
       "regime": "Obra por administração",
