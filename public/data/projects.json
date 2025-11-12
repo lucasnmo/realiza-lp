@@ -1,0 +1,143 @@
+[
+  {
+    "id": "facility-view",
+    "category": "residenciais",
+    "name": "Facility View",
+    "images": ["/facilityview1.png", "/facilityview2.jpg", "/facilityview3.jpg", "/facilityview4.jpg"],
+    "technicalSheet": {
+      "year": "2024",
+      "regime": "Obra em regime de condomínio",
+      "address": "Alameda das Mongubas, nº 58 - Caminho das Árvores",
+      "architect": "Mário Figueiredo",
+      "totalArea": "4.606,91 m²",
+      "floors": "18",
+      "bedrooms": "102 studios",
+      "unitArea": "24,55 m²",
+      "infrastructure": "Fachadas em pastilha; salão de festas, espaço gourmet, coworking, lavanderia, deck e bar da piscina."
+    }
+  },
+  {
+    "id": "facility-tower",
+    "category": "residenciais",
+    "name": "Facility Tower",
+    "images": ["/facilitytower1.png", "/facilitytower2.jpeg", "/facilitytower3.jpeg", "/facilitytower4.jpeg"],
+    "technicalSheet": {
+      "year": "2023",
+      "regime": "Obra em regime de condomínio",
+      "address": "Alameda das Mongubas, 136 - Caminho das Árvores",
+      "architect": "Alessandro Grimaldi",
+      "totalArea": "4.252,19 m²",
+      "floors": "17",
+      "bedrooms": "96 studios",
+      "unitArea": "22,40 m²",
+      "infrastructure": "Fachadas em pastilha; salão de festas, espaço gourmet, coworking, lavanderia, deck e bar da piscina."
+    }
+  },
+  {
+    "id": "residencial-canela",
+    "category": "residenciais",
+    "name": "Canela Residence",
+    "images": ["/canelares1.jpg", "/canelares2.jpg", "/canelares3.jpg", "/canelares4.jpg", "/canelares5.jpg"],
+    "technicalSheet": {
+      "year": "2022",
+      "regime": "Obra em regime de condomínio",
+      "address": "R. Marechal Floriano, 570 - Canela",
+      "architect": "Mário Figueiredo",
+      "totalArea": "5.934,75 m²",
+      "floors": "16",
+      "bedrooms": "1 e 2 quartos",
+      "unitArea": "42 m² e 56 m²",
+      "infrastructure": "Fachadas em pastilha; play coberto e descoberto; salão de festas; espaço gourmet; academia; piscina; deck e bar da piscina."
+    }
+  },
+  {
+    "id": "inoa-parque-bela-vista",
+    "category": "comerciais",
+    "name": "INOA Parque Bela Vista",
+    "images": ["/inoa1.webp", "/inoa2.webp", "/inoa3.webp", "/inoa4.webp"],
+    "technicalSheet": {
+      "year": "2023",
+      "regime": "Obra por administração",
+      "address": "Rua Metódio Coelho, 55 - Parque Bela Vista",
+      "architect": "Graça Alcântara",
+      "totalArea": "2.700,00 m²",
+      "floors": "7",
+      "infrastructure": "19 apartamentos e 16 consultórios; revestimento em pele de vidro verde e ACM verde e silver; esquadrias em alumínio bronze."
+    }
+  },
+  {
+    "id": "horto-office",
+    "category": "comerciais",
+    "name": "Horto Office",
+    "images": ["/hortofice.webp", "/hortofice1.jpg", "/hortofice2.jpg", "/hortofice3.jpg", "/hortofice4.jpg", "/hortofice5.jpg", "/hortofice6.jpg"],
+    "technicalSheet": {
+      "year": "2018",
+      "regime": "Obra por administração",
+      "address": "R. Waldemar Falcão, 979 - Horto",
+      "architect": "Mário Figueiredo",
+      "totalArea": "7.453,34 m²",
+      "floors": "30",
+      "unitArea": "Salas comerciais: 45 m²; apartamentos: 58 m²",
+      "bedrooms": "Apartamentos 1/4 (suíte) com varanda",
+      "infrastructure": "Fachadas principais em alumínio composto e vidro."
+    }
+  },
+  {
+    "id": "alphaville-estrela-do-mar",
+    "category": "casas",
+    "name": "Alphaville Estrela do Mar",
+    "images": ["/estreladomar.jpg", "/estreladomar2.jpg", "/estreladomar3.jpg", "/estreladomar4.jpg"],
+    "technicalSheet": {
+      "regime": "Residencial exclusivo",
+      "address": "Alphaville, Salvador",
+      "totalArea": "830 m² (residência)",
+      "bedrooms": "5 suítes",
+      "infrastructure": "6 vagas de garagem e piscina aquecida."
+    }
+  },
+  {
+    "id": "horto-vilas",
+    "category": "casas",
+    "name": "Condomínio Horto Vilas",
+    "images": ["/hortovlias.jpg", "/hortovlias2.jpg", "/hortovlias3.jpg", "/hortovlias4.jpg"],
+    "technicalSheet": {
+      "regime": "Residencial exclusivo",
+      "address": "Vilas do Atlântico, Lauro de Freitas",
+      "totalArea": "620 m² (residência)",
+      "bedrooms": "5 suítes",
+      "infrastructure": "4 vagas de garagem e elevador social."
+    }
+  },
+  {
+    "id": "egeu-pedra-do-sal",
+    "category": "breve",
+    "name": "EGEU Pedra do Sal - Pré-lançamento",
+    "images": ["/EGEU1.jpeg", "/EGEU2.jpeg", "/EGEU3.jpeg", "/EGEU4.jpeg"],
+    "technicalSheet": {
+      "year": "2025",
+      "regime": "Obra em regime de condomínio",
+      "address": "Rua Sereno da Madrugada, lotes 17, 18 e 19 - Itapuã, Salvador",
+      "architect": "Braz e Brenha Arquitetos",
+      "totalArea": "4.805,70 m²",
+      "bedrooms": "1 e 2 suítes",
+      "unitArea": "29,39 m² a 70,85 m²",
+      "infrastructure": "Fachadas em pastilha; academia com pé-direito duplo; piscina com borda infinita, prainha e deck; espaço gourmet; coworking; mini market; sala de reuniões; lavanderia; bicicletário; guardaria de pranchas; lobby com pé-direito duplo; guarita."
+    }
+  },
+  {
+    "id": "azure-beach-living",
+    "category": "breve",
+    "name": "Azure Beach Living",
+    "images": ["/azure2.jpg", "/azure1.jpg", "/azure3.jpg"],
+    "technicalSheet": {
+      "year": "2025",
+      "regime": "Obra em regime de condomínio",
+      "address": "Rua Sereno da Madrugada, 47 - Itapuã",
+      "architect": "Mario Figueiredo",
+      "totalArea": "5.705,86 m²",
+      "bedrooms": "1 e 2 suítes",
+      "unitArea": "34,50 m² a 81,00 m²",
+      "infrastructure": "Fachadas em pastilha; academia; piscina com borda infinita, prainha e deck; espaço gourmet; coworking; sala de reuniões; lavanderia; bicicletário; guardaria de pranchas; lobby com pé-direito duplo; guarita."
+    }
+  }
+]
