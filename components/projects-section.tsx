@@ -12,8 +12,14 @@ import { PROJECTS, Project, TechnicalSheet } from "@/lib/projects";
 
 /* ---------------------------------------------
    Top 10: "breve" primeiro, depois mais recentes
+   (removendo Alphaville Estrela do Mar e Horto Vilas)
 ---------------------------------------------- */
 const top10Projects: Project[] = [...PROJECTS]
+  .filter(
+    (p) =>
+      p.id !== "alphaville-estrela-do-mar" &&
+      p.id !== "horto-vilas"
+  )
   .sort((a, b) => {
     const isBreveA = a.category === "breve" ? 1 : 0;
     const isBreveB = b.category === "breve" ? 1 : 0;
@@ -141,7 +147,6 @@ function SlideCard({
         >
           {/* IMAGEM — altura fixa padronizada */}
           <div className="relative overflow-hidden rounded-t-2xl bg-gray-100 h-[460px] md:h-[380px] lg:h-[420px]">
-
             {project.category === "breve" && (
               <div className="absolute top-2 left-2 z-10 px-2.5 py-1 rounded-full bg-emerald-600/95 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.12em] text-white shadow">
                 Obra em andamento

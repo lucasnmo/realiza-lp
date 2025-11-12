@@ -18,7 +18,7 @@ const slides = [
     id: 2,
     title: "Empreendimentos Residenciais e Comerciais",
     subtitle: "Transparência, controle e compromisso",
-    image: "/aranyammi3.JPG",
+    image: "/azure3.JPG",
   },
   {
     id: 3,
