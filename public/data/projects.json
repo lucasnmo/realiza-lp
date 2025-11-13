@@ -351,11 +351,11 @@
     "category": "casas",
     "name": "Residência Pampalona Busca Vida",
     "images": [
-      "/pampalona1.tif",
-      "/pampalona2.tif",
-      "/pampalona3.tif",
-      "/pampalona4.tif",
-      "/pampalona5.tif"
+      "/pampalona1.jpg",
+      "/pampalona2.jpg",
+      "/pampalona3.jpg",
+      "/pampalona4.jpg",
+      "/pampalona5.jpg"
     ],
     "technicalSheet": {
       "regime": "Residencial exclusivo",

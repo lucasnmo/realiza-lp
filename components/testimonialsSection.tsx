@@ -26,14 +26,23 @@ export default function TestimonialsSection() {
   const Row = () => (
     <div className="flex gap-4 sm:gap-6 md:gap-8">
       {testimonials.map((t) => (
-        <div key={`t-${t.id}`} className="shrink-0 w-[85vw] sm:w-[60vw] md:w-[45vw] lg:w-[33vw] px-4 sm:px-5 pb-6">
+        <div
+          key={`t-${t.id}`}
+          className="shrink-0 w-[85vw] sm:w-[60vw] md:w-[45vw] lg:w-[33vw] px-4 sm:px-5 pb-6"
+        >
           <article className="h-full bg-white rounded-2xl border border-zinc-100 shadow-[0_12px_28px_rgba(0,0,0,0.10)] hover:shadow-[0_16px_36px_rgba(0,0,0,0.12)] transition-all duration-300">
             <div className="p-5 sm:p-6">
               <Quote className="h-6 w-6 text-cyan-700 mb-3 opacity-80" />
-              <p className="text-gray-800 text-[15px] sm:text-base md:text-lg leading-relaxed">“{t.quote}”</p>
+              <p className="text-gray-800 text-[15px] sm:text-base md:text-lg leading-relaxed">
+                “{t.quote}”
+              </p>
               <div className="mt-4">
-                <p className="font-semibold text-gray-900 text-sm sm:text-base">{t.author}</p>
-                {t.meta && <p className="text-gray-600 text-xs sm:text-sm">{t.meta}</p>}
+                <p className="font-semibold text-gray-900 text-sm sm:text-base">
+                  {t.author}
+                </p>
+                {t.meta && (
+                  <p className="text-gray-600 text-xs sm:text-sm">{t.meta}</p>
+                )}
               </div>
             </div>
           </article>
@@ -43,7 +52,10 @@ export default function TestimonialsSection() {
   );
 
   return (
-    <section id="testemunhos" className="relative isolate z-10 bg-white mt-8 sm:mt-10 lg:mt-12 pt-8 sm:pt-10 lg:pt-12 pb-12 sm:pb-14 lg:pb-16">
+    <section
+      id="testemunhos"
+      className="relative isolate z-10 bg-white mt-8 sm:mt-10 lg:mt-12 pt-8 sm:pt-10 lg:pt-12 pb-12 sm:pb-14 lg:pb-16"
+    >
       <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16 max-w-7xl">
         <h2
           ref={ref}
@@ -57,7 +69,7 @@ export default function TestimonialsSection() {
         <div className="-mx-6 sm:-mx-8">
           {/* viewport */}
           <div className="relative overflow-hidden px-6 sm:px-2 py-6">
-            {/* ⬇️ overlays com z-20 para ficarem ACIMA do track */}
+            {/* overlays de borda */}
             <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-24 z-20 bg-linear-to-r from-white to-transparent" />
             <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-24 z-20 bg-linear-to-l from-white to-transparent" />
 
@@ -69,6 +81,7 @@ export default function TestimonialsSection() {
                   display: "flex",
                   width: "max-content",
                   animation: `marquee var(--dur, ${DURATION}s) linear infinite`,
+                  transform: "translateZ(0)",
                 } as React.CSSProperties
               }
             >
@@ -81,11 +94,20 @@ export default function TestimonialsSection() {
 
       <style jsx>{`
         @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
         }
+
+        /* Em vez de travar, só desacelera para quem usa "reduzir movimento" */
         @media (prefers-reduced-motion: reduce) {
-          div[style*="marquee"] { animation: none !important; }
+          div[style*="marquee"] {
+            animation: marquee 120s linear infinite !important;
+            opacity: 0.85;
+          }
         }
       `}</style>
     </section>
