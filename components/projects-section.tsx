@@ -11,19 +11,26 @@ import { Calendar, Ruler, Layers, Bed, MapPin } from "lucide-react";
 import { PROJECTS, Project, TechnicalSheet } from "@/lib/projects";
 
 /* ---------------------------------------------
-   Top 10: "breve" primeiro, depois mais recentes
-   (removendo Alphaville Estrela do Mar e Horto Vilas)
+   Top 10: "Em construção" e "Breve lançamento"
+   primeiro, depois mais recentes por ano
 ---------------------------------------------- */
+
+// define uma prioridade para ordenar
+function getPriority(p: Project): number {
+  if (p.category === "em_construcao") return 2;        // mais importante
+  if (p.category === "breve_lancamento") return 1;     // segundo
+  return 0;                                            // demais categorias
+}
+
 const top10Projects: Project[] = [...PROJECTS]
-  .filter(
-    (p) =>
-      p.id !== "alphaville-estrela-do-mar" &&
-      p.id !== "horto-vilas"
-  )
   .sort((a, b) => {
-    const isBreveA = a.category === "breve" ? 1 : 0;
-    const isBreveB = b.category === "breve" ? 1 : 0;
-    if (isBreveA !== isBreveB) return isBreveB - isBreveA;
+    const pa = getPriority(a);
+    const pb = getPriority(b);
+
+    // primeiro ordena por prioridade (em_construcao > breve_lancamento > resto)
+    if (pa !== pb) return pb - pa;
+
+    // depois por ano (mais recente primeiro)
     const ya = a.technicalSheet.year ? parseInt(a.technicalSheet.year) : 0;
     const yb = b.technicalSheet.year ? parseInt(b.technicalSheet.year) : 0;
     return yb - ya;
@@ -128,6 +135,14 @@ function SlideCard({
   index: number;
   isVisible: boolean;
 }) {
+  // label do selo conforme categoria
+  let badgeLabel: string | null = null;
+  if (project.category === "em_construcao") {
+    badgeLabel = "Em construção";
+  } else if (project.category === "breve_lancamento") {
+    badgeLabel = "Breve lançamento";
+  }
+
   return (
     <div
       // 1 por vez (mobile), 2 por vez (md), 3 por vez (lg+)
@@ -147,9 +162,9 @@ function SlideCard({
         >
           {/* IMAGEM — altura fixa padronizada */}
           <div className="relative overflow-hidden rounded-t-2xl bg-gray-100 h-[460px] md:h-[380px] lg:h-[420px]">
-            {project.category === "breve" && (
+            {badgeLabel && (
               <div className="absolute top-2 left-2 z-10 px-2.5 py-1 rounded-full bg-emerald-600/95 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.12em] text-white shadow">
-                Obra em andamento
+                {badgeLabel}
               </div>
             )}
 

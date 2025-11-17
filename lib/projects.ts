@@ -1,6 +1,12 @@
+// lib/projects.ts
 import projectsData from "../public/data/projects.json";
 
-export type Category = "residenciais" | "casas" | "comerciais" | "breve";
+export type Category =
+  | "residenciais"
+  | "casas"
+  | "comerciais"
+  | "em_construcao"
+  | "breve_lancamento";
 
 export type TechnicalSheet = {
   year?: string;

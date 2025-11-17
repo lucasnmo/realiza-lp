@@ -404,7 +404,7 @@
   },
   {
     "id": "egeu-pedra-do-sal",
-    "category": "breve",
+    "category": "breve_lancamento",
     "name": "EGEU Pedra do Sal - Pré-lançamento",
     "images": [
       "/EGEU1.jpeg",
@@ -424,7 +424,7 @@
   },
   {
     "id": "azure-beach-living",
-    "category": "breve",
+    "category": "em_construcao",
     "name": "Azure Beach Living",
     "images": [
       "/azure2.jpg",

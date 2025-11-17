@@ -27,6 +27,14 @@ import { useSearchParams, useRouter } from "next/navigation";
 
 /* ==================== PÁGINA ==================== */
 
+const VALID_TABS: Category[] = [
+  "em_construcao",
+  "breve_lancamento",
+  "residenciais",
+  "casas",
+  "comerciais",
+];
+
 export default function PortfolioPageClient() {
   const { ref: headerRef, isVisible: headerVisible } =
     useScrollReveal<HTMLDivElement>();
@@ -34,10 +42,14 @@ export default function PortfolioPageClient() {
   const params = useSearchParams();
   const router = useRouter();
 
-  const urlTab = (params.get("tab") as Category) || "breve";
+  const rawTab = params.get("tab") as Category | null;
+  const initialTab: Category = VALID_TABS.includes(rawTab as Category)
+    ? (rawTab as Category)
+    : "em_construcao";
+
   const highlightId = params.get("highlight") || undefined;
 
-  const [tab, setTab] = useState<Category>(urlTab);
+  const [tab, setTab] = useState<Category>(initialTab);
   const [lightbox, setLightbox] = useState<{
     images: string[];
     index: number;
@@ -48,7 +60,6 @@ export default function PortfolioPageClient() {
   useEffect(() => {
     const sp = new URLSearchParams(params.toString());
     sp.set("tab", tab);
-    // mantém highlight se já existir
     router.replace(`/portfolio?${sp.toString()}`, { scroll: false });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab]);
@@ -211,16 +222,22 @@ function Tabs({
   return (
     <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
       <button
-        className={`${base} ${tab === "breve" ? active : idle}`}
-        onClick={() => onChange("breve")}
+        className={`${base} ${tab === "em_construcao" ? active : idle}`}
+        onClick={() => onChange("em_construcao")}
       >
-        Obras em andamento
+        Em construção
+      </button>
+      <button
+        className={`${base} ${tab === "breve_lancamento" ? active : idle}`}
+        onClick={() => onChange("breve_lancamento")}
+      >
+        Breve lançamento
       </button>
       <button
         className={`${base} ${tab === "residenciais" ? active : idle}`}
         onClick={() => onChange("residenciais")}
       >
-        Prédios Residenciais
+        Prédios residenciais
       </button>
       <button
         className={`${base} ${tab === "casas" ? active : idle}`}
@@ -283,15 +300,11 @@ function ProjectCard({
     : "object-cover object-center";
   const bgClass = useContain ? "bg-white" : "bg-gray-100";
 
-  const shouldPriority =
-    project.category === "breve" && index === 0;
+  const isInvestmentCategory =
+    project.category === "em_construcao" ||
+    project.category === "breve_lancamento";
 
-  const whatsappUrl =
-    project.category === "breve"
-      ? `https://wa.me/5571992220164?text=${encodeURIComponent(
-          `Olá, tenho interesse em investir no empreendimento ${project.name}. Poderia me enviar mais informações?`
-        )}`
-      : "";
+  const shouldPriority = isInvestmentCategory && index === 0;
 
   return (
     <div
@@ -410,15 +423,14 @@ function ProjectCard({
             </dl>
           </div>
 
-          {/* CTA Breve */}
-          {project.category === "breve" && (
+          {/* CTA Em construção / Breve lançamento */}
+          {isInvestmentCategory && (
             <div className="mt-5">
               <a
-                href={
-                  `https://wa.me/5571992220164?text=${encodeURIComponent(
+                href={`
+                  https://wa.me/5571992220164?text=${encodeURIComponent(
                     `Olá, tenho interesse em investir no empreendimento ${project.name}. Poderia me enviar mais informações?`
-                  )}`
-                }
+                  )}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -426,7 +438,7 @@ function ProjectCard({
                   size="lg"
                   className="rounded-full border-2 border-gray-800 bg-transparent px-8 py-4 sm:py-5 font-bold uppercase tracking-wide text-gray-800 hover:scale-105 hover:bg-gray-800 hover:text-white w-full sm:w-auto"
                 >
-                  Quero Investir
+                  Quero investir
                 </Button>
               </a>
             </div>
