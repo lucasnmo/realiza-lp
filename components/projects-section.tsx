@@ -11,11 +11,9 @@ import { Calendar, Ruler, Layers, Bed, MapPin } from "lucide-react";
 import { PROJECTS, Project, TechnicalSheet } from "@/lib/projects";
 
 /* ---------------------------------------------
-   Top 10: "Em construção" e "Breve lançamento"
-   primeiro, depois mais recentes por ano
+   PRIORIDADE DO CARROSSEL
 ---------------------------------------------- */
 
-// prioridade
 function getPriority(p: Project): number {
   if (p.category === "em_construcao") return 2;
   if (p.category === "breve_lancamento") return 1;
@@ -26,7 +24,6 @@ const top10Projects: Project[] = [...PROJECTS]
   .sort((a, b) => {
     const pa = getPriority(a);
     const pb = getPriority(b);
-
     if (pa !== pb) return pb - pa;
 
     const ya = a.technicalSheet.year ? parseInt(a.technicalSheet.year) : 0;
@@ -34,6 +31,10 @@ const top10Projects: Project[] = [...PROJECTS]
     return yb - ya;
   })
   .slice(0, 10);
+
+/* ---------------------------------------------
+   COMPONENTE PRINCIPAL
+---------------------------------------------- */
 
 export default function ProjectsSection() {
   const { ref, isVisible } = useScrollReveal();
@@ -45,13 +46,12 @@ export default function ProjectsSection() {
     containScroll: false,
   });
 
+  // autoplay
   const timer = React.useRef<ReturnType<typeof setInterval> | null>(null);
-
   const start = React.useCallback(() => {
     if (timer.current) return;
     timer.current = setInterval(() => emblaApi?.scrollNext(), 3500);
   }, [emblaApi]);
-
   const stop = React.useCallback(() => {
     if (!timer.current) return;
     clearInterval(timer.current);
@@ -64,12 +64,7 @@ export default function ProjectsSection() {
     emblaApi.on("pointerDown", stop);
     emblaApi.on("select", start);
     emblaApi.on("reInit", start);
-    return () => {
-      emblaApi.off("pointerDown", stop);
-      emblaApi.off("select", start);
-      emblaApi.off("reInit", start);
-      stop();
-    };
+    return () => stop();
   }, [emblaApi, start, stop]);
 
   return (
@@ -88,6 +83,7 @@ export default function ProjectsSection() {
           Nossos Empreendimentos
         </h2>
 
+        {/* viewport */}
         <div className="-mx-6 sm:-mx-8">
           <div ref={emblaRef} className="overflow-hidden px-6 sm:px-2">
             <div className="flex">
@@ -103,6 +99,7 @@ export default function ProjectsSection() {
           </div>
         </div>
 
+        {/* CTA */}
         <div
           className={`mt-8 sm:mt-10 lg:mt-12 flex flex-wrap justify-center gap-3 transition-all duration-700 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
@@ -123,7 +120,10 @@ export default function ProjectsSection() {
   );
 }
 
-/* ========= Slide/Card (3 por vez no desktop) ========= */
+/* ---------------------------------------------
+   CARD DO CARROSSEL
+---------------------------------------------- */
+
 function SlideCard({
   project,
   index,
@@ -133,30 +133,33 @@ function SlideCard({
   index: number;
   isVisible: boolean;
 }) {
+  // selo
   let badgeLabel: string | null = null;
   if (project.category === "em_construcao") badgeLabel = "Em construção";
   if (project.category === "breve_lancamento") badgeLabel = "Breve lançamento";
 
+  // botão só aparece nestes casos
+  const showInvestButton =
+    project.category === "em_construcao" ||
+    project.category === "breve_lancamento";
+
   const whatsappMessage = encodeURIComponent(
-    `Olá! Tenho interesse no empreendimento ${project.name}. Pode me enviar mais informações?`
+    `Olá! Tenho interesse no empreendimento ${project.name}. Poderia me enviar mais informações?`
   );
-  const whatsappLink = `https://wa.me/5571992220164?text=${whatsappMessage}`;
 
   return (
     <div
-      className="flex-[0_0_100%] md:flex-[0_0_50%] lg:flex-[0_0_25.333%] px-3 sm:px-4 pb-4"
+      className="flex-[0_0_100%] md:flex-[0_0_50%] lg:flex-[0_0_25.333%] px-3 sm:px-4 pb-6"
       style={{ transitionDelay: `${index * 90}ms` }}
     >
       <article
-        className={`h-full flex flex-col bg-white rounded-2xl border border-zinc-100 shadow-[0_4px_16px_rgba(0,0,0,0.10)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 ${
+        className={`relative h-full bg-white rounded-2xl border border-zinc-100 shadow-[0_4px_16px_rgba(0,0,0,0.10)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 ${
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
         }`}
       >
+        {/* IMAGEM */}
         <Link
-          href={`/portfolio?tab=${encodeURIComponent(
-            project.category
-          )}&highlight=${encodeURIComponent(project.id)}`}
-          className="block"
+          href={`/portfolio?tab=${project.category}&highlight=${project.id}`}
         >
           <div className="relative overflow-hidden rounded-t-2xl bg-gray-100 h-[460px] md:h-[380px] lg:h-[420px]">
             {badgeLabel && (
@@ -171,48 +174,46 @@ function SlideCard({
               fill
               className="object-cover transition-transform duration-300 hover:scale-105"
               style={{ objectPosition: "center bottom" }}
-              sizes="(min-width:1024px) 33vw, (min-width:768px) 50vw, 100vw"
-              priority={index < 2}
             />
-          </div>
-
-          <div className="p-4 sm:p-5">
-            <h3 className="text-base sm:text-lg font-semibold text-gray-800 leading-snug line-clamp-2">
-              {project.name}
-            </h3>
-
-            <div className="mt-1 min-h-[40px]">
-              {project.technicalSheet.address && (
-                <p className="text-xs sm:text-sm text-gray-600 leading-snug line-clamp-2">
-                  <span className="inline-flex items-start gap-1">
-                    <MapPin className="mt-0.5 h-3.5 w-3.5 text-slate-700 flex-shrink-0" />
-                    <span>{project.technicalSheet.address}</span>
-                  </span>
-                </p>
-              )}
-            </div>
-
-            <div className="mt-3 min-h-[64px] sm:min-h-[72px]">
-              <Chips technicalSheet={project.technicalSheet} />
-            </div>
           </div>
         </Link>
 
-        {/* botão interno */}
-        <div className="px-4 sm:px-5 pb-4 mt-auto">
-          <a
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block"
-          >
-            <Button
-              size="sm"
-              className="w-full rounded-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all flex items-center justify-center gap-2"
+        {/* CONTEÚDO */}
+        <div className="p-4 sm:p-5">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-800 leading-snug">
+            <span className="line-clamp-2">{project.name}</span>
+          </h3>
+
+          <div className="mt-1 min-h-[40px]">
+            {project.technicalSheet.address && (
+              <p className="text-xs sm:text-sm text-gray-600 leading-snug line-clamp-2">
+                <span className="inline-flex items-start gap-1">
+                  <MapPin className="mt-0.5 h-3.5 w-3.5 text-slate-700 flex-shrink-0" />
+                  <span>{project.technicalSheet.address}</span>
+                </span>
+              </p>
+            )}
+          </div>
+
+          <div className="mt-3 min-h-[64px] sm:min-h-[72px]">
+            <Chips technicalSheet={project.technicalSheet} />
+          </div>
+
+          {/* BOTÃO — só aparece nas categorias selecionadas */}
+          {showInvestButton && (
+            <a
+              href={`https://wa.me/5571992220164?text=${whatsappMessage}`}
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              Quero investir
-            </Button>
-          </a>
+              <Button
+                size="sm"
+                className="mt-4 rounded-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-all shadow-sm"
+              >
+                Quero investir
+              </Button>
+            </a>
+          )}
         </div>
       </article>
     </div>
