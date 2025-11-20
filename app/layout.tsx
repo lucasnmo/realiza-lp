@@ -26,8 +26,12 @@ const openSans = Open_Sans({
 export const metadata: Metadata = {
   title: "REALIZA Engenharia - Engenharia com Credibilidade",
   description: "Construção civil de qualidade em Salvador, Bahia",
+  icons: {
+    icon: "/favicon.png",
+  },
   generator: "v0.app",
-}
+};
+
 
 export default function RootLayout({
   children,
