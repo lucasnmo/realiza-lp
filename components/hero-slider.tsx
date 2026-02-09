@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { Button } from "@/components/ui/button"
 import Image from "next/image"
+import Link from "next/link"
 
 const SLIDE_DURATION = 5500
 const TEXT_DELAY = 280
@@ -50,6 +50,7 @@ export default function HeroSlider() {
     return () => {
       if (textTimerRef.current) clearTimeout(textTimerRef.current)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current])
 
   useEffect(() => {
@@ -68,7 +69,7 @@ export default function HeroSlider() {
   const next = () => goTo((current + 1) % slides.length)
   const prev = () => goTo((current - 1 + slides.length) % slides.length)
 
-  // 🧭 Controle de swipe no mobile
+  /* Swipe mobile */
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX
   }
@@ -76,15 +77,13 @@ export default function HeroSlider() {
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStartX.current === null) return
     const deltaX = e.changedTouches[0].clientX - touchStartX.current
-    const threshold = 60 // distância mínima em px para considerar swipe
+    const threshold = 60
 
     if (deltaX > threshold) prev()
     else if (deltaX < -threshold) next()
 
     touchStartX.current = null
   }
-
-  const activeSlide = slides[current]
 
   return (
     <section
@@ -93,46 +92,63 @@ export default function HeroSlider() {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Slide ativo */}
-      <div className="absolute inset-0">
-        <Image
-          src={activeSlide.image}
-          alt={activeSlide.title}
-          fill
-          priority={current === 0}
-          loading={current === 0 ? "eager" : "lazy"}
-          sizes="100vw"
-          className="object-cover object-center transition-opacity duration-[800ms] ease-out"
-        />
-        <div className="absolute inset-0 bg-[#1E2A32]/55" />
+      {/* CAMADA CLICÁVEL: clique no banner vai para /portfolio */}
+      <Link
+        href="/portfolio"
+        aria-label="Ir para o portfólio"
+        className="absolute inset-0 z-[5]"
+      >
+        <span className="sr-only">Ver portfólio</span>
+      </Link>
+
+      {/* Track horizontal */}
+      <div
+        className="flex h-full transition-transform duration-[900ms] ease-in-out"
+        style={{ transform: `translateX(-${current * 100}%)` }}
+      >
+        {slides.map((slide, i) => (
+          <div key={slide.id} className="relative w-full h-full flex-shrink-0">
+            <Image
+              src={slide.image}
+              alt={slide.title}
+              fill
+              priority={i === 0}
+              sizes="100vw"
+              className="object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-[#1E2A32]/55" />
+          </div>
+        ))}
       </div>
 
-      {/* Texto central */}
-      <div className="absolute inset-0 flex items-center justify-center">
+      {/* Texto */}
+      <div className="absolute inset-0 z-[6] flex items-center justify-center pointer-events-none">
         <div
-          className={`container mx-auto px-4 sm:px-6 md:px-8 text-center text-white
+          className={`container text-center text-white
             ${textVisible ? "animate-[fadeUp_750ms_ease-out] opacity-100" : "opacity-0"}`}
         >
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 uppercase tracking-wide">
-            {activeSlide.title}
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 uppercase tracking-wide">
+            {slides[current].title}
           </h1>
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-light">
-            {activeSlide.subtitle}
+            {slides[current].subtitle}
           </p>
         </div>
       </div>
 
-      {/* Indicadores */}
-      <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 flex space-x-2 sm:space-x-3">
+      {/* Indicadores (continuam clicáveis sem navegar) */}
+      <div className="absolute bottom-4 left-1/2 z-[10] -translate-x-1/2 flex space-x-2 pointer-events-auto">
         {slides.map((_, i) => (
           <button
             key={i}
-            onClick={() => goTo(i)}
-            aria-label={`Ir para slide ${i + 1}`}
-            className={`h-2 sm:h-3 rounded-full transition-all
-              ${i === current
-                ? "bg-white w-8 sm:w-10"
-                : "bg-white/50 hover:bg-white/75 w-2 sm:w-3"}`}
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              goTo(i)
+            }}
+            className={`h-2 rounded-full transition-all
+              ${i === current ? "bg-white w-10" : "bg-white/50 w-2"}`}
+            aria-label={`Ir para o slide ${i + 1}`}
           />
         ))}
       </div>

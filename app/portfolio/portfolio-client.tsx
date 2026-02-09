@@ -11,17 +11,11 @@ import {
   Ruler,
   Layers,
   Bed,
-  MapPin,
   ChevronLeft,
   ChevronRight,
   X,
 } from "lucide-react";
-import {
-  PROJECTS,
-  Category,
-  Project,
-  TechnicalSheet,
-} from "@/lib/projects";
+import { PROJECTS, Category, Project, TechnicalSheet } from "@/lib/projects";
 import { Button } from "@/components/ui/button";
 import { useSearchParams, useRouter } from "next/navigation";
 
@@ -99,9 +93,7 @@ export default function PortfolioPageClient() {
           prev
             ? {
                 ...prev,
-                index:
-                  (prev.index - 1 + prev.images.length) %
-                  prev.images.length,
+                index: (prev.index - 1 + prev.images.length) % prev.images.length,
               }
             : prev
         );
@@ -119,9 +111,7 @@ export default function PortfolioPageClient() {
         <div
           ref={headerRef}
           className={`mb-8 sm:mb-10 transition-all duration-700 ${
-            headerVisible
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-6"
+            headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}
         >
           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-3 uppercase tracking-wide text-gray-800">
@@ -174,28 +164,18 @@ export default function PortfolioPageClient() {
               prev
                 ? {
                     ...prev,
-                    index:
-                      (prev.index - 1 + prev.images.length) %
-                      prev.images.length,
+                    index: (prev.index - 1 + prev.images.length) % prev.images.length,
                   }
                 : prev
             )
           }
           onNext={() =>
             setLightbox((prev) =>
-              prev
-                ? {
-                    ...prev,
-                    index:
-                      (prev.index + 1) % prev.images.length,
-                  }
-                : prev
+              prev ? { ...prev, index: (prev.index + 1) % prev.images.length } : prev
             )
           }
           onThumbClick={(i: number) =>
-            setLightbox((prev) =>
-              prev ? { ...prev, index: i } : prev
-            )
+            setLightbox((prev) => (prev ? { ...prev, index: i } : prev))
           }
         />
       )}
@@ -295,14 +275,11 @@ function ProjectCard({
   const isHouse = project.category === "casas";
 
   const useContain = isHouse || isPortrait;
-  const fitClass = useContain
-    ? "object-contain"
-    : "object-cover object-center";
+  const fitClass = useContain ? "object-contain" : "object-cover object-center";
   const bgClass = useContain ? "bg-white" : "bg-gray-100";
 
   const isInvestmentCategory =
-    project.category === "em_construcao" ||
-    project.category === "breve_lancamento";
+    project.category === "em_construcao" || project.category === "breve_lancamento";
 
   const shouldPriority = isInvestmentCategory && index === 0;
 
@@ -311,9 +288,7 @@ function ProjectCard({
       ref={cardRef}
       id={`project-${project.id}`}
       className={`transition-all duration-700 ${
-        cardVisible
-          ? "opacity-100 translate-y-0"
-          : "opacity-0 translate-y-6"
+        cardVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
       }`}
     >
       <article
@@ -321,8 +296,15 @@ function ProjectCard({
           highlight ? "border-[#0891b2]" : "border-gray-100"
         }`}
       >
+        {/* TÍTULO NO TOPO (mudança solicitada) */}
+        <div className="px-5 pt-6 sm:px-6">
+          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-gray-900">
+            {project.name}
+          </h2>
+        </div>
+
         {/* Imagem principal */}
-        <div className="p-5 sm:p-6">
+        <div className="p-5 sm:p-6 pt-4">
           <button
             type="button"
             onClick={() => onOpenLightbox(activeIdx)}
@@ -365,12 +347,7 @@ function ProjectCard({
                   aria-label={`Trocar para imagem ${i + 1}`}
                 >
                   <div className="relative h-full w-full bg-gray-100">
-                    <Image
-                      src={src}
-                      alt={`${project.name} ${i + 1}`}
-                      fill
-                      className="object-cover"
-                    />
+                    <Image src={src} alt={`${project.name} ${i + 1}`} fill className="object-cover" />
                   </div>
                 </button>
               ))}
@@ -378,12 +355,8 @@ function ProjectCard({
           )}
         </div>
 
-        {/* Conteúdo */}
+        {/* Conteúdo (restante) */}
         <div className="px-5 sm:px-6 pb-6">
-          <h2 className="mb-3 font-serif text-2xl sm:text-3xl font-bold text-gray-900">
-            {project.name}
-          </h2>
-
           {/* Chips resumo */}
           <div className="mb-4 flex flex-wrap gap-2">
             {T.year && (
@@ -427,10 +400,9 @@ function ProjectCard({
           {isInvestmentCategory && (
             <div className="mt-5">
               <a
-                href={`
-                  https://wa.me/5571992220164?text=${encodeURIComponent(
-                    `Olá, tenho interesse em investir no empreendimento ${project.name}. Poderia me enviar mais informações?`
-                  )}`}
+                href={`https://wa.me/5571992220164?text=${encodeURIComponent(
+                  `Olá, tenho interesse em investir no empreendimento ${project.name}. Poderia me enviar mais informações?`
+                )}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -462,9 +434,7 @@ function InfoRows({ sheet: T }: { sheet: TechnicalSheet }) {
       {T.floors && <Row label="Pavimentos" value={T.floors} />}
       {T.bedrooms && <Row label="Dormitórios" value={T.bedrooms} />}
       {T.unitArea && <Row label="Área das unidades" value={T.unitArea} />}
-      {T.infrastructure && (
-        <Row label="Infraestrutura" value={T.infrastructure} />
-      )}
+      {T.infrastructure && <Row label="Infraestrutura" value={T.infrastructure} />}
     </>
   );
 }
@@ -472,9 +442,7 @@ function InfoRows({ sheet: T }: { sheet: TechnicalSheet }) {
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex gap-2">
-      <dt className="min-w-[140px] font-semibold text-gray-800">
-        {label}
-      </dt>
+      <dt className="min-w-[140px] font-semibold text-gray-800">{label}</dt>
       <dd className="text-gray-700">{value}</dd>
     </div>
   );
@@ -506,10 +474,7 @@ function LightboxOverlay({
       aria-modal="true"
       role="dialog"
     >
-      <div
-        className="relative h-full w-full"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="relative h-full w-full" onClick={(e) => e.stopPropagation()}>
         {/* Fechar */}
         <button
           onClick={onClose}
@@ -567,19 +532,12 @@ function LightboxOverlay({
                   key={`lightbox-thumb-${i}`}
                   onClick={() => onThumbClick(i)}
                   className={`relative h-14 w-20 flex-shrink-0 overflow-hidden rounded-md ring-2 transition-all ${
-                    index === i
-                      ? "ring-white"
-                      : "ring-white/30 hover:ring-white/50"
+                    index === i ? "ring-white" : "ring-white/30 hover:ring-white/50"
                   }`}
                   aria-label={`Abrir imagem ${i + 1}`}
                 >
                   <div className="relative h-full w-full bg-black/40">
-                    <Image
-                      src={src}
-                      alt={`thumb ${i + 1}`}
-                      fill
-                      className="object-cover"
-                    />
+                    <Image src={src} alt={`thumb ${i + 1}`} fill className="object-cover" />
                   </div>
                 </button>
               ))}

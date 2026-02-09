@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Montserrat, Lato, Open_Sans } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
+import WhatsappFloatingButton from "@/components/WhatsappFloatingButton"
 import "./globals.css"
 
 const montserrat = Montserrat({
@@ -30,8 +31,7 @@ export const metadata: Metadata = {
     icon: "/favicon.png",
   },
   generator: "v0.app",
-};
-
+}
 
 export default function RootLayout({
   children,
@@ -40,8 +40,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${openSans.variable} ${montserrat.variable} ${lato.variable} font-sans antialiased`}>
+      <body
+        className={`${openSans.variable} ${montserrat.variable} ${lato.variable} font-sans antialiased`}
+      >
         {children}
+
+        {/* Botão flutuante de WhatsApp */}
+        <WhatsappFloatingButton />
+
         <Analytics />
       </body>
     </html>
