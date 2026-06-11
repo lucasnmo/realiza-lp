@@ -1,9 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* === Google Fonts === */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Nunito+Sans:wght@300;400;500;600;700&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap');
-
 @custom-variant dark (&:is(.dark *));
 
 /* Paleta via CSS vars (opcional) */
@@ -38,7 +35,14 @@ body {
   padding: 0;
   line-height: 1.6;
   overflow-x: hidden;
-  font-family: 'Nunito Sans', system-ui, sans-serif;
+  scroll-behavior: smooth;
+  font-family: var(--font-open-sans), system-ui, sans-serif;
+}
+
+main,
+section {
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .container {
@@ -49,21 +53,14 @@ body {
 
 /* Títulos */
 h1, h2 {
-  font-family: 'Montserrat', system-ui, sans-serif;
+  font-family: var(--font-montserrat), system-ui, sans-serif;
   font-weight: 600;
   line-height: 1.2;
 }
 h3, h4, h5, h6 {
-  font-family: 'Montserrat', system-ui, sans-serif;
+  font-family: var(--font-montserrat), system-ui, sans-serif;
   font-weight: 600;
   line-height: 1.25;
-}
-
-/* Mídias comuns responsivas */
-img, video, canvas, iframe, svg {
-  max-width: 100%;
-  height: auto;
-  display: block;
 }
 
 /* === LOGO HEADER === */

@@ -1,35 +1,32 @@
 "use client"
+
+import { companyStats } from "@/lib/site-content"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 
 export default function ResultsSection() {
-  const { ref, isVisible } = useScrollReveal()
-
-  const stats = [
-    { value: "15+", label: "Anos de Experiência" },
-    { value: "500+", label: "Unidades Habitacionais" },
-    { value: "10",  label: "Prédios Concluídos" },
-    { value: "100%", label: "Satisfação dos Clientes" },
-  ]
+  const { ref, isVisible } = useScrollReveal<HTMLDivElement>()
 
   return (
-    <section className="bg-white text-[#1E2A32] py-10 sm:py-12 md:py-14">
-      <div className="container mx-auto px-4 sm:px-6 md:px-8 max-w-7xl">
+    <section className="bg-white py-12 text-[#1E2A32] sm:py-14">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div
           ref={ref}
-          className={`grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 md:gap-10 transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+          className={`grid gap-4 sm:grid-cols-2 lg:grid-cols-4 transition-all duration-700 ${
+            isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
           }`}
         >
-          {stats.map((stat, i) => (
+          {companyStats.map((stat, index) => (
             <div
-              key={i}
-              className="text-center"
-              style={{ transitionDelay: `${i * 100}ms` }}
+              key={stat.label}
+              className="rounded-lg border border-gray-200 bg-[#F7F8F6] p-5 text-center"
+              style={{ transitionDelay: `${index * 70}ms` }}
             >
-              <div className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-none mb-1.5">
+              <div className="text-3xl font-extrabold leading-none sm:text-4xl">
                 {stat.value}
               </div>
-              <div className="text-xs sm:text-sm opacity-90">{stat.label}</div>
+              <div className="mt-2 text-sm font-bold leading-5 text-gray-600">
+                {stat.label}
+              </div>
             </div>
           ))}
         </div>

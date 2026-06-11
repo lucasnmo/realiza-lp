@@ -1,8 +1,10 @@
 "use client";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import FinalCTASection from "@/components/final-cta-section";
 import Image from "next/image";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
+import { Building2, Home } from "lucide-react";
 
 export default function SobrePage() {
   const { ref: refHero, isVisible: visHero } = useScrollReveal();
@@ -21,7 +23,7 @@ export default function SobrePage() {
           <div className="absolute inset-0 opacity-20">
             <Image
               src="/background1.png"
-              alt=""
+              alt="Imagem de fundo institucional da REALIZA Engenharia"
               fill
               className="object-cover object-center"
               priority
@@ -37,7 +39,7 @@ export default function SobrePage() {
                   : "opacity-0 translate-y-3"
               }`}
             >
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-[#4a5568] font-serif">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-[#4a5568]">
                 Realiza Engenharia Ltda.
               </h1>
               <p className="mt-6 text-base sm:text-lg md:text-xl text-gray-600 text-center max-w-3xl mx-auto">
@@ -62,7 +64,7 @@ export default function SobrePage() {
             >
               <div className="grid md:grid-cols-12 gap-8 items-center">
                 <div className="md:col-span-6">
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-serif text-[#4a5568] mb-4">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#4a5568] mb-4">
                     Nossa História
                   </h2>
                   <p className="text-gray-700 text-base leading-relaxed">
@@ -82,7 +84,7 @@ export default function SobrePage() {
                 </div>
 
                 <div className="md:col-span-6 relative">
-                  <div className="group relative h-64 sm:h-72 md:h-[360px] rounded-2xl overflow-hidden shadow-xl transition-transform duration-500 hover:scale-[1.02]">
+                  <div className="group relative h-64 sm:h-72 md:h-[360px] rounded-lg overflow-hidden shadow-xl transition-transform duration-500 hover:scale-[1.02]">
                     <Image
                       src="/sergiorealiza1.JPG"
                       alt="Sérgio Farias, diretor da Realiza Engenharia"
@@ -112,7 +114,7 @@ export default function SobrePage() {
                   : "opacity-0 translate-y-4"
               }`}
             >
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-serif text-[#4a5568] text-center mb-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#4a5568] text-center mb-8">
                 Nossa Atuação
               </h2>
 
@@ -151,7 +153,7 @@ export default function SobrePage() {
                   : "opacity-0 translate-y-4"
               }`}
             >
-              <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-md transition-all">
+              <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm hover:shadow-md transition-all">
                 <h3 className="text-xl sm:text-2xl font-semibold text-[#4a5568] mb-2">
                   Modelo de Atuação
                 </h3>
@@ -204,7 +206,7 @@ export default function SobrePage() {
             >
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 <div>
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-serif text-[#4a5568] mb-4">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#4a5568] mb-4">
                     Nossos Valores
                   </h2>
                   <p className="text-gray-700 text-base leading-relaxed">
@@ -239,7 +241,7 @@ export default function SobrePage() {
                   </div>
                 </div>
 
-                <div className="relative h-64 sm:h-72 md:h-[340px] rounded-2xl overflow-hidden shadow-xl group transition-transform duration-500 hover:scale-[1.02]">
+                <div className="relative h-64 sm:h-72 md:h-[340px] rounded-lg overflow-hidden shadow-xl group transition-transform duration-500 hover:scale-[1.02]">
                   <Image
                     src="/realizavalores.JPG"
                     alt="Giardino Loreto — empreendimento entregue"
@@ -259,6 +261,7 @@ export default function SobrePage() {
         </section>
       </main>
 
+      <FinalCTASection />
       <Footer />
     </div>
   );
@@ -275,17 +278,13 @@ function HoverCard({
   description: string;
   items: string[];
 }) {
-  const symbol = title.includes("Construção")
-    ? "🏗️"
-    : title.includes("Casas")
-    ? "🏡"
-    : "🏢";
+  const Icon = title.includes("Casas") ? Home : Building2;
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-500 hover:-translate-y-1 group">
+    <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-lg transition-all duration-500 hover:-translate-y-1 group">
       <div className="flex items-center gap-3 mb-3">
-        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0d7a8f]/10 text-lg">
-          <span className="text-[#0d7a8f]">{symbol}</span>
+        <div className="flex h-9 w-9 items-center justify-center rounded-md bg-[#0d7a8f]/10 text-[#0d7a8f]">
+          <Icon className="h-5 w-5" aria-hidden="true" />
         </div>
         <h3 className="text-xl font-semibold text-[#4a5568]">{title}</h3>
       </div>

@@ -5,7 +5,7 @@ export function useScrollReveal<T extends HTMLElement = HTMLDivElement>(
   options?: IntersectionObserverInit
 ) {
   const ref = useRef<T | null>(null);            // <- RefObject VÁLIDO
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     const node = ref.current;

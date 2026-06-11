@@ -25,12 +25,21 @@ const openSans = Open_Sans({
 })
 
 export const metadata: Metadata = {
-  title: "REALIZA Engenharia - Engenharia com Credibilidade",
-  description: "Construção civil de qualidade em Salvador, Bahia",
+  title: "REALIZA Engenharia | Engenharia com Credibilidade em Salvador",
+  description:
+    "Empreendimentos residenciais e comerciais em Salvador com gestão transparente, regime de condomínio a preço de custo e mais de 15 anos de experiência.",
+  openGraph: {
+    title: "REALIZA Engenharia | Engenharia com Credibilidade em Salvador",
+    description:
+      "Empreendimentos residenciais e comerciais em Salvador com gestão transparente, regime de condomínio a preço de custo e mais de 15 anos de experiência.",
+    url: "https://realizaeng.com.br/",
+    siteName: "REALIZA Engenharia",
+    locale: "pt_BR",
+    type: "website",
+  },
   icons: {
     icon: "/favicon.png",
   },
-  generator: "v0.app",
 }
 
 export default function RootLayout({

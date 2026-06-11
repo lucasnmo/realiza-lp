@@ -6,6 +6,8 @@ import ResultsSection from "@/components/results-section"
 import Footer from "@/components/footer"
 import TestimonialsSection from "@/components/testimonialsSection"
 import MethodologySection from "@/components/nossametodologia"
+import CostCondominiumSection from "@/components/cost-condominium-section"
+import FinalCTASection from "@/components/final-cta-section"
 
 export default function Home() {
   return (
@@ -13,10 +15,12 @@ export default function Home() {
       <Header />
       <HeroSlider />
       <ProjectsSection />
+      <CostCondominiumSection />
       <AboutSection />
       <ResultsSection />
-      <MethodologySection/>
-      <TestimonialsSection/>
+      <MethodologySection />
+      <TestimonialsSection />
+      <FinalCTASection />
       <Footer />
     </main>
   )

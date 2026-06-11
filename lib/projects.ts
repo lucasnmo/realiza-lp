@@ -28,6 +28,8 @@ export type Project = {
   technicalSheet: TechnicalSheet;
 };
 
+export type ProjectStatus = "Em construção" | "Breve lançamento" | "Entregue";
+
 export function getProjects(): Project[] {
   const projects = projectsData as Project[];
 
@@ -36,6 +38,19 @@ export function getProjects(): Project[] {
     const yearB = b.technicalSheet.year ? parseInt(b.technicalSheet.year) : 0;
     return yearB - yearA;
   });
+}
+
+export function getProjectStatus(project: Project): ProjectStatus {
+  if (project.category === "em_construcao") return "Em construção";
+  if (project.category === "breve_lancamento") return "Breve lançamento";
+  return "Entregue";
+}
+
+export function isInvestmentProject(project: Project): boolean {
+  return (
+    project.category === "em_construcao" ||
+    project.category === "breve_lancamento"
+  );
 }
 
 export const PROJECTS = getProjects();

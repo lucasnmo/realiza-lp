@@ -1,138 +1,129 @@
-"use client";
+"use client"
 
-import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { useScrollReveal } from "@/hooks/use-scroll-reveal";
-import { CheckCircle2 } from "lucide-react";
+import Image from "next/image"
+import Link from "next/link"
+import { ArrowRight, MessageCircle } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { useScrollReveal } from "@/hooks/use-scroll-reveal"
+import { companyStats, getWhatsappUrl, trustPillars } from "@/lib/site-content"
 
 export default function AboutSection() {
-  const { ref, isVisible } = useScrollReveal();
+  const { ref, isVisible } = useScrollReveal<HTMLDivElement>()
+  const whatsappUrl = getWhatsappUrl(
+    "Olá! Gostaria de conversar com a REALIZA Engenharia sobre um empreendimento."
+  )
 
   return (
-    <section
-      id="quem-somos"
-      className="relative overflow-hidden bg-[#1E2A32] py-14 sm:py-16 md:py-18"
-    >
-      {/* Fundo sutil */}
-      <div className="absolute inset-0 opacity-10">
-        <Image
-          src="/construction-bg.jpg"
-          alt="Fundo Realiza Engenharia"
-          fill
-          className="object-cover object-center"
-          priority
-        />
-      </div>
-
-      <div className="relative container mx-auto max-w-6xl px-4 sm:px-6 md:px-8">
-        <h2
+    <section id="quem-somos" className="bg-[#1E2A32] py-16 text-white sm:py-20 lg:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div
           ref={ref}
-          className={`text-2xl sm:text-3xl md:text-[32px] font-bold text-center uppercase tracking-wide text-white transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          } mb-4 sm:mb-5`}
-        >
-          Quem Somos Nós
-        </h2>
-
-        {/* filete/acento */}
-        <div
-          className={`mx-auto mb-8 h-1 w-16 rounded-full bg-[#0d7a8f] transition-all duration-700 ${
-            isVisible ? "opacity-100 scale-100" : "opacity-0 scale-75"
-          }`}
-        />
-
-        {/* Grid 12 colunas */}
-        <div
-          className={`grid items-center gap-6 md:grid-cols-12 md:gap-8 transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          className={`grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center transition-all duration-700 ${
+            isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
           }`}
         >
-          {/* Imagem (5 colunas) */}
-          <div className="md:col-span-5">
-            <div className="group relative h-64 sm:h-72 md:h-[360px] overflow-hidden rounded-xl ring-1 ring-white/10 shadow-[0_8px_24px_rgba(0,0,0,0.25)]">
+          <div className="relative">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-white/10 shadow-[0_20px_52px_rgba(0,0,0,0.26)]">
               <Image
                 src="/realizaquemsomos.jpeg"
-                alt="Equipe da Realiza Engenharia em obra"
+                alt="Equipe da REALIZA Engenharia acompanhando obra"
                 fill
-                className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                priority
+                sizes="(min-width: 1024px) 48vw, 100vw"
+                className="object-cover object-center"
               />
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#1E2A32]/60 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#111B20]/80 to-transparent p-5">
+                <p className="text-sm font-semibold text-white/90">
+                  Gestão próxima, técnica e transparente em cada etapa.
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* Texto (7 colunas) */}
-          <div className="md:col-span-7">
-            <div className="text-white/90 text-base sm:text-[15px] md:text-[16px] leading-relaxed">
-              <p className="mb-3">
-                A <strong>Realiza Engenharia Ltda.</strong>, com sede em Salvador (BA),
-                reúne <strong>15 anos</strong> de experiência na construção civil, marcada
-                por solidez, transparência e gestão próxima dos clientes.
+          <div>
+            <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#78C9D6]">
+              Quem Somos Nós
+            </p>
+            <h2 className="mt-3 text-3xl font-bold leading-tight sm:text-4xl">
+              Engenharia com presença técnica e responsabilidade de gestão
+            </h2>
+
+            <div className="mt-5 space-y-4 text-base leading-8 text-white/80">
+              <p>
+                A REALIZA Engenharia tem sede em Salvador/BA e reúne mais de
+                15 anos de experiência na construção civil, atuando com solidez,
+                transparência e gestão próxima dos clientes.
               </p>
-
-              <p className="mb-3">
-                Somos especializados no{" "}
-                <strong>regime de condomínio a preço de custo</strong> — modelo em que os
-                próprios condôminos financiam a obra, sem necessidade de financiamento
-                bancário. O resultado é um investimento mais acessível e participativo,
-                com <strong>prestação de contas rigorosa</strong>.
+              <p>
+                A empresa desenvolve empreendimentos residenciais e comerciais,
+                com forte experiência no regime de condomínio a preço de custo,
+                em que planejamento, acompanhamento financeiro e prestação de
+                contas dão mais clareza ao investimento.
               </p>
+            </div>
 
-              <p className="mb-5">
-                Desde a fundação, entregamos <strong>10 edifícios residenciais</strong>,
-                somando <strong>quase 500 unidades</strong>, sempre com{" "}
-                <strong>transparência, segurança e cumprimento de prazos</strong>.
-              </p>
+            <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {companyStats.map((stat) => (
+                <div
+                  key={stat.label}
+                  className="rounded-lg border border-white/10 bg-white/10 p-4"
+                >
+                  <strong className="block text-2xl font-extrabold text-white">
+                    {stat.value}
+                  </strong>
+                  <span className="mt-1 block text-xs font-semibold uppercase leading-5 tracking-[0.08em] text-white/70">
+                    {stat.label}
+                  </span>
+                </div>
+              ))}
+            </div>
 
-              {/* Mini “modelo de atuação” — linha, elegante */}
-              <ul className="flex flex-col sm:flex-row sm:items-center sm:divide-x sm:divide-white/15 gap-3 sm:gap-0 mb-6">
-                <li className="flex items-center gap-2 pr-0 sm:pr-4">
-                  <CheckCircle2 className="h-5 w-5 text-[#2A98AA]" />
-                  <span className="text-white/90">Gestão compartilhada</span>
-                </li>
-                <li className="flex items-center gap-2 sm:px-4">
-                  <CheckCircle2 className="h-5 w-5 text-[#2A98AA]" />
-                  <span className="text-white/90">Sem juros bancários</span>
-                </li>
-                <li className="flex items-center gap-2 sm:pl-4">
-                  <CheckCircle2 className="h-5 w-5 text-[#2A98AA]" />
-                  <span className="text-white/90">Transparência e controle</span>
-                </li>
-              </ul>
+            <div className="mt-7 grid gap-3 sm:grid-cols-2">
+              {trustPillars.map((pillar) => {
+                const Icon = pillar.icon
 
-              {/* CTAs */}
-              <div className="flex flex-wrap items-center gap-3">
-                <Link href="/sobre">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="rounded-full border-2 border-white bg-transparent px-5 py-2 font-semibold uppercase tracking-wide text-white transition-all duration-200 hover:scale-[1.03] hover:bg-white hover:text-[#1E2A32]"
-                  >
-                    Saiba Mais Sobre Nós
-                  </Button>
+                return (
+                  <div key={pillar.label} className="flex items-center gap-3 text-white/90">
+                    <span className="flex h-9 w-9 flex-none items-center justify-center rounded-md bg-[#2A98AA]/20 text-[#78C9D6]">
+                      <Icon className="h-4 w-4" />
+                    </span>
+                    <span className="text-sm font-semibold">{pillar.label}</span>
+                  </div>
+                )
+              })}
+            </div>
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Button
+                asChild
+                size="lg"
+                className="h-12 rounded-md bg-[#2A98AA] px-6 text-base font-bold text-white hover:bg-[#238799]"
+              >
+                <Link href="/sobre" aria-label="Conhecer mais sobre a REALIZA Engenharia">
+                  Saiba mais sobre nós
+                  <ArrowRight className="h-5 w-5" />
                 </Link>
+              </Button>
 
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="h-12 rounded-md border-white/60 bg-transparent px-6 text-base font-bold text-white hover:bg-white hover:text-[#1E2A32]"
+              >
                 <a
-                  href="https://wa.me/5571992220164?text=Olá%2C%20tenho%20interesse%20em%20falar%20com%20a%20Realiza%20Engenharia."
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="Entrar em contato com a REALIZA Engenharia pelo WhatsApp"
                 >
-                  <Button
-                    size="sm"
-                    className="rounded-full bg-[#2A98AA] px-5 py-2 font-semibold uppercase tracking-wide text-white shadow-md transition-all duration-200 hover:scale-[1.03] hover:shadow-lg"
-                  >
-                    Entre em Contato
-                  </Button>
+                  <MessageCircle className="h-5 w-5" />
+                  Entrar em contato
                 </a>
-              </div>
+              </Button>
             </div>
           </div>
         </div>
       </div>
-
-      {/* espaçador mínimo */}
-      <div className="h-6 sm:h-8 md:h-10" />
     </section>
-  );
+  )
 }
