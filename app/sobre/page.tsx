@@ -25,6 +25,8 @@ export default function SobrePage() {
               src="/institutional/background1.webp"
               alt="Imagem de fundo institucional da REALIZA Engenharia"
               fill
+              sizes="100vw"
+              quality={78}
               className="object-cover object-center"
               priority
             />
@@ -89,6 +91,8 @@ export default function SobrePage() {
                       src="/institutional/sergiorealiza1.webp"
                       alt="Sérgio Farias, diretor da Realiza Engenharia"
                       fill
+                      sizes="(min-width: 768px) 50vw, 100vw"
+                      quality={82}
                       className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
                     />
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#0d7a8f]/90 via-[#0d7a8f]/60 to-transparent p-4">
@@ -246,6 +250,8 @@ export default function SobrePage() {
                     src="/institutional/realizavalores.webp"
                     alt="Giardino Loreto — empreendimento entregue"
                     fill
+                    sizes="(min-width: 768px) 50vw, 100vw"
+                    quality={82}
                     className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#0d7a8f]/90 via-[#0d7a8f]/60 to-transparent p-8" />

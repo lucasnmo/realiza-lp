@@ -35,6 +35,7 @@ export default function Header() {
               alt="REALIZA Engenharia"
               fill
               sizes="(min-width: 1024px) 288px, (min-width: 640px) 208px, 176px"
+              quality={90}
               className="object-contain object-left"
               priority
             />

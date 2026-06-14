@@ -57,7 +57,8 @@ export default function HeroSlider() {
                 alt={slide.alt}
                 fill
                 priority={index === 0}
-                loading={index === 0 ? undefined : "eager"}
+                loading={index === 0 ? undefined : "lazy"}
+                quality={84}
                 sizes="100vw"
                 className="object-cover object-center"
                 style={{ objectPosition: slide.position }}

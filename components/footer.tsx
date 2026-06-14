@@ -34,6 +34,7 @@ export default function Footer() {
               alt="REALIZA Engenharia"
               width={190}
               height={60}
+              quality={90}
               className="h-14 w-auto"
             />
             <p className="mt-5 max-w-sm text-sm leading-7 text-white/70">

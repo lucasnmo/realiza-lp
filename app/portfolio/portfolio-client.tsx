@@ -183,6 +183,7 @@ export default function PortfolioPageClient() {
               fill
               priority
               aria-hidden="true"
+              quality={78}
               className="object-cover opacity-25"
               sizes="100vw"
             />
@@ -209,11 +210,10 @@ export default function PortfolioPageClient() {
                 Explore residenciais, casas e projetos comerciais conduzidos pela
                 REALIZA em Salvador e região.
               </p>
-              <div className="mt-7 grid w-full max-w-xl grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-3 sm:grid-cols-4">
+              <div className="mt-7 grid w-full max-w-xl grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-3 sm:grid-cols-3">
                 <PortfolioStat value={PROJECTS.length.toString()} label="projetos" />
                 <PortfolioStat value="5" label="categorias" />
                 <PortfolioStat value="15+" label="anos" />
-                <PortfolioStat value="BA" label="atuação" />
               </div>
             </div>
 
@@ -472,6 +472,7 @@ function ProjectCard({
                 fill
                 className={`${fitClass} transition-transform duration-500 group-hover:scale-[1.02]`}
                 sizes="(min-width:1280px) 1100px, (min-width:1024px) 960px, 100vw"
+                quality={86}
                 priority={shouldPriority}
                 onLoad={(event) => {
                   const img = event.currentTarget;
@@ -506,6 +507,7 @@ function ProjectCard({
                       fill
                       className="object-cover"
                       sizes="80px"
+                      quality={68}
                     />
                   </div>
                 </button>
@@ -691,6 +693,7 @@ function LightboxOverlay({
                 fill
                 className="object-contain"
                 sizes="100vw"
+                quality={90}
                 priority
               />
             </div>
@@ -716,6 +719,8 @@ function LightboxOverlay({
                       alt={`${title || "Empreendimento"} - miniatura ${i + 1}`}
                       fill
                       className="object-cover"
+                      sizes="80px"
+                      quality={68}
                     />
                   </div>
                 </button>

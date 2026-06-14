@@ -29,6 +29,7 @@ export default function AboutSection() {
                 alt="Equipe da REALIZA Engenharia acompanhando obra"
                 fill
                 sizes="(min-width: 1024px) 48vw, 100vw"
+                quality={82}
                 className="object-cover object-center"
               />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#111B20]/80 to-transparent p-5">

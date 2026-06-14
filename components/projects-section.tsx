@@ -171,6 +171,7 @@ function ProjectCard({
             alt=""
             aria-hidden="true"
             fill
+            quality={50}
             sizes="(min-width: 1024px) 390px, (min-width: 640px) 360px, 82vw"
             className="scale-110 object-cover opacity-35 blur-xl transition-transform duration-700 group-hover:scale-[1.16]"
             style={{ objectPosition: getProjectImagePosition(project) }}
@@ -180,6 +181,7 @@ function ProjectCard({
           src={project.images[0] || "/placeholders/placeholder.svg"}
           alt={`${project.name} - empreendimento da REALIZA Engenharia`}
           fill
+          quality={82}
           sizes="(min-width: 1024px) 390px, (min-width: 640px) 360px, 82vw"
           className={`transition-transform duration-700 group-hover:scale-105 ${
             imageFit === "contain" ? "object-contain p-3" : "object-cover"
