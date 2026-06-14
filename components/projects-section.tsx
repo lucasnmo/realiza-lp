@@ -167,7 +167,7 @@ function ProjectCard({
       <Link href={href} className="group relative block aspect-[4/3] overflow-hidden bg-[#DDE5E8]">
         {imageFit === "contain" && (
           <Image
-            src={project.images[0] || "/placeholder.svg"}
+            src={project.images[0] || "/placeholders/placeholder.svg"}
             alt=""
             aria-hidden="true"
             fill
@@ -177,7 +177,7 @@ function ProjectCard({
           />
         )}
         <Image
-          src={project.images[0] || "/placeholder.svg"}
+          src={project.images[0] || "/placeholders/placeholder.svg"}
           alt={`${project.name} - empreendimento da REALIZA Engenharia`}
           fill
           sizes="(min-width: 1024px) 390px, (min-width: 640px) 360px, 82vw"

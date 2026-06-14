@@ -22,7 +22,7 @@ export default function SobrePage() {
         <section className="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white">
           <div className="absolute inset-0 opacity-20">
             <Image
-              src="/background1.png"
+              src="/institutional/background1.webp"
               alt="Imagem de fundo institucional da REALIZA Engenharia"
               fill
               className="object-cover object-center"
@@ -86,7 +86,7 @@ export default function SobrePage() {
                 <div className="md:col-span-6 relative">
                   <div className="group relative h-64 sm:h-72 md:h-[360px] rounded-lg overflow-hidden shadow-xl transition-transform duration-500 hover:scale-[1.02]">
                     <Image
-                      src="/sergiorealiza1.JPG"
+                      src="/institutional/sergiorealiza1.webp"
                       alt="Sérgio Farias, diretor da Realiza Engenharia"
                       fill
                       className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
@@ -243,7 +243,7 @@ export default function SobrePage() {
 
                 <div className="relative h-64 sm:h-72 md:h-[340px] rounded-lg overflow-hidden shadow-xl group transition-transform duration-500 hover:scale-[1.02]">
                   <Image
-                    src="/realizavalores.JPG"
+                    src="/institutional/realizavalores.webp"
                     alt="Giardino Loreto — empreendimento entregue"
                     fill
                     className="object-cover object-center transition-transform duration-700 group-hover:scale-105"

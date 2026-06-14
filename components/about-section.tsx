@@ -25,7 +25,7 @@ export default function AboutSection() {
           <div className="relative">
             <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-white/10 shadow-[0_20px_52px_rgba(0,0,0,0.26)]">
               <Image
-                src="/realizaquemsomos.jpeg"
+                src="/institutional/realizaquemsomos.webp"
                 alt="Equipe da REALIZA Engenharia acompanhando obra"
                 fill
                 sizes="(min-width: 1024px) 48vw, 100vw"

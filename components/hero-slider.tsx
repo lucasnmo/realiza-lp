@@ -12,19 +12,19 @@ const SLIDE_DURATION = 5200
 const slides = [
   {
     id: 1,
-    image: "/hortovlias.jpg",
+    image: "/horto-vilas/hortovlias.webp",
     alt: "Casa de alto padrão construída pela REALIZA Engenharia",
     position: "center center",
   },
   {
     id: 2,
-    image: "/azure3.jpg",
+    image: "/azure-beach-living/azure3.webp",
     alt: "Empreendimento Azure Beach Living da REALIZA Engenharia",
     position: "center center",
   },
   {
     id: 3,
-    image: "/estreladomar2.jpg",
+    image: "/alphaville-estrela-do-mar/estreladomar2.webp",
     alt: "Residência entregue pela REALIZA Engenharia",
     position: "center center",
   },
@@ -71,10 +71,6 @@ export default function HeroSlider() {
 
       <div className="relative z-10 mx-auto flex min-h-[520px] max-w-7xl items-center px-4 py-14 sm:min-h-[590px] sm:px-6 lg:min-h-[620px] lg:px-8">
         <div className="min-w-0 max-w-2xl text-white">
-          <p className="mb-4 inline-flex rounded-md border border-white/20 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-white/90 backdrop-blur">
-            Engenharia e incorporação em Salvador
-          </p>
-
           <h1 className="max-w-[21rem] break-words text-[28px] font-bold leading-[1.16] sm:max-w-full sm:text-5xl lg:text-[56px]">
             Engenharia com credibilidade, transparência e resultado
           </h1>

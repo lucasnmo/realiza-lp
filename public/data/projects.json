@@ -4,10 +4,10 @@
     "category": "residenciais",
     "name": "Facility View",
     "images": [
-      "/facilityview1.png",
-      "/facilityview2.jpg",
-      "/facilityview3.jpg",
-      "/facilityview4.jpg"
+      "/facility-view/facilityview1.webp",
+      "/facility-view/facilityview2.webp",
+      "/facility-view/facilityview3.webp",
+      "/facility-view/facilityview4.webp"
     ],
     "technicalSheet": {
       "year": "2024",
@@ -26,10 +26,10 @@
     "category": "residenciais",
     "name": "Facility Tower",
     "images": [
-      "/facilitytower1.png",
-      "/facilitytower2.jpeg",
-      "/facilitytower3.jpeg",
-      "/facilitytower4.jpeg"
+      "/facility-tower/facilitytower1.webp",
+      "/facility-tower/facilitytower2.webp",
+      "/facility-tower/facilitytower3.webp",
+      "/facility-tower/facilitytower4.webp"
     ],
     "technicalSheet": {
       "year": "2023",
@@ -48,14 +48,14 @@
     "category": "residenciais",
     "name": "Giardino Loreto",
     "images": [
-      "/giardino1.jpg",
-      "/giardino2.jpg",
-      "/giardino3.jpg",
-      "/giardino4.jpg",
-      "/giardino5.jpg",
-      "/giardino6.jpg",
-      "/giardino7.JPG",
-      "/giardino8.JPG"
+      "/giardino-loreto/giardino1.webp",
+      "/giardino-loreto/giardino2.webp",
+      "/giardino-loreto/giardino3.webp",
+      "/giardino-loreto/giardino4.webp",
+      "/giardino-loreto/giardino5.webp",
+      "/giardino-loreto/giardino6.webp",
+      "/giardino-loreto/giardino7.webp",
+      "/giardino-loreto/giardino8.webp"
     ],
     "technicalSheet": {
       "year": "2017",
@@ -74,11 +74,11 @@
     "category": "residenciais",
     "name": "Pituba Paradiso",
     "images": [
-      "/pitubaparadiso1.jpg",
-      "/pitubaparadiso2.jpg",
-      "/pitubaparadiso3.jpg",
-      "/pitubaparadiso4.jpg",
-      "/pitubaparadiso5.jpg"
+      "/pituba-paradiso/pitubaparadiso1.webp",
+      "/pituba-paradiso/pitubaparadiso2.webp",
+      "/pituba-paradiso/pitubaparadiso3.webp",
+      "/pituba-paradiso/pitubaparadiso4.webp",
+      "/pituba-paradiso/pitubaparadiso5.webp"
     ],
     "technicalSheet": {
       "year": "2016",
@@ -97,11 +97,11 @@
     "category": "residenciais",
     "name": "Canela Residence",
     "images": [
-      "/canelares1.jpg",
-      "/canelares2.jpg",
-      "/canelares3.jpg",
-      "/canelares4.jpg",
-      "/canelares5.jpg"
+      "/residencial-canela/canelares1.webp",
+      "/residencial-canela/canelares2.webp",
+      "/residencial-canela/canelares3.webp",
+      "/residencial-canela/canelares4.webp",
+      "/residencial-canela/canelares5.webp"
     ],
     "technicalSheet": {
       "year": "2022",
@@ -120,14 +120,14 @@
     "category": "residenciais",
     "name": "Residencial dos Sombreiros",
     "images": [
-      "/residencialdossombreiros2.jpg",
-      "/residencialdossombreiros.jpg",
-      "/residencialdossombreiros3.jpg",
-      "/sombreiros.JPG",
-      "/sombreiros2.JPG",
-      "/sombreiros3.JPG",
-      "/sombreiros4.JPG",
-      "/sombreiros5.JPG"
+      "/residencial-sombreiros/residencialdossombreiros2.webp",
+      "/residencial-sombreiros/residencialdossombreiros.webp",
+      "/residencial-sombreiros/residencialdossombreiros3.webp",
+      "/residencial-sombreiros/sombreiros.webp",
+      "/residencial-sombreiros/sombreiros2.webp",
+      "/residencial-sombreiros/sombreiros3.webp",
+      "/residencial-sombreiros/sombreiros4.webp",
+      "/residencial-sombreiros/sombreiros5.webp"
     ],
     "technicalSheet": {
       "year": "2013",
@@ -146,17 +146,17 @@
     "category": "residenciais",
     "name": "Condomínio Bosque de Guarajuba",
     "images": [
-      "/bosquedeguarajuba.jpg",
-      "/bosquedeguarajuba2.jpg",
-      "/bosquedeguarajuba3.jpg",
-      "/bosque1.JPG",
-      "/bosque2.jpg",
-      "/bosque3.JPG",
-      "/bosque4.JPG",
-      "/bosque5.JPG",
-      "/bosque6.JPG",
-      "/bosque7.JPG",
-      "/bosque8.JPG"
+      "/bosque-guarajuba/bosquedeguarajuba.webp",
+      "/bosque-guarajuba/bosquedeguarajuba2.webp",
+      "/bosque-guarajuba/bosquedeguarajuba3.webp",
+      "/bosque-guarajuba/bosque1.webp",
+      "/bosque-guarajuba/bosque2.webp",
+      "/bosque-guarajuba/bosque3.webp",
+      "/bosque-guarajuba/bosque4.webp",
+      "/bosque-guarajuba/bosque5.webp",
+      "/bosque-guarajuba/bosque6.webp",
+      "/bosque-guarajuba/bosque7.webp",
+      "/bosque-guarajuba/bosque8.webp"
     ],
     "technicalSheet": {
       "year": "2012",
@@ -172,11 +172,11 @@
     "category": "residenciais",
     "name": "Solar das Amendoeiras",
     "images": [
-      "/solarmendoeiras1.jpg",
-      "/solardasamendoeiras.jpg",
-      "/solardasamendoeiras2.jpg",
-      "/solarmendoeiras2.jpg",
-      "/solarmendoeiras3.jpg"
+      "/solar-amendoeiras/solarmendoeiras1.webp",
+      "/solar-amendoeiras/solardasamendoeiras.webp",
+      "/solar-amendoeiras/solardasamendoeiras2.webp",
+      "/solar-amendoeiras/solarmendoeiras2.webp",
+      "/solar-amendoeiras/solarmendoeiras3.webp"
     ],
     "technicalSheet": {
       "year": "2010",
@@ -195,10 +195,10 @@
     "category": "comerciais",
     "name": "INOA Parque Bela Vista",
     "images": [
-      "/inoa1.webp",
-      "/inoa2.webp",
-      "/inoa3.webp",
-      "/inoa4.webp"
+      "/inoa-parque-bela-vista/inoa1.webp",
+      "/inoa-parque-bela-vista/inoa2.webp",
+      "/inoa-parque-bela-vista/inoa3.webp",
+      "/inoa-parque-bela-vista/inoa4.webp"
     ],
     "technicalSheet": {
       "year": "2023",
@@ -215,13 +215,13 @@
     "category": "comerciais",
     "name": "Horto Office",
     "images": [
-      "/hortofice.webp",
-      "/hortofice1.jpeg",
-      "/hortofice2.jpeg",
-      "/hortofice3.jpeg",
-      "/hortofice4.jpg",
-      "/hortofice5.jpg",
-      "/hortofice6.jpg"
+      "/horto-office/hortofice.webp",
+      "/horto-office/hortofice1.webp",
+      "/horto-office/hortofice2.webp",
+      "/horto-office/hortofice3.webp",
+      "/horto-office/hortofice4.webp",
+      "/horto-office/hortofice5.webp",
+      "/horto-office/hortofice6.webp"
     ],
     "technicalSheet": {
       "year": "2018",
@@ -240,11 +240,11 @@
     "category": "comerciais",
     "name": "Hotel Aram Yamí",
     "images": [
-      "/aranyammi.jpg",
-      "/aranyammi3.JPG",
-      "/aranyammi4.jpg",
-      "/aramyami.JPG",
-      "/aramyami6.JPG"
+      "/hotel-aram-yami/aranyammi.webp",
+      "/hotel-aram-yami/aranyammi3.webp",
+      "/hotel-aram-yami/aranyammi4.webp",
+      "/hotel-aram-yami/aramyami.webp",
+      "/hotel-aram-yami/aramyami6.webp"
     ],
     "technicalSheet": {
       "year": "2009",
@@ -259,10 +259,10 @@
     "category": "comerciais",
     "name": "Clinirim Nefrologia",
     "images": [
-      "/clinirim1.jpg",
-      "/clinirim2.jpg",
-      "/clinirim3.jpg",
-      "/clinirim4.jpg"
+      "/clinirim-nefrologia/clinirim1.webp",
+      "/clinirim-nefrologia/clinirim2.webp",
+      "/clinirim-nefrologia/clinirim3.webp",
+      "/clinirim-nefrologia/clinirim4.webp"
     ],
     "technicalSheet": {
       "regime": "Obra em regime de administração",
@@ -276,10 +276,10 @@
     "category": "casas",
     "name": "Condomínio Horto Vilas",
     "images": [
-      "/hortovlias.jpg",
-      "/hortovlias2.jpg",
-      "/hortovlias3.jpg",
-      "/hortovlias4.jpg"
+      "/horto-vilas/hortovlias.webp",
+      "/horto-vilas/hortovlias2.webp",
+      "/horto-vilas/hortovlias3.webp",
+      "/horto-vilas/hortovlias4.webp"
     ],
     "technicalSheet": {
       "regime": "Residencial exclusivo",
@@ -294,10 +294,10 @@
     "category": "casas",
     "name": "Alphaville Estrela do Mar",
     "images": [
-      "/estreladomar.jpg",
-      "/estreladomar2.jpg",
-      "/estreladomar3.jpg",
-      "/estreladomar4.jpg"
+      "/alphaville-estrela-do-mar/estreladomar.webp",
+      "/alphaville-estrela-do-mar/estreladomar2.webp",
+      "/alphaville-estrela-do-mar/estreladomar3.webp",
+      "/alphaville-estrela-do-mar/estreladomar4.webp"
     ],
     "technicalSheet": {
       "regime": "Residencial exclusivo",
@@ -312,12 +312,12 @@
     "category": "casas",
     "name": "Residência Alphaville Itaparica",
     "images": [
-      "/alphavilleitaparica1.jpg",
-      "/alphavilleitaparica2.jpg",
-      "/alphavilleitaparica3.jpg",
-      "/alphavilleitaparica4.jpg",
-      "/alphavilleitaparica5.JPG",
-      "/alphavilleitaparica6.JPG"
+      "/alphaville-itaparica/alphavilleitaparica1.webp",
+      "/alphaville-itaparica/alphavilleitaparica2.webp",
+      "/alphaville-itaparica/alphavilleitaparica3.webp",
+      "/alphaville-itaparica/alphavilleitaparica4.webp",
+      "/alphaville-itaparica/alphavilleitaparica5.webp",
+      "/alphaville-itaparica/alphavilleitaparica6.webp"
     ],
     "technicalSheet": {
       "regime": "Residencial exclusivo",
@@ -332,11 +332,11 @@
     "category": "casas",
     "name": "Residência em Guarajuba",
     "images": [
-      "/guarajuba1.jpg",
-      "/guarajuba2.jpg",
-      "/guarajuba3.jpg",
-      "/guarajuba4.jpg",
-      "/guarajuba5.jpg"
+      "/residencia-guarajuba/guarajuba1.webp",
+      "/residencia-guarajuba/guarajuba2.webp",
+      "/residencia-guarajuba/guarajuba3.webp",
+      "/residencia-guarajuba/guarajuba4.webp",
+      "/residencia-guarajuba/guarajuba5.webp"
     ],
     "technicalSheet": {
       "regime": "Residencial exclusivo",
@@ -351,11 +351,11 @@
     "category": "casas",
     "name": "Residência Pampalona Busca Vida",
     "images": [
-      "/pampalona1.jpg",
-      "/pampalona2.jpg",
-      "/pampalona3.jpg",
-      "/pampalona4.jpg",
-      "/pampalona5.jpg"
+      "/pampalona-busca-vida/pampalona1.webp",
+      "/pampalona-busca-vida/pampalona2.webp",
+      "/pampalona-busca-vida/pampalona3.webp",
+      "/pampalona-busca-vida/pampalona4.webp",
+      "/pampalona-busca-vida/pampalona5.webp"
     ],
     "technicalSheet": {
       "regime": "Residencial exclusivo",
@@ -370,12 +370,12 @@
     "category": "casas",
     "name": "Residência Condomínio Busca Vida",
     "images": [
-      "/lotebuscavida1.jpg",
-      "/lotebuscavida2.jpg",
-      "/lotebuscavida3.jpg",
-      "/lotebuscavida4.jpg",
-      "/lotebuscavida5.jpg",
-      "/lotebuscavida6.jpg"
+      "/condominio-busca-vida-1160/lotebuscavida1.webp",
+      "/condominio-busca-vida-1160/lotebuscavida2.webp",
+      "/condominio-busca-vida-1160/lotebuscavida3.webp",
+      "/condominio-busca-vida-1160/lotebuscavida4.webp",
+      "/condominio-busca-vida-1160/lotebuscavida5.webp",
+      "/condominio-busca-vida-1160/lotebuscavida6.webp"
     ],
     "technicalSheet": {
       "regime": "Residencial exclusivo",
@@ -390,10 +390,10 @@
     "category": "casas",
     "name": "Residência Itapuã",
     "images": [
-      "/itapuares1.jpg",
-      "/itapuares2.jpg",
-      "/itapuares3.jpg",
-      "/itapuares4.jpg"
+      "/residencial-itapua/itapuares1.webp",
+      "/residencial-itapua/itapuares2.webp",
+      "/residencial-itapua/itapuares3.webp",
+      "/residencial-itapua/itapuares4.webp"
     ],
     "technicalSheet": {
       "regime": "Residencial exclusivo",
@@ -407,10 +407,10 @@
     "category": "breve_lancamento",
     "name": "EGEU Pedra do Sal - Pré-lançamento",
     "images": [
-      "/EGEU1.jpeg",
-      "/EGEU2.jpeg",
-      "/EGEU3.jpeg",
-      "/EGEU4.jpeg"
+      "/egeu-pedra-do-sal/egeu1.webp",
+      "/egeu-pedra-do-sal/egeu2.webp",
+      "/egeu-pedra-do-sal/egeu3.webp",
+      "/egeu-pedra-do-sal/egeu4.webp"
     ],
     "technicalSheet": {
       "regime": "Obra em regime de condomínio",
@@ -427,9 +427,9 @@
     "category": "em_construcao",
     "name": "Azure Beach Living",
     "images": [
-      "/azure2.jpg",
-      "/azure1.jpg",
-      "/azure3.jpg"
+      "/azure-beach-living/azure2.webp",
+      "/azure-beach-living/azure1.webp",
+      "/azure-beach-living/azure3.webp"
     ],
     "technicalSheet": {
       "regime": "Obra em regime de condomínio",

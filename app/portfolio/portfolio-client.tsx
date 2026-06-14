@@ -467,18 +467,16 @@ function ProjectCard({
               className={`relative h-[310px] overflow-hidden rounded-lg shadow-inner sm:h-[390px] md:h-[460px] lg:h-[540px] ${bgClass}`}
             >
               <Image
-                src={mainImage || "/placeholder.svg"}
+                src={mainImage || "/placeholders/placeholder.svg"}
                 alt={`${project.name} - imagem principal do empreendimento`}
                 fill
                 className={`${fitClass} transition-transform duration-500 group-hover:scale-[1.02]`}
                 sizes="(min-width:1280px) 1100px, (min-width:1024px) 960px, 100vw"
                 priority={shouldPriority}
-                onLoadingComplete={(img) =>
-                  setIsPortrait(
-                    (img as HTMLImageElement).naturalHeight >
-                      (img as HTMLImageElement).naturalWidth
-                  )
-                }
+                onLoad={(event) => {
+                  const img = event.currentTarget;
+                  setIsPortrait(img.naturalHeight > img.naturalWidth);
+                }}
               />
               <span className="absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-md bg-black/55 px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-white backdrop-blur-sm">
                 <ImageIcon className="h-4 w-4" aria-hidden="true" />
@@ -688,7 +686,7 @@ function LightboxOverlay({
           <div className="relative w-full max-w-6xl">
             <div className="relative h-[58vh] sm:h-[68vh] md:h-[72vh]">
               <Image
-                src={images[index] || "/placeholder.svg"}
+                src={images[index] || "/placeholders/placeholder.svg"}
                 alt={`${title || "Empreendimento"} - imagem ampliada ${index + 1}`}
                 fill
                 className="object-contain"

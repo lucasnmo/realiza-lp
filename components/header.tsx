@@ -31,7 +31,7 @@ export default function Header() {
             onClick={() => setMobileMenuOpen(false)}
           >
             <Image
-              src="/realiza-logo-white.png"
+              src="/brand/realiza-logo-white.webp"
               alt="REALIZA Engenharia"
               fill
               sizes="(min-width: 1024px) 288px, (min-width: 640px) 208px, 176px"

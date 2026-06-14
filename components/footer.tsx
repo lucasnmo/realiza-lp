@@ -30,7 +30,7 @@ export default function Footer() {
         <div className="grid gap-10 md:grid-cols-[1.15fr_0.65fr_1fr_0.7fr]">
           <div>
             <Image
-              src="/realiza-logo-white.png"
+              src="/brand/realiza-logo-white.webp"
               alt="REALIZA Engenharia"
               width={190}
               height={60}
