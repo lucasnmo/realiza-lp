@@ -70,19 +70,7 @@ export default function Header() {
             </Button>
           </div>
 
-          <div
-            className="flex shrink-0 items-center gap-2 lg:hidden"
-            style={{
-              alignItems: "center",
-              display: "flex",
-              gap: "0.5rem",
-              position: "fixed",
-              right: "1rem",
-              top: "1.25rem",
-              width: "5.5rem",
-              zIndex: 60,
-            }}
-          >
+          <div className="fixed right-4 top-5 z-[60] flex w-[5.5rem] shrink-0 items-center gap-2 lg:hidden">
             <Button
               asChild
               className="h-10 w-10 rounded-md bg-[#2A98AA] p-0 text-white shadow-sm hover:bg-[#238799] has-[>svg]:px-0"
