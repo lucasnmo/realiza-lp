@@ -1,7 +1,7 @@
 // app/portfolio/portfolio-client.tsx
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import FinalCTASection from "@/components/final-cta-section";
@@ -14,6 +14,7 @@ import {
   Bed,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   BriefcaseBusiness,
   Building2,
   Hammer,
@@ -241,10 +242,10 @@ export default function PortfolioPageClient() {
           </div>
         </section>
 
-        <section className="relative z-10 mx-auto -mt-8 w-full max-w-[358px] px-4 pb-14 sm:max-w-7xl sm:px-6 sm:pb-16 lg:px-8">
+        <section className="relative z-10 mx-auto -mt-8 w-full max-w-full px-4 pb-14 sm:max-w-7xl sm:px-6 sm:pb-16 lg:px-8">
           <Tabs tab={tab} onChange={setTab} counts={tabCounts} />
 
-          <div className="mt-8 space-y-8 sm:mt-10">
+          <div className="mt-5 space-y-5 sm:mt-10 sm:space-y-8">
           {filtered.length === 0 && (
             <p className="text-center text-sm sm:text-base text-gray-500">
               Em breve novos empreendimentos nesta categoria.
@@ -327,8 +328,8 @@ function Tabs({
   counts: Record<Category, number>;
 }) {
   return (
-    <div className="w-full rounded-lg border border-black/10 bg-white p-2 shadow-[0_18px_45px_rgba(20,33,40,0.12)]">
-      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+    <div className="mx-auto w-full rounded-lg border border-black/10 bg-white p-1.5 shadow-[0_14px_34px_rgba(20,33,40,0.10)] lg:w-fit lg:max-w-[calc(100vw-2rem)]">
+  <div className="grid gap-1.5 sm:grid-cols-2 lg:flex lg:flex-wrap lg:items-center lg:justify-center">
         {TAB_ITEMS.map(({ value, label, Icon }) => {
           const active = tab === value;
 
@@ -336,7 +337,7 @@ function Tabs({
             <button
               key={value}
               type="button"
-              className={`flex min-h-16 items-center gap-3 rounded-md px-3 py-3 text-left transition-all ${
+              className={`flex min-h-[52px] items-center gap-2 rounded-md px-2.5 py-2 text-left transition-all lg:min-h-[46px] lg:w-auto lg:px-2 lg:py-1.5 ${
                 active
                   ? "bg-[#1E2A32] text-white shadow-md"
                   : "bg-[#F7F8F6] text-[#1E2A32] hover:bg-[#E9EEF0]"
@@ -344,16 +345,16 @@ function Tabs({
               onClick={() => onChange(value)}
             >
               <span
-                className={`grid h-9 w-9 flex-shrink-0 place-items-center rounded-md ${
+                className={`grid h-8 w-8 flex-shrink-0 place-items-center rounded-md ${
                   active ? "bg-white/12 text-[#78C9D6]" : "bg-white text-[#2A98AA]"
                 }`}
               >
-                <Icon className="h-[18px] w-[18px]" aria-hidden="true" />
+                <Icon className="h-4 w-4" aria-hidden="true" />
               </span>
               <span className="min-w-0">
-                <span className="block text-sm font-bold leading-tight">{label}</span>
+                <span className="block text-[13px] font-bold leading-tight">{label}</span>
                 <span
-                  className={`mt-1 block text-xs ${
+                  className={`mt-0.5 block text-[11px] ${
                     active ? "text-white/65" : "text-gray-500"
                   }`}
                 >
@@ -378,7 +379,7 @@ function Chip({
   children: React.ReactNode;
 }) {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-2.5 py-1 text-xs text-gray-700">
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-2 py-0.5 text-[11px] text-gray-700 sm:px-2.5 sm:py-1 sm:text-xs">
       {icon}
       {children}
     </span>
@@ -401,99 +402,314 @@ function ProjectCard({
   const { ref: cardRef, isVisible: cardVisible } =
     useScrollReveal<HTMLDivElement>();
   const [activeIdx, setActiveIdx] = useState(0);
-  const [isPortrait, setIsPortrait] = useState(false);
+  const [isTechnicalSheetOpen, setIsTechnicalSheetOpen] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [settleDirection, setSettleDirection] = useState<-1 | 0 | 1>(0);
+  const touchStartRef = useRef<{
+    x: number;
+    y: number;
+    width: number;
+    isHorizontal: boolean;
+  } | null>(null);
+  const didSwipeRef = useRef(false);
 
   const mainImage = project.images[activeIdx] ?? project.images[0];
   const T = project.technicalSheet;
-  const isHouse = project.category === "casas";
-
-  const useContain = isHouse || isPortrait;
-  const fitClass = useContain ? "object-contain" : "object-cover object-center";
-  const bgClass = useContain ? "bg-white" : "bg-gray-100";
+  const technicalSheetId = `technical-sheet-${project.id}`;
+  const hasMultipleImages = project.images.length > 1;
+  const fitClass = "object-contain";
 
   const isInvestmentCategory = isInvestmentProject(project);
 
   const shouldPriority = isInvestmentCategory && index === 0;
+  const galleryImages = useMemo(() => {
+    if (!hasMultipleImages) return [mainImage];
+
+    return [
+      project.images[
+        (activeIdx - 1 + project.images.length) % project.images.length
+      ],
+      mainImage,
+      project.images[(activeIdx + 1) % project.images.length],
+    ];
+  }, [activeIdx, hasMultipleImages, mainImage, project.images]);
+  const galleryTransform = hasMultipleImages
+    ? `translate3d(calc(-100% + ${dragOffset}px), 0, 0)`
+    : "translate3d(0, 0, 0)";
+  const preventClickAfterDrag = () => {
+    didSwipeRef.current = true;
+    window.setTimeout(() => {
+      didSwipeRef.current = false;
+    }, 450);
+  };
+  const goToImage = useCallback(
+    (nextIndex: number) => {
+      if (!project.images.length) return;
+      setDragOffset(0);
+      setSettleDirection(0);
+      setIsDragging(false);
+      setActiveIdx(
+        (nextIndex + project.images.length) % project.images.length
+      );
+    },
+    [project.images.length]
+  );
+  const showPreviousImage = useCallback(() => {
+    goToImage(activeIdx - 1);
+  }, [activeIdx, goToImage]);
+  const showNextImage = useCallback(() => {
+    goToImage(activeIdx + 1);
+  }, [activeIdx, goToImage]);
+  const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    if (!hasMultipleImages) return;
+    const touch = event.touches[0];
+    const width = event.currentTarget.clientWidth || 1;
+    touchStartRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+      width,
+      isHorizontal: false,
+    };
+    didSwipeRef.current = false;
+    setSettleDirection(0);
+    setDragOffset(0);
+    setIsDragging(true);
+  };
+  const handleTouchMove = (event: React.TouchEvent<HTMLDivElement>) => {
+    const start = touchStartRef.current;
+    const touch = event.touches[0];
+
+    if (!start || !touch || !hasMultipleImages) return;
+
+    const deltaX = touch.clientX - start.x;
+    const deltaY = touch.clientY - start.y;
+
+    if (!start.isHorizontal) {
+      if (Math.abs(deltaX) < 6 && Math.abs(deltaY) < 6) return;
+
+      if (Math.abs(deltaY) > Math.abs(deltaX)) {
+        touchStartRef.current = null;
+        setIsDragging(false);
+        setDragOffset(0);
+        return;
+      }
+
+      start.isHorizontal = true;
+    }
+
+    event.preventDefault();
+
+    if (Math.abs(deltaX) > 8) {
+      didSwipeRef.current = true;
+    }
+
+    const maxOffset = start.width * 0.98;
+    setDragOffset(Math.max(-maxOffset, Math.min(maxOffset, deltaX)));
+  };
+  const handleTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
+    const start = touchStartRef.current;
+    const touch = event.changedTouches[0];
+    touchStartRef.current = null;
+
+    if (!start || !touch || !hasMultipleImages) return;
+
+    const deltaX = touch.clientX - start.x;
+    const shouldChangeImage =
+      start.isHorizontal && Math.abs(deltaX) > Math.min(90, start.width * 0.2);
+
+    if (!start.isHorizontal) {
+      setIsDragging(false);
+      setDragOffset(0);
+      return;
+    }
+
+    preventClickAfterDrag();
+    setIsDragging(false);
+
+    if (!shouldChangeImage) {
+      setSettleDirection(0);
+      setDragOffset(0);
+      return;
+    }
+
+    const nextDirection = deltaX < 0 ? 1 : -1;
+    setSettleDirection(nextDirection);
+    setDragOffset(nextDirection === 1 ? -start.width : start.width);
+  };
+  const handleTouchCancel = () => {
+    touchStartRef.current = null;
+    setIsDragging(false);
+    setSettleDirection(0);
+    setDragOffset(0);
+  };
+  const handleGalleryTransitionEnd = (
+    event: React.TransitionEvent<HTMLDivElement>
+  ) => {
+    if (event.target !== event.currentTarget) return;
+    if (!settleDirection || !hasMultipleImages) return;
+
+    setIsDragging(true);
+    setActiveIdx(
+      (activeIdx + settleDirection + project.images.length) %
+        project.images.length
+    );
+    setDragOffset(0);
+    setSettleDirection(0);
+
+    window.requestAnimationFrame(() => {
+      setIsDragging(false);
+    });
+  };
+  const handleImageClick = () => {
+    if (didSwipeRef.current) {
+      didSwipeRef.current = false;
+      return;
+    }
+
+    onOpenLightbox(activeIdx);
+  };
+  const handleImageKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onOpenLightbox(activeIdx);
+    }
+
+    if (!hasMultipleImages) return;
+
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      showPreviousImage();
+    }
+
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      showNextImage();
+    }
+  };
 
   return (
     <div
       ref={cardRef}
       id={`project-${project.id}`}
-      className={`transition-all duration-700 ${
+      className={`mx-auto w-full max-w-6xl transition-all duration-700 ${
         cardVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
       }`}
     >
       <article
-        className={`overflow-hidden rounded-xl border bg-white shadow-[0_22px_60px_rgba(20,33,40,0.12)] transition-shadow hover:shadow-[0_28px_75px_rgba(20,33,40,0.16)] ${
+        className={`w-full overflow-hidden rounded-lg border bg-white shadow-[0_16px_42px_rgba(20,33,40,0.10)] transition-shadow hover:shadow-[0_28px_75px_rgba(20,33,40,0.16)] sm:rounded-xl sm:shadow-[0_22px_60px_rgba(20,33,40,0.12)] ${
           highlight ? "border-[#2A98AA] ring-2 ring-[#2A98AA]/25" : "border-black/10"
         }`}
       >
-        <div className="border-b border-black/10 bg-white px-5 py-5 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-            <div className="min-w-0">
+        <div className="border-b border-black/10 bg-white px-4 py-4 text-center sm:px-6 sm:py-5 lg:px-10">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center justify-center gap-2">
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#2A98AA]">
                 {isInvestmentCategory ? "Oportunidade" : "Empreendimento entregue"}
               </p>
-              <h2 className="mt-2 text-2xl font-bold leading-tight text-[#1E2A32] sm:text-3xl">
-                {project.name}
-              </h2>
-              {T.address && (
-                <p className="mt-3 flex max-w-3xl items-start gap-2 text-sm leading-6 text-gray-600">
-                  <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#2A98AA]" />
-                  <span>{T.address}</span>
-                </p>
+              {isInvestmentCategory && (
+                <span className="inline-flex w-fit rounded-md bg-[#2A98AA] px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-white">
+                  {getProjectStatus(project)}
+                </span>
               )}
             </div>
-            <span
-              className={`inline-flex w-fit rounded-md px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] ${
-                isInvestmentCategory
-                  ? "bg-[#2A98AA] text-white"
-                  : "bg-[#EEF2F3] text-[#1E2A32]"
-              }`}
-            >
-              {getProjectStatus(project)}
-            </span>
+            <h2 className="mx-auto mt-2 max-w-4xl text-xl font-bold leading-tight text-[#1E2A32] sm:text-2xl lg:text-[28px]">
+              {project.name}
+            </h2>
+            {T.address && (
+              <p className="mx-auto mt-2 flex max-w-3xl items-start justify-center gap-2 text-center text-[13px] leading-5 text-gray-600 sm:text-sm sm:leading-6">
+                <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#2A98AA]" />
+                <span>{T.address}</span>
+              </p>
+            )}
           </div>
         </div>
+        <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(340px,0.72fr)] lg:items-stretch xl:grid-cols-[minmax(0,0.95fr)_minmax(380px,0.68fr)]">
         {/* Imagem principal */}
-        <div className="bg-[#DDE5E8] p-3 sm:p-4 lg:p-5">
-          <button
-            type="button"
-            onClick={() => onOpenLightbox(activeIdx)}
-            className="group block w-full"
-            aria-label={`Ampliar imagens de ${project.name}`}
+        <div className="bg-[#DDE5E8] p-2 sm:p-4 lg:flex lg:flex-col lg:justify-start lg:p-5">
+          <div
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onTouchCancel={handleTouchCancel}
+            className="group mx-auto block w-full touch-pan-y select-none"
           >
-            <div
-              className={`relative h-[310px] overflow-hidden rounded-lg shadow-inner sm:h-[390px] md:h-[460px] lg:h-[540px] ${bgClass}`}
-            >
-              <Image
-                src={mainImage || "/placeholders/placeholder.svg"}
-                alt={`${project.name} - imagem principal do empreendimento`}
-                fill
-                className={`${fitClass} transition-transform duration-500 group-hover:scale-[1.02]`}
-                sizes="(min-width:1280px) 1100px, (min-width:1024px) 960px, 100vw"
-                quality={86}
-                priority={shouldPriority}
-                onLoad={(event) => {
-                  const img = event.currentTarget;
-                  setIsPortrait(img.naturalHeight > img.naturalWidth);
-                }}
+            <div className="relative aspect-[16/10] overflow-hidden rounded-md bg-white shadow-inner min-[400px]:aspect-[16/9] sm:rounded-lg lg:aspect-auto lg:h-[340px] xl:h-[380px]">
+              <div
+                className={`flex h-full ${
+                  isDragging ? "" : "transition-transform duration-300 ease-out"
+                }`}
+                style={{ transform: galleryTransform }}
+                onTransitionEnd={handleGalleryTransitionEnd}
+              >
+                {galleryImages.map((src, galleryIndex) => (
+                  <div
+                    key={`${project.id}-${activeIdx}-${galleryIndex}-${src}`}
+                    className="relative h-full min-w-full bg-white"
+                  >
+                    <Image
+                      src={src || "/placeholders/placeholder.svg"}
+                      alt={`${project.name} - imagem do empreendimento`}
+                      fill
+                      className={`${fitClass} transition-transform duration-500 group-hover:scale-[1.01]`}
+                      sizes="(min-width:1280px) 720px, (min-width:1024px) 58vw, 100vw"
+                      quality={86}
+                      priority={
+                        shouldPriority &&
+                        galleryIndex === (hasMultipleImages ? 1 : 0)
+                      }
+                    />
+                  </div>
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={handleImageClick}
+                onKeyDown={handleImageKeyDown}
+                className="absolute inset-0 z-10 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#2A98AA]"
+                aria-label={`Ampliar imagens de ${project.name}`}
               />
-              <span className="absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-md bg-black/55 px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-white backdrop-blur-sm">
+              {hasMultipleImages && (
+                <>
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      showPreviousImage();
+                    }}
+                    className="absolute left-3 top-1/2 z-20 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full bg-[#1E2A32]/70 text-white shadow-md backdrop-blur transition hover:bg-[#1E2A32]/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2A98AA] sm:h-9 sm:w-9 sm:opacity-75 sm:group-hover:opacity-100"
+                    aria-label="Imagem anterior"
+                  >
+                    <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      showNextImage();
+                    }}
+                    className="absolute right-3 top-1/2 z-20 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full bg-[#1E2A32]/70 text-white shadow-md backdrop-blur transition hover:bg-[#1E2A32]/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2A98AA] sm:h-9 sm:w-9 sm:opacity-75 sm:group-hover:opacity-100"
+                    aria-label="Próxima imagem"
+                  >
+                    <ChevronRight className="h-4 w-4" aria-hidden="true" />
+                  </button>
+                </>
+              )}
+              <span className="absolute bottom-3 right-3 z-20 inline-flex items-center gap-1.5 rounded-md bg-black/55 px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white backdrop-blur-sm sm:bottom-4 sm:right-4 sm:gap-2 sm:px-3 sm:py-2 sm:text-xs">
                 <ImageIcon className="h-4 w-4" aria-hidden="true" />
                 {activeIdx + 1}/{project.images.length}
               </span>
             </div>
-          </button>
+          </div>
 
           {/* Thumbnails */}
           {project.images.length > 1 && (
-            <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
+            <div className="mt-2 flex gap-2 overflow-x-auto pb-1 sm:mt-3 lg:justify-center">
               {project.images.map((src, i: number) => (
                 <button
                   key={`${project.id}-${i}`}
                   onClick={() => setActiveIdx(i)}
-                  className={`relative h-14 w-20 flex-shrink-0 overflow-hidden rounded-md ring-1 transition-all ${
+                  className={`relative h-12 w-16 flex-shrink-0 overflow-hidden rounded-md ring-1 transition-all sm:h-14 sm:w-20 ${
                     activeIdx === i
                       ? "ring-[#0891b2]"
                       : "ring-gray-200 hover:ring-gray-300"
@@ -517,13 +733,13 @@ function ProjectCard({
         </div>
 
         {/* Conteúdo (restante) */}
-        <div className="bg-white px-5 py-5 sm:px-6 lg:px-8 lg:py-7">
+        <div className="bg-white px-4 py-4 sm:px-6 sm:py-5 lg:flex lg:flex-col lg:justify-center lg:border-l lg:border-black/10 lg:px-6 lg:py-6 xl:px-8">
           {/* Chips resumo */}
-          <div className="rounded-lg border border-gray-200 bg-[#F7F8F6] p-4 sm:p-5">
-            <p className="mb-3 text-sm font-bold uppercase tracking-[0.14em] text-[#1E2A32]">
+          <div className="rounded-md border border-gray-200 bg-[#F7F8F6] p-3 text-center sm:rounded-lg sm:p-5">
+            <p className="mb-2 text-xs font-bold uppercase tracking-[0.14em] text-[#1E2A32] sm:mb-3 sm:text-sm">
               Resumo do projeto
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2">
             {T.year && (
               <Chip icon={<Calendar className="h-3.5 w-3.5 text-[#4a5568]" />}>
                 {T.year}
@@ -553,21 +769,43 @@ function ProjectCard({
           </div>
 
           {/* Ficha técnica: coluna única */}
-          <div className="mt-5 rounded-lg border border-gray-200 bg-white p-4 shadow-[0_12px_30px_rgba(20,33,40,0.06)] sm:p-5">
-            <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-[#4a5568]">
+          <div className="mt-4 rounded-md border border-gray-200 bg-white p-3 shadow-[0_10px_24px_rgba(20,33,40,0.05)] sm:mt-5 sm:rounded-lg sm:p-5 sm:shadow-[0_12px_30px_rgba(20,33,40,0.06)]">
+            <div className="flex items-center justify-between gap-3">
+            <h3 className="text-xs font-bold uppercase tracking-wide text-[#4a5568] sm:text-sm">
               Ficha técnica
             </h3>
-            <dl className="grid grid-cols-1 gap-y-2 text-sm">
+              <button
+                type="button"
+                className="inline-flex items-center gap-1.5 rounded-md border border-gray-200 bg-[#F7F8F6] px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.08em] text-[#1E2A32] transition-colors hover:bg-[#EEF2F3] sm:hidden"
+                aria-expanded={isTechnicalSheetOpen}
+                aria-controls={technicalSheetId}
+                onClick={() => setIsTechnicalSheetOpen((open) => !open)}
+              >
+                {isTechnicalSheetOpen ? "Ocultar" : "Mostrar completo"}
+                <ChevronDown
+                  className={`h-3.5 w-3.5 transition-transform ${
+                    isTechnicalSheetOpen ? "rotate-180" : ""
+                  }`}
+                  aria-hidden="true"
+                />
+              </button>
+            </div>
+            <dl
+              id={technicalSheetId}
+              className={`mt-3 grid-cols-1 gap-y-1.5 text-[13px] sm:grid sm:gap-y-2 sm:text-sm ${
+                isTechnicalSheetOpen ? "grid" : "hidden"
+              }`}
+            >
               <InfoRows sheet={T} />
             </dl>
           </div>
 
-          <div className="mt-5">
+          <div className="mt-4 flex justify-center sm:mt-5">
             {isInvestmentCategory ? (
               <Button
                 asChild
                 size="lg"
-                className="w-full rounded-md bg-[#2A98AA] px-8 py-4 font-bold uppercase tracking-wide text-white shadow-md transition-transform hover:scale-[1.01] hover:bg-[#217f8f] sm:w-auto sm:py-5"
+                className="w-full rounded-md bg-[#2A98AA] px-5 py-3 font-bold uppercase tracking-wide text-white shadow-md transition-transform hover:scale-[1.01] hover:bg-[#217f8f] sm:w-auto sm:px-8 sm:py-5"
               >
                 <a
                   href={getWhatsappUrl(
@@ -585,12 +823,13 @@ function ProjectCard({
                 type="button"
                 size="lg"
                 onClick={() => onOpenLightbox(activeIdx)}
-                className="w-full rounded-md bg-[#1E2A32] px-8 py-4 font-bold uppercase tracking-wide text-white shadow-md transition-transform hover:scale-[1.01] hover:bg-[#2B3B45] sm:w-auto sm:py-5"
+                className="w-full rounded-md bg-[#1E2A32] px-5 py-3 font-bold uppercase tracking-wide text-white shadow-md transition-transform hover:scale-[1.01] hover:bg-[#2B3B45] sm:w-auto sm:px-8 sm:py-5"
               >
                 Ver galeria
               </Button>
             )}
           </div>
+        </div>
         </div>
       </article>
     </div>
@@ -617,8 +856,8 @@ function InfoRows({ sheet: T }: { sheet: TechnicalSheet }) {
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="grid gap-1 sm:grid-cols-[140px_1fr] sm:gap-2">
-      <dt className="font-semibold text-gray-800">{label}</dt>
+    <div className="grid gap-0.5 sm:grid-cols-[130px_1fr] sm:gap-3">
+      <dt className="font-semibold text-gray-800 sm:text-right">{label}</dt>
       <dd className="min-w-0 break-words text-gray-700">{value}</dd>
     </div>
   );
