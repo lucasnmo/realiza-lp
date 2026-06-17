@@ -2,6 +2,9 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import useEmblaCarousel, {
+  type UseEmblaCarouselType,
+} from "embla-carousel-react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import FinalCTASection from "@/components/final-cta-section";
@@ -38,6 +41,8 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { getWhatsappUrl } from "@/lib/site-content";
 
 /* ==================== PÁGINA ==================== */
+
+type CarouselApi = UseEmblaCarouselType[1];
 
 const VALID_TABS: Category[] = [
   "em_construcao",
@@ -403,18 +408,17 @@ function ProjectCard({
     useScrollReveal<HTMLDivElement>();
   const [activeIdx, setActiveIdx] = useState(0);
   const [isTechnicalSheetOpen, setIsTechnicalSheetOpen] = useState(false);
-  const [dragOffset, setDragOffset] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [settleDirection, setSettleDirection] = useState<-1 | 0 | 1>(0);
-  const touchStartRef = useRef<{
-    x: number;
-    y: number;
-    width: number;
-    isHorizontal: boolean;
-  } | null>(null);
-  const didSwipeRef = useRef(false);
+  const [galleryRef, galleryApi] = useEmblaCarousel({
+    align: "start",
+    containScroll: "trimSnaps",
+    dragFree: false,
+    loop: project.images.length > 1,
+    skipSnaps: false,
+    watchDrag: project.images.length > 1,
+  });
+  const pointerStartRef = useRef<{ x: number; y: number } | null>(null);
+  const didDragGalleryRef = useRef(false);
 
-  const mainImage = project.images[activeIdx] ?? project.images[0];
   const T = project.technicalSheet;
   const technicalSheetId = `technical-sheet-${project.id}`;
   const hasMultipleImages = project.images.length > 1;
@@ -423,37 +427,39 @@ function ProjectCard({
   const isInvestmentCategory = isInvestmentProject(project);
 
   const shouldPriority = isInvestmentCategory && index === 0;
-  const galleryImages = useMemo(() => {
-    if (!hasMultipleImages) return [mainImage];
 
-    return [
-      project.images[
-        (activeIdx - 1 + project.images.length) % project.images.length
-      ],
-      mainImage,
-      project.images[(activeIdx + 1) % project.images.length],
-    ];
-  }, [activeIdx, hasMultipleImages, mainImage, project.images]);
-  const galleryTransform = hasMultipleImages
-    ? `translate3d(calc(-100% + ${dragOffset}px), 0, 0)`
-    : "translate3d(0, 0, 0)";
-  const preventClickAfterDrag = () => {
-    didSwipeRef.current = true;
-    window.setTimeout(() => {
-      didSwipeRef.current = false;
-    }, 450);
-  };
+  const onGallerySelect = useCallback((api: NonNullable<CarouselApi>) => {
+    setActiveIdx(api.selectedScrollSnap());
+  }, []);
+
+  useEffect(() => {
+    if (!galleryApi) return;
+
+    onGallerySelect(galleryApi);
+    galleryApi.on("select", onGallerySelect);
+    galleryApi.on("reInit", onGallerySelect);
+
+    return () => {
+      galleryApi.off("select", onGallerySelect);
+      galleryApi.off("reInit", onGallerySelect);
+    };
+  }, [galleryApi, onGallerySelect]);
+
   const goToImage = useCallback(
     (nextIndex: number) => {
       if (!project.images.length) return;
-      setDragOffset(0);
-      setSettleDirection(0);
-      setIsDragging(false);
-      setActiveIdx(
-        (nextIndex + project.images.length) % project.images.length
-      );
+
+      const normalizedIndex =
+        (nextIndex + project.images.length) % project.images.length;
+
+      if (galleryApi && hasMultipleImages) {
+        galleryApi.scrollTo(normalizedIndex);
+        return;
+      }
+
+      setActiveIdx(normalizedIndex);
     },
-    [project.images.length]
+    [galleryApi, hasMultipleImages, project.images.length]
   );
   const showPreviousImage = useCallback(() => {
     goToImage(activeIdx - 1);
@@ -461,109 +467,36 @@ function ProjectCard({
   const showNextImage = useCallback(() => {
     goToImage(activeIdx + 1);
   }, [activeIdx, goToImage]);
-  const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
-    if (!hasMultipleImages) return;
-    const touch = event.touches[0];
-    const width = event.currentTarget.clientWidth || 1;
-    touchStartRef.current = {
-      x: touch.clientX,
-      y: touch.clientY,
-      width,
-      isHorizontal: false,
-    };
-    didSwipeRef.current = false;
-    setSettleDirection(0);
-    setDragOffset(0);
-    setIsDragging(true);
-  };
-  const handleTouchMove = (event: React.TouchEvent<HTMLDivElement>) => {
-    const start = touchStartRef.current;
-    const touch = event.touches[0];
-
-    if (!start || !touch || !hasMultipleImages) return;
-
-    const deltaX = touch.clientX - start.x;
-    const deltaY = touch.clientY - start.y;
-
-    if (!start.isHorizontal) {
-      if (Math.abs(deltaX) < 6 && Math.abs(deltaY) < 6) return;
-
-      if (Math.abs(deltaY) > Math.abs(deltaX)) {
-        touchStartRef.current = null;
-        setIsDragging(false);
-        setDragOffset(0);
-        return;
-      }
-
-      start.isHorizontal = true;
-    }
-
-    event.preventDefault();
-
-    if (Math.abs(deltaX) > 8) {
-      didSwipeRef.current = true;
-    }
-
-    const maxOffset = start.width * 0.98;
-    setDragOffset(Math.max(-maxOffset, Math.min(maxOffset, deltaX)));
-  };
-  const handleTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
-    const start = touchStartRef.current;
-    const touch = event.changedTouches[0];
-    touchStartRef.current = null;
-
-    if (!start || !touch || !hasMultipleImages) return;
-
-    const deltaX = touch.clientX - start.x;
-    const shouldChangeImage =
-      start.isHorizontal && Math.abs(deltaX) > Math.min(90, start.width * 0.2);
-
-    if (!start.isHorizontal) {
-      setIsDragging(false);
-      setDragOffset(0);
-      return;
-    }
-
-    preventClickAfterDrag();
-    setIsDragging(false);
-
-    if (!shouldChangeImage) {
-      setSettleDirection(0);
-      setDragOffset(0);
-      return;
-    }
-
-    const nextDirection = deltaX < 0 ? 1 : -1;
-    setSettleDirection(nextDirection);
-    setDragOffset(nextDirection === 1 ? -start.width : start.width);
-  };
-  const handleTouchCancel = () => {
-    touchStartRef.current = null;
-    setIsDragging(false);
-    setSettleDirection(0);
-    setDragOffset(0);
-  };
-  const handleGalleryTransitionEnd = (
-    event: React.TransitionEvent<HTMLDivElement>
+  const handleGalleryPointerDown = (
+    event: React.PointerEvent<HTMLDivElement>
   ) => {
-    if (event.target !== event.currentTarget) return;
-    if (!settleDirection || !hasMultipleImages) return;
+    if (!hasMultipleImages) return;
 
-    setIsDragging(true);
-    setActiveIdx(
-      (activeIdx + settleDirection + project.images.length) %
-        project.images.length
-    );
-    setDragOffset(0);
-    setSettleDirection(0);
+    pointerStartRef.current = { x: event.clientX, y: event.clientY };
+    didDragGalleryRef.current = false;
+  };
+  const handleGalleryPointerMove = (
+    event: React.PointerEvent<HTMLDivElement>
+  ) => {
+    const start = pointerStartRef.current;
+    if (!start || !hasMultipleImages) return;
 
-    window.requestAnimationFrame(() => {
-      setIsDragging(false);
-    });
+    const deltaX = event.clientX - start.x;
+    const deltaY = event.clientY - start.y;
+
+    if (Math.abs(deltaX) > 8 && Math.abs(deltaX) > Math.abs(deltaY)) {
+      didDragGalleryRef.current = true;
+    }
+  };
+  const clearGalleryPointer = () => {
+    pointerStartRef.current = null;
+
+    window.setTimeout(() => {
+      didDragGalleryRef.current = false;
+    }, 300);
   };
   const handleImageClick = () => {
-    if (didSwipeRef.current) {
-      didSwipeRef.current = false;
+    if (didDragGalleryRef.current) {
       return;
     }
 
@@ -627,36 +560,32 @@ function ProjectCard({
         <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(340px,0.72fr)] lg:items-stretch xl:grid-cols-[minmax(0,0.95fr)_minmax(380px,0.68fr)]">
         {/* Imagem principal */}
         <div className="bg-[#DDE5E8] p-2 sm:p-4 lg:flex lg:flex-col lg:justify-start lg:p-5">
-          <div
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-            onTouchCancel={handleTouchCancel}
-            className="group mx-auto block w-full touch-pan-y select-none"
-          >
-            <div className="relative aspect-[16/10] overflow-hidden rounded-md bg-white shadow-inner min-[400px]:aspect-[16/9] sm:rounded-lg lg:aspect-auto lg:h-[340px] xl:h-[380px]">
-              <div
-                className={`flex h-full ${
-                  isDragging ? "" : "transition-transform duration-300 ease-out"
-                }`}
-                style={{ transform: galleryTransform }}
-                onTransitionEnd={handleGalleryTransitionEnd}
-              >
-                {galleryImages.map((src, galleryIndex) => (
+          <div className="group mx-auto block w-full select-none">
+            <div
+              ref={galleryRef}
+              onPointerDownCapture={handleGalleryPointerDown}
+              onPointerMoveCapture={handleGalleryPointerMove}
+              onPointerUpCapture={clearGalleryPointer}
+              onPointerCancelCapture={clearGalleryPointer}
+              className="relative aspect-[16/10] touch-pan-y overflow-hidden rounded-md bg-white shadow-inner min-[400px]:aspect-[16/9] sm:rounded-lg lg:aspect-auto lg:h-[340px] xl:h-[380px]"
+            >
+              <div className="flex h-full will-change-transform">
+                {project.images.map((src, galleryIndex) => (
                   <div
-                    key={`${project.id}-${activeIdx}-${galleryIndex}-${src}`}
-                    className="relative h-full min-w-full bg-white"
+                    key={`${project.id}-${galleryIndex}-${src}`}
+                    className="relative h-full min-w-0 flex-[0_0_100%] bg-white"
                   >
                     <Image
                       src={src || "/placeholders/placeholder.svg"}
                       alt={`${project.name} - imagem do empreendimento`}
                       fill
-                      className={`${fitClass} transition-transform duration-500 group-hover:scale-[1.01]`}
+                      draggable={false}
+                      className={`${fitClass} transition-transform duration-500 sm:group-hover:scale-[1.01]`}
                       sizes="(min-width:1280px) 720px, (min-width:1024px) 58vw, 100vw"
                       quality={86}
                       priority={
                         shouldPriority &&
-                        galleryIndex === (hasMultipleImages ? 1 : 0)
+                        galleryIndex === 0
                       }
                     />
                   </div>
@@ -708,7 +637,7 @@ function ProjectCard({
               {project.images.map((src, i: number) => (
                 <button
                   key={`${project.id}-${i}`}
-                  onClick={() => setActiveIdx(i)}
+                  onClick={() => goToImage(i)}
                   className={`relative h-12 w-16 flex-shrink-0 overflow-hidden rounded-md ring-1 transition-all sm:h-14 sm:w-20 ${
                     activeIdx === i
                       ? "ring-[#0891b2]"

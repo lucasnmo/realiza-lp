@@ -98,14 +98,21 @@ export default function ProjectsSection() {
           <Carousel
             opts={{
               align: "start",
+              breakpoints: {
+                "(max-width: 767px)": {
+                  align: "center",
+                  containScroll: "trimSnaps",
+                  loop: false,
+                },
+              },
               containScroll: false,
-              dragFree: true,
+              dragFree: false,
               loop: true,
             }}
             className="projects-carousel px-6 sm:px-14 lg:px-16"
             aria-label="Empreendimentos em destaque"
           >
-            <CarouselContent className="-ml-4 cursor-grab items-start py-4 active:cursor-grabbing sm:-ml-6 sm:items-stretch sm:py-8">
+            <CarouselContent className="-ml-4 cursor-grab items-start py-4 will-change-transform active:cursor-grabbing sm:-ml-6 sm:items-stretch sm:py-8">
               {featuredProjects.map((project) => (
                 <CarouselItem
                   key={project.id}
@@ -170,7 +177,7 @@ function ProjectCard({
   )
 
   return (
-    <article className="flex h-full w-full shrink-0 flex-col overflow-hidden rounded-lg border border-black/10 bg-white shadow-[0_16px_36px_rgba(20,33,40,0.14)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_22px_46px_rgba(20,33,40,0.18)]">
+    <article className="flex h-full w-full shrink-0 flex-col overflow-hidden rounded-lg border border-black/10 bg-white shadow-[0_12px_28px_rgba(20,33,40,0.12)] transition-all duration-300 sm:hover:-translate-y-1 sm:hover:shadow-[0_22px_46px_rgba(20,33,40,0.18)]">
       <Link href={href} className="group relative block aspect-[16/11] overflow-hidden bg-[#DDE5E8] sm:aspect-[4/3]">
         {imageFit === "contain" && (
           <Image
@@ -180,7 +187,7 @@ function ProjectCard({
             fill
             quality={50}
             sizes="(min-width: 1024px) 390px, (min-width: 640px) 360px, 76vw"
-            className="scale-110 object-cover opacity-35 blur-xl transition-transform duration-700 group-hover:scale-[1.16]"
+            className="hidden scale-110 object-cover opacity-35 blur-xl transition-transform duration-700 sm:block sm:group-hover:scale-[1.16]"
             style={{ objectPosition: getProjectImagePosition(project) }}
           />
         )}
@@ -190,7 +197,7 @@ function ProjectCard({
           fill
           quality={82}
           sizes="(min-width: 1024px) 390px, (min-width: 640px) 360px, 76vw"
-          className={`transition-transform duration-700 group-hover:scale-105 ${
+          className={`transition-transform duration-700 sm:group-hover:scale-105 ${
             imageFit === "contain" ? "object-contain p-2 sm:p-3" : "object-cover"
           }`}
           style={{ objectPosition: getProjectImagePosition(project) }}
